@@ -1,0 +1,570 @@
+
+/*highlight*/
+::selection {
+  background-color: #c2cf00;
+  color:white;
+}
+
+::-moz-selection {
+  background-color: #c2cf00;
+  color:white;
+}
+
+body {
+/*  padding-top: 60px;*/
+}
+
+/***************
+CIVICBAR
+***************/
+
+.navbar-inner {
+  min-height: 31px;
+}
+
+.civiclinks-logo {
+  vertical-align: middle;
+}
+
+.navbar .brand {
+  padding-bottom: 0px;
+  padding-top: 4px;
+}
+
+#nav-main-menu .nav > li > a {
+  padding: 9px 10px 9px;
+  line-height: 10px;
+}
+
+#nav-main-menu .active a {
+  padding-bottom: 9px !important;
+  border-bottom: 4px solid rgb(9,146,140);
+}
+
+#nav-login #registration a {
+  margin-top: 3px;
+  padding: 6px 11px;
+  color: rgb(254,254,254);
+  margin-right: 5px;
+}
+
+.btn-small {
+  color: white;
+  font-size: 12px;
+  background-color: rgb(9,146,140);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  border: 1px solid rgb(9,146,140);
+}
+
+#registration .btn {
+  text-shadow: none;
+  font-weight: normal;
+}
+
+#nav-login #registration .btn-small:hover {
+  color: rgb(60,60,60);
+  background-color: rgb(230,230,230);
+}
+
+.navbar-inverse .nav-collapse .nav > li > a:hover,
+.navbar-inverse .nav-collapse .nav > li > a:focus,
+.navbar-inverse .nav-collapse .dropdown-menu a:hover,
+.navbar-inverse .nav-collapse .dropdown-menu a:focus {
+  color: white;
+}
+
+.nav-collapse .nav > li > a, .nav-collapse .dropdown-menu a {
+  font-weight: normal;
+  text-shadow: none;
+}
+
+
+/***************
+END of CIVICBAR
+***************/
+
+/**********************************************************************************************/
+
+/***************
+Carousel
+***************/
+
+.carousel {
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+
+.carousel-control {
+  top: 50%;
+  background-color: transparent;
+  border: 0px none;
+  font-size: 120px;
+  opacity: 0.7;
+}
+
+.carousel-control.right {
+  right: 5px;
+}
+
+.carousel-control.left {
+  left: 5px;
+}
+
+
+/**********************************************************************************************/
+
+
+.introduction {
+  background-color: rgb(245,245,245);
+  border: 2px solid #7DAFBF;
+  margin-bottom: 10px;
+  padding: 5px 40px;
+}
+
+.introduction h5 {
+  color: rgb(0,0,0);
+  font-family: 'Roboto Slab', serif;
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 300;
+}
+
+.introduction h5 strong {
+  font-weight: 400;
+}
+
+.introduction > h5 > a {
+  text-decoration: none;
+  font-weight: 400;
+  color: rgb(0,0,0);
+}
+
+.introduction > h5 > a:hover, a:focus, a:active {
+  color: rgb(125,175,191);
+  font-weight: 400;
+}
+
+.explanation {
+  text-transform: uppercase;
+  background-color: #7DAFBF;
+  padding: 5px 40px;
+  margin-bottom: 30px;
+}
+
+.explanation h5 {
+  color: white;
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 200;
+}
+
+.themes {
+  background-color: rgb(245,245,245);
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(200,200,200);
+  padding: 0;
+  height: 350px;
+  overflow: hidden;
+}
+
+.linktotheme:link {
+  color: black;
+}
+
+.linktotheme:visited {
+  color: black;
+}
+
+.linktotheme:focus {
+  text-decoration: none;
+  color: white;
+}
+
+.linktotheme:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.linktotheme:active {
+  text-decoration: none;
+  color: black;
+}
+
+.themes:focus, .themes:hover, .themes:active {
+  background-color: #7DAFBF;
+}
+
+.title {
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding: 20px 40px 0px 40px;
+}
+
+.description {
+  font-family: 'Roboto Slab', serif;
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 300;
+  padding: 0px 40px;
+  height: 100%;
+  display: block;
+}
+
+.border-line {
+  border-bottom: 1px solid #7DAFBF;
+  float: left;
+  width: 100%;
+  min-height: 60px;
+}
+
+.civici-logo {
+  position: absolute;
+  top: 18px;
+  display: block; text-indent: -5000px;
+  width: 127px;
+  height: 26px;
+  background-image: url('../images/civici.png');
+}
+
+.last {
+  margin-bottom: 50px;
+}
+
+.partecipa-gov {
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  padding-top: 25px;
+  position: relative;
+  top: 1px;
+}
+
+.partecipa-gov a {
+  color: black;
+}
+
+.partecipa-gov a:hover {
+  color: #7DAFBF;
+  text-decoration: none;
+}
+
+
+
+/***************
+Footer
+***************/
+
+.conclusion {
+	background-color: rgb(0,0,0);
+	color: rgb(255,255,255);
+	font-size: 12px;
+	bottom: 0px;
+	width: 100%;
+	margin-top: 20px;
+}
+
+footer {
+	padding: 5px 0px;
+}
+
+footer > p {
+	margin: 0;
+}
+
+footer > p > a {
+	color: rgb(255,255,255);
+	text-decoration: none;
+}
+
+footer > p > a:hover, a:focus, a:active {
+	color: rgb(255,255,255);
+	text-decoration: none;
+	font-weight: bold;
+}
+
+
+
+/***************
+Landscape phone to portrait tablet
+***************/
+
+/**********************************************************************************************/
+
+@media (max-width: 767px) {
+
+  body {
+    padding-top: 0;
+  }
+
+  .themes {
+    height: auto;
+  }
+
+  .main-content {
+    font-size: 12px;
+    line-height: 20px;
+    margin-top: 0;
+    margin-left: 0px;
+    margin-right: 5px;
+  }
+
+  .sub-content {
+    font-size: 10px;
+    line-height: 16px;
+    margin-left: 0px;
+    margin-right: 5px;
+    margin-top: 0;
+  }
+
+  .va-title {
+    margin-left:20px;
+  }
+}
+
+
+/***************
+Portrait tablet to landscape
+***************/
+
+/**********************************************************************************************/
+
+@media (min-width: 768px) and (max-width: 979px) {
+
+  body {
+    padding-top: 0;
+  }
+
+  .themes {
+    height: 400px;
+  }
+
+  .title {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 15px;
+    padding: 10px 20px 0px 20px;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 22px;
+    padding: 0px 20px;
+  }
+
+  .themes {
+    padding: 0px;
+  }
+
+  .main-content {
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .sub-content {
+    font-size: 12px;
+  }
+}
+
+
+/***************
+Landscape tablet
+***************/
+
+/**********************************************************************************************/
+
+@media (min-width: 980px) and (max-width: 1199px) {
+
+  .themes {
+    height: 450px;
+  }
+}
+
+
+.proposalStatus{
+  cursor: pointer;
+  color: rgb(0, 136, 204);
+}
+.navbar .nav .dropdown-toggle .caret {
+margin-top: 4px;
+margin-left: 5px;
+margin-right: 0;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+background-color: rgb(153,153,153);
+background-image: none;
+}
+
+body {
+	padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.container-narrow {
+     margin: 0 auto;
+     width: 80%;
+     max-width: 960px;
+     position: relative;
+}
+
+.masthead {
+	border-bottom: 1px solid rgb(125,175,191);
+	margin-bottom: 40px;
+	padding-bottom: 10px;
+}
+
+.masthead h4 {
+	font-family: 'Titillium Web', sans-serif;
+	font-weight: 200;
+	text-transform: uppercase;
+	float: right;
+}
+
+.proposal-title {
+	background-color: rgb(240,240,240);
+	padding: 3px 0px;
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+.proposal-title h4 {
+	font-family: 'Titillium Web', sans-serif;
+	font-weight: 100;
+	font-size: 18px;
+	text-transform: uppercase;
+}
+
+/* Text */
+
+.text {
+	margin-bottom: 30px;
+}
+
+.avatar {
+	width: 30px;
+	float: left;
+}
+
+.author {
+	font-family: 'Roboto Slab', Serif;
+	font-size: 13px;
+	line-height: 20px;
+	font-weight: bold;
+	margin-bottom: 40px;
+}
+
+.name {
+	padding-top: 15px;
+	padding-left: 40px;
+}
+
+.text > h2 {
+	font-family: 'Roboto Slab', Serif;
+	font-size: 30px;
+	line-height: 42px;
+	margin-bottom: 20px;
+}
+
+.intro {
+	font-family: 'Roboto Slab', Serif;
+	font-size: 16px;
+	line-height: 28px;
+	margin-bottom: 30px;
+	font-weight: 300;
+}
+
+.main-desc {
+	font-family: 'Roboto Slab', Serif;
+	font-size: 14px;
+	line-height: 24px;
+	margin-bottom: 30px;
+	font-weight: 300;
+}
+
+.immagine {
+	text-align: center;
+	padding-top: 10px;
+	margin-bottom: 20px;
+}
+
+.triangolo {
+	width: 80px;
+}
+
+.opinioon {
+	border-bottom: 1px solid rgb(125,175,191);
+	margin-bottom: 30px;
+}
+
+.opinioon h4 {
+	font-family: 'Titillium Web', sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+
+/* Comments */
+
+
+.vote {
+	width: 30px;
+	float: left;
+	margin-right: 10px;
+}
+
+.person {
+	margin-right: 10px;
+}
+
+.comments {
+	padding-left: 20px;
+	padding-right: 20px;
+	font-family: 'Roboto Slab', Serif;
+	font-size: 13px;
+	line-height: 20px;
+	font-weight: 300;
+	margin-bottom: 60px;
+}
+
+.agree {
+	font-weight: 300;
+	margin-top: 5px;
+	border-left: 5px solid rgb(163,222,189);
+	padding-left: 10px;
+	margin-left: 40px;
+}
+
+.neutral{
+	font-weight: 300;
+	margin-top: 5px;
+	border-left: 5px solid rgb(255,255,255);
+	padding-left: 10px;
+	margin-left: 40px;
+}
+
+.disagree {
+	font-weight: 300;
+	margin-top: 5px;
+	border-left: 5px solid rgb(251,167,181);
+	padding-left: 10px;
+	margin-left: 40px;
+}
+
+.comment {
+	margin-bottom: 20px;
+}

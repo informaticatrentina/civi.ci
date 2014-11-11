@@ -1,0 +1,30 @@
+RELEASE NOTES
+
+Date: 16/09/2013
+Release Tag: 0.0.1.0
+Notes:
+First release of civico. 
+Required Aggregator version is 0.0.8.0
+------------------------------------------
+
+Date: 18/09/2013
+Release Tag: 0.0.2.0
+Notes:
+	Regular release conatining majorly UI changes and couple of bug fixes.
+Gitlab Milestone: 0.0.3.0
+Aggregator Version Reguired: 0.0.8.0
+--------------------------------------------
+
+Date: 20/09/2013
+Release Tag: 0.0.4.0
+Notes:
+	Bug fixes. Details of same can be found in gitlab milestone 0.0.4.0
+Gitlab Milestone: 0.0.4.0
+Aggregator Version required: 0.0.4.0
+----------------------------------------------
+
+Date 27/09/2013
+Release Tag: 1.0.3
+Notes:
+Gitlab milestone 1.03
+Aggregator Version required: 0.0.8.0

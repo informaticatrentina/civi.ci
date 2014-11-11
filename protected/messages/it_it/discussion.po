@@ -1,0 +1,1018 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.0.1\n"
+"PO-Revision-Date: 2014-07-29 10:49+0200\n"
+"Last-Translator: Daniele Pizzolli <daniele@ahref.eu>\n"
+"Language-Team: Italian <daniele@ahref.eu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgctxt "discussion"
+msgid "Add a new Proposal "
+msgstr "Aggiungi una nuova proposta"
+
+msgctxt "discussion"
+msgid "Aggregator is not responding or Curl failed"
+msgstr "L’aggregatore non risponde"
+
+msgctxt "discussion"
+msgid "Aggregator returning httpcode: "
+msgstr "Codice ritornato dall’aggragatore"
+
+msgctxt "discussion"
+msgid "Agree"
+msgstr "Concordo"
+
+msgctxt "discussion"
+msgid "Author"
+msgstr "Autore"
+
+msgctxt "discussion"
+msgid "Body can not be empty"
+msgstr "Il campo proposta non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Cancel"
+msgstr "Annulla"
+
+msgctxt "discussion"
+msgid "Create Discussion"
+msgstr "Crea una discussione"
+
+msgctxt "discussion"
+msgid "Current links"
+msgstr "Link allegati"
+
+msgctxt "discussion"
+msgid "Description"
+msgstr "Descrizione"
+
+msgctxt "discussion"
+msgid "DisAgree"
+msgstr "Non concordo"
+
+msgctxt "discussion"
+msgid "Disagree"
+msgstr "<tspan y='10' x='10'>Non</tspan><tspan y='20' x='10'>concordo</tspan>"
+
+msgctxt "discussion"
+msgid "Discussion Author"
+msgstr "Autore della discussione"
+
+msgctxt "discussion"
+msgid "Discussion Summary"
+msgstr "Sintesi discussione"
+
+msgctxt "discussion"
+msgid "Discussion Summay"
+msgstr "Sintesi discussione"
+
+msgctxt "discussion"
+msgid "Discussion Title"
+msgstr "Titolo discussione"
+
+msgctxt "discussion"
+msgid "Don’t Understand"
+msgstr "Non chiara"
+
+msgctxt "discussion"
+msgid "Edit"
+msgstr "Modifica"
+
+msgctxt "discussion"
+msgid "Edit Discussion"
+msgstr "Modifica Discussione"
+
+msgctxt "discussion"
+msgid "Email address"
+msgstr "indirizzo e-mail"
+
+msgctxt "discussion"
+msgid "Email id already in use, Please choose a different email id"
+msgstr "Questo indirizzo email id già in uso"
+
+msgctxt "discussion"
+msgid "Error in actionRegisterUser method :"
+msgstr "Errore in actionRegisterUser:"
+
+msgctxt "discussion"
+msgid "Error in createDiscussion :"
+msgstr "Errore in createDiscussion:"
+
+msgctxt "discussion"
+msgid "Error in curlGet :"
+msgstr "Errore in curlGet:"
+
+msgctxt "discussion"
+msgid "Error in getContestDetailByContestSlug"
+msgstr "Errore in getContestDetailByContestSlug"
+
+msgctxt "discussion"
+msgid "Error in getEntry method :"
+msgstr "Errore in getEntry:"
+
+msgctxt "discussion"
+msgid "Error in getEntryForPagination method :"
+msgstr "Errore in getEntryForPagination:"
+
+msgctxt "discussion"
+msgid "Error in saveEntry method :"
+msgstr "Errore in saveEntry:"
+
+msgctxt "discussion"
+msgid "Error in submitContestEntry :"
+msgstr "Errore in submitContestEntry:"
+
+msgctxt "discussion"
+msgid "Error in updateStatus method :"
+msgstr "Errore in updateStatus:"
+
+msgctxt "discussion"
+msgid "Error in validateUser method :"
+msgstr "Errore in validateUser:"
+
+msgctxt "discussion"
+msgid "Hide"
+msgstr "Nascondi"
+
+msgctxt "discussion"
+msgid "Home"
+msgstr "Home"
+
+msgctxt "discussion"
+msgid "Id can not be empty"
+msgstr "Id non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Input data in getEntry : "
+msgstr "Input in getEntry:"
+
+msgctxt "discussion"
+msgid "Input data in getEntryForPagination : "
+msgstr "Input in getEntryForPagination:"
+
+msgctxt "discussion"
+msgid "Introduction"
+msgstr "Introduzione"
+
+msgctxt "discussion"
+msgid "Introduction can not be empty"
+msgstr "Il campo introduzione non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Link's author"
+msgstr "Autore del link"
+
+msgctxt "discussion"
+msgid "Login"
+msgstr "Accedi"
+
+msgctxt "discussion"
+msgid "Logout"
+msgstr "Esci"
+
+msgctxt "discussion"
+msgid "Manage Discussion"
+msgstr "Gestione Discussione"
+
+msgctxt "discussion"
+msgid "Neutral"
+msgstr "Neutro"
+
+msgctxt "discussion"
+msgid "No links yet. Be the first to submit a link."
+msgstr "Non è ancora stato inserito alcun link, puoi essere il primo."
+
+msgctxt "discussion"
+msgid "Opinion's author"
+msgstr "Autore dell'opinione"
+
+msgctxt "discussion"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "discussion"
+msgid "Please enter first name"
+msgstr "Inserisci il nome"
+
+msgctxt "discussion"
+msgid "Please enter last name"
+msgstr "Inserisci il cognome"
+
+msgctxt "discussion"
+msgid "Please enter valid lnk url"
+msgstr "Inserisci un URL valido"
+
+msgctxt "discussion"
+msgid "Please login to submit an entry"
+msgstr "Effettua l'accesso per partecipare"
+
+msgctxt "discussion"
+msgid "Please provide a link"
+msgstr "Manca un URL"
+
+msgctxt "discussion"
+msgid "Please sign in with your Civic Links account"
+msgstr "Per accedere puoi usare il tuo account Civiclinks"
+
+msgctxt "discussion"
+msgid "Propoasl Status"
+msgstr "Stato della proposta"
+
+msgctxt "discussion"
+msgid "Proposal"
+msgstr "Proposta"
+
+msgctxt "discussion"
+msgid "Proposal Tags"
+msgstr "Tag proposta"
+
+msgctxt "discussion"
+msgid "Proposal Title"
+msgstr "Titolo della proposta"
+
+msgctxt "discussion"
+msgid "Proposal abstract"
+msgstr "Sommario della proposta"
+
+msgctxt "discussion"
+msgid "Proposal body"
+msgstr "Corpo della proposta"
+
+msgctxt "discussion"
+msgid "Proposal title should not be empty"
+msgstr "Devi inserire un titolo"
+
+msgctxt "discussion"
+msgid "Range can not be empty for pagination"
+msgstr "L’intervallo per la paginazione non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Remember me"
+msgstr "Ricordati di me"
+
+msgctxt "discussion"
+msgid "Return fields should not be empty"
+msgstr "Questi campi non possono essere vuoti"
+
+msgctxt "discussion"
+msgid "S No."
+msgstr "S No."
+
+msgctxt "discussion"
+msgid "Save Proposal"
+msgstr "Salva proposta"
+
+msgctxt "discussion"
+msgid "See the attached documents"
+msgstr "Visualizza i link allegati"
+
+msgctxt "discussion"
+msgid "Show"
+msgstr "Mostra"
+
+msgctxt "discussion"
+msgid "Show/hide"
+msgstr "Mostra / nascondi"
+
+msgctxt "discussion"
+msgid "Sign Up"
+msgstr "Registrati"
+
+msgctxt "discussion"
+msgid "Sign in"
+msgstr "Accedi"
+
+msgctxt "discussion"
+msgid "Some technical problem occurred, For more detail check log file"
+msgstr "Ci sono stati problemi tecnici, contatta l’amministratore"
+
+msgctxt "discussion"
+msgid "Some technical problem occurred, contact administrator"
+msgstr "Ci sono stati problemi tecnici, contatta l’amministratore"
+
+msgctxt "discussion"
+msgid "Sorry, You want something which we dont offer!!"
+msgstr "Siamo spiacenti, c'è stato un errore"
+
+msgctxt "discussion"
+msgid "Status"
+msgstr "Stato"
+
+msgctxt "discussion"
+msgid "Submit"
+msgstr "Salva"
+
+msgctxt "discussion"
+msgid "Submit Proposal"
+msgstr "Salva proposta"
+
+msgctxt "discussion"
+msgid "Submit a new link"
+msgstr "Aggiungi un link"
+
+msgctxt "discussion"
+msgid "Summary"
+msgstr "Sommario"
+
+msgctxt "discussion"
+msgid "There are no links"
+msgstr "Non ci sono link"
+
+msgctxt "discussion"
+msgid "There are no opinion"
+msgstr "Non ci sono ancora opinioni su questa proposta"
+
+msgctxt "discussion"
+msgid "There are no proposal in this discussion"
+msgstr "Non ci sono proposte in questa discussione"
+
+msgctxt "discussion"
+msgid "There are no proposals"
+msgstr "Non ci sono proposte"
+
+msgctxt "discussion"
+msgid "Title"
+msgstr "Titolo"
+
+msgctxt "discussion"
+msgid "Title can not be empty"
+msgstr "Titolo non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Understand"
+msgstr "Chiara"
+
+msgctxt "discussion"
+msgid "Update Discussion"
+msgstr "Aggiorna la discussione"
+
+msgctxt "discussion"
+msgid "View All"
+msgstr "Vedi tutti"
+
+msgctxt "discussion"
+msgid "View Proposals"
+msgstr "Visualizza le proposte"
+
+msgctxt "discussion"
+msgid "View links"
+msgstr "Vedi link"
+
+msgctxt "discussion"
+msgid "View opinions"
+msgstr "Visualizza le opinioni"
+
+msgctxt "discussion"
+msgid "Views on this proposal"
+msgstr "Opinioni su questa proposta"
+
+msgctxt "discussion"
+msgid "Welcome"
+msgstr "Benvenuto"
+
+msgctxt "discussion"
+msgid "You have already submitted a proposal for this discussion"
+msgstr "Hai già presentato la tua proposta per questa discussione"
+
+msgctxt "discussion"
+msgid "You have entered either wrong email id or password. Please try again"
+msgstr "Email o password sbagliate, riprova"
+
+msgctxt "discussion"
+msgid "You have succesfully submitted a link"
+msgstr "Il tuo link è stato salvato"
+
+msgctxt "discussion"
+msgid "You have successfully created your account"
+msgstr "È stato creato il tuo account"
+
+msgctxt "discussion"
+msgid "You have updated this discussion Succesfully"
+msgstr "Discussione aggiornata"
+
+msgctxt "discussion"
+msgid "Zero length response not permitted"
+msgstr "Risposta vuota non permessa"
+
+msgctxt "discussion"
+msgid "admin"
+msgstr "admin"
+
+msgctxt "discussion"
+msgid "create discussion"
+msgstr "Creare discussione"
+
+msgctxt "discussion"
+msgid "status can not be empty"
+msgstr "stato non può essere vuoto"
+
+msgctxt "discussion"
+msgid "submit your link"
+msgstr "Aggiungi il tuo sito"
+
+msgctxt "discussion"
+msgid "tags can not be empty"
+msgstr "tag non possono essere vuoti"
+
+msgctxt "discussion"
+msgid "Active"
+msgstr "Attivo"
+
+msgctxt "discussion"
+msgid "Delete"
+msgstr "Cancella"
+
+msgctxt "discussion"
+msgid "Discussion author should not be empty"
+msgstr "Autore discussione non deve essere vuoto"
+
+msgctxt "discussion"
+msgid "Creation date should not be empty"
+msgstr "Data di creazione non deve essere vuoto"
+
+msgctxt "discussion"
+msgid "Discription Summary should not be empty"
+msgstr "Il sommario non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Discussion summary should not be empty"
+msgstr "La descrizione non deve essere vuota"
+
+msgctxt "discussion"
+msgid "Discussion title should not be empty"
+msgstr "Titolo discussione non deve essere vuoto"
+
+msgctxt "discussion"
+msgid "Please enter a valid email"
+msgstr "Si prega di inserire un indirizzo email valido"
+
+msgctxt "discussion"
+msgid "Please enter password"
+msgstr "Inserisci la password"
+
+msgctxt "discussion"
+msgid "This discussion title is already exist"
+msgstr "Questo titolo discussione è già presente"
+
+msgctxt "discussion"
+msgid "You have created a discussion Succesfully"
+msgstr "È stata creata una discussione con successo"
+
+msgctxt "discussion"
+msgid "Closed"
+msgstr "Chiuso"
+
+msgctxt "discussion"
+msgid "Open"
+msgstr "Aprire"
+
+msgctxt "discussion"
+msgid "Please Login to submit a link"
+msgstr "Effettua il login per inviare un link"
+
+msgctxt "discussion"
+msgid "Please Login to submit a proposal"
+msgstr "Effettua il login per presentare una proposta"
+
+msgctxt "discussion"
+msgid "by"
+msgstr "da"
+
+msgctxt "discussion"
+msgid "Error in createUser :"
+msgstr "Errore in createUser:"
+
+msgctxt "discussion"
+msgid "Error in createUser method :"
+msgstr "Errore in createUser:"
+
+msgctxt "discussion"
+msgid "Error in curlPut :"
+msgstr "Errore in curlPut:"
+
+msgctxt "discussion"
+msgid "Identitity Manager API is not responding or Curl failed"
+msgstr "Errore dovuto ad Identitity Manager"
+
+msgctxt "discussion"
+msgid "Identitity Manager API returning httpcode: "
+msgstr "Identitity Manager API ha ritornato:"
+
+msgctxt "discussion"
+msgid "Identitity Manager returning httpcode: "
+msgstr "Identitity Manager API ha ritornato:"
+
+msgctxt "discussion"
+msgid "InActive"
+msgstr "Disattive"
+
+msgctxt "discussion"
+msgid "No opinions yet. Be the first to have an opinion"
+msgstr "Non ci sono ancora commenti. Puoi essere il primo ad avere un parere"
+
+msgctxt "discussion"
+msgid "You have succesfully submited a proposal"
+msgstr "È stato inserito con successo una proposta "
+
+msgctxt "discussion"
+msgid "resize folder does not exists in "
+msgstr "la directory per i resize non esiste in"
+
+msgctxt "discussion"
+msgid "Click on one of the triangles below to register your opinion on this proposal."
+msgstr "Fare clic su uno dei triangoli di seguito per registrare il vostro parere su questa proposta."
+
+msgctxt "discussion"
+msgid "Discussion slug should not be empty"
+msgstr "Lo slug della discussione non puà essere vuoto"
+
+msgctxt "discussion"
+msgid "Discussion topics should not be empty"
+msgstr "I topic della discussione non possono essere vuouti"
+
+msgctxt "discussion"
+msgid "Google api for translation is not respondind"
+msgstr "Le API di google per la traduzione non rispondono"
+
+msgctxt "discussion"
+msgid "Identitity Manager  is not responding or Curl failed"
+msgstr "Errore dovuto ad Identitity Manager"
+
+msgctxt "discussion"
+msgid "Number of Opinions"
+msgstr "Numero di opinioni"
+
+msgctxt "discussion"
+msgid "One topic should be selected"
+msgstr "Deve essere selezionato un topic"
+
+msgctxt "discussion"
+msgid "Oops! something wrong"
+msgstr "Ooops! Qualcosa è andato storto"
+
+msgctxt "discussion"
+msgid "Proposal id is empty"
+msgstr "La proposta è vuota"
+
+msgctxt "discussion"
+msgid "Triangle count"
+msgstr "Risultati del triangolo"
+
+msgctxt "discussion"
+msgid "You have already submitted allowed number of proposals on this discussion"
+msgstr "Hai già inserito il numero massimo di proposte permesse per questa discussione"
+
+msgctxt "discussion"
+msgid "Creation Date"
+msgstr "Data di creazione"
+
+msgctxt "discussion"
+msgid "Configuration Name"
+msgstr "Nome della configurazione"
+
+msgctxt "discussion"
+msgid "Configuration Value"
+msgstr "Valore di configurazione"
+
+msgctxt "discussion"
+msgid "Discussion Slug"
+msgstr "Slug della discussione"
+
+msgctxt "discussion"
+msgid "Discussion Topics (Please enter \",\" saperated )"
+msgstr "Topic della discussione (separati da virgola)"
+
+msgctxt "discussion"
+msgid "Link"
+msgstr "Link"
+
+msgctxt "discussion"
+msgid "Link Description"
+msgstr "Descrizione del Link"
+
+msgctxt "discussion"
+msgid "Number of Links"
+msgstr "Numero di link"
+
+msgctxt "discussion"
+msgid "Please Login to submit a Opinion"
+msgstr "Effettua l'accesso per inserire un opinione"
+
+msgctxt "discussion"
+msgid "Reports"
+msgstr "Report"
+
+msgctxt "discussion"
+msgid "Topics"
+msgstr "Topic"
+
+msgctxt "discussion"
+msgid "Please Login to submit an Opinion"
+msgstr "Effettua l'accesso per inserire un opinione"
+
+msgctxt "discussion"
+msgid "Please enter proper opinion text"
+msgstr "Effettua l'accesso per inserire un opinione"
+
+msgctxt "discussion"
+msgid "You have successfully submitted an opinion"
+msgstr "Hai inserito un opinione con successo"
+
+msgctxt "discussion"
+msgid "First give us your position on the proposal."
+msgstr "Prima devi scegliere la tua valutazione sulla proposta."
+
+msgctxt "discussion"
+msgid "Position"
+msgstr "Posizione"
+
+msgctxt "discussion"
+msgid "You have succesfully submitted an opinion"
+msgstr "È stato presentato con successo un parere"
+
+msgctxt "discussion"
+msgid "Your link"
+msgstr "Il tuo link"
+
+msgctxt "discussion"
+msgid "Submit Opinion"
+msgstr "Invia Opinione"
+
+msgctxt "discussion"
+msgid "Thank you for giving us you position on the proposal."
+msgstr "Grazie per averci dato la tua posizione sulla proposta."
+
+msgctxt "discussion"
+msgid "Update Opinion"
+msgstr "Aggiorna Opinione"
+
+msgctxt "discussion"
+msgid "Opinion"
+msgstr "Opinione"
+
+msgctxt "discussion"
+msgid "Links"
+msgstr "Links"
+
+msgctxt "discussion"
+msgid "Your Position"
+msgstr "La tua posizione"
+
+msgctxt "discussion"
+msgid "Your Opinion"
+msgstr "La tua opinione"
+
+msgctxt "discussion"
+msgid "Description can not be empty"
+msgstr "La descrizione non può essere vuota"
+
+msgctxt "discussion"
+msgid "Summary can not be empty"
+msgstr "Il sommario non può essere vuoto"
+
+msgctxt "discussion"
+msgid "Update Proposal"
+msgstr "Aggiorna proposta"
+
+msgctxt "discussion"
+msgid "Additional Description"
+msgstr "Descrizione supplementare"
+
+msgctxt "discussion"
+msgid "An error occurred"
+msgstr "Si è verificato un errore"
+
+msgctxt "discussion"
+msgid "Close"
+msgstr "Salva"
+
+msgctxt "discussion"
+msgid "Configuration Panel"
+msgstr "Pannello configurazione"
+
+msgctxt "discussion"
+msgid "Discussion List"
+msgstr "Lista delle discussioni"
+
+msgctxt "discussion"
+msgid "Highlight"
+msgstr "Evidenziare"
+
+msgctxt "discussion"
+msgid "Highlight Proposal"
+msgstr "Evidenziare proposta"
+
+msgctxt "discussion"
+msgid "Proposal Status"
+msgstr "Stato proposta"
+
+msgctxt "discussion"
+msgid "Rbac"
+msgstr "Rbac"
+
+msgctxt "discussion"
+msgid "UnHighlight"
+msgstr "Togliere evidenza"
+
+msgctxt "discussion"
+msgid "Your reply has been saved successfully"
+msgstr "La tua risposta è stata salvata con successo"
+
+msgctxt "discussion"
+msgid "Please enter youtube or vimeo video url"
+msgstr "Inserisci url youtube o vimeo del video"
+
+msgctxt "discussion"
+msgid "Video Link"
+msgstr "Video Link"
+
+msgctxt "discussion"
+msgid "Additional Description (Header Text)"
+msgstr "Descrizione supplementare (Testo testata)"
+
+msgctxt "discussion" 
+msgid "Failed to write file to disk"
+msgstr "Impossibile scrivere file su disco"
+
+msgctxt "discussion" 
+msgid "File size exceeded"
+msgstr "Dimensioni del file superato"
+
+msgctxt "discussion" 
+msgid "Html Content"
+msgstr "html Content"
+
+msgctxt "discussion" 
+msgid "Invalid Discussion"
+msgstr "Discussione non valido"
+
+msgctxt "discussion" 
+msgid "Missing File Name"
+msgstr "Manca Nome file"
+
+msgctxt "discussion" 
+msgid "Missing a temporary folder"
+msgstr "Manca una cartella temporanea"
+
+msgctxt "discussion" 
+msgid "Only Numbers are allowed"
+msgstr "Solo i numeri sono permessi"
+
+msgctxt "discussion" 
+msgid "Only png and jpg/jpeg image allowed"
+msgstr "Solo png e immagine jpg / jpeg permesso"
+
+msgctxt "discussion" 
+msgid "Please enter valid youtube or vimeo video url"
+msgstr "Inserisci URL valido del video su youtube o vimeo"
+
+msgctxt "discussion" 
+msgid "Proposal Image"
+msgstr "proposta Immagine"
+
+msgctxt "discussion" 
+msgid "Some error occured in file uploading"
+msgstr "Qualche errore si è verificato in un file caricato"
+
+msgctxt "discussion" 
+msgid "Sorting Order"
+msgstr "Ordinamento ordine"
+
+msgctxt "discussion" 
+msgid "Sorting order can not be empty"
+msgstr "Ordinamento non può essere vuoto"
+
+msgctxt "discussion" 
+msgid "The uploaded file was only partially uploaded"
+msgstr "Il file caricato è stato caricato solo parzialmente"
+
+msgctxt "discussion" 
+msgid "Upload Image"
+msgstr "Carica Immagine"
+
+msgctxt "discussion" 
+msgid "file was not uploaded "
+msgstr "file non è stato caricato"
+
+msgctxt "discussion"
+msgid "An error occured in saving moderator, Please retry."
+msgstr "Verificato un errore nel salvare moderatore, prego riprovare."
+
+msgctxt "discussion"
+msgid "An internal error occured. Please retry"
+msgstr "Verificato un errore interno. riprovare"
+
+msgctxt "discussion"
+msgid "Feedback"
+msgstr "Feedback"
+
+msgctxt "discussion"
+msgid "Send a feedback to the author"
+msgstr "Invia un feedback all'autore"
+
+msgctxt "discussion"
+msgid "email id is not valid for moderator"
+msgstr "d-mail non è valido per moderatore"
+
+msgctxt "discussion"
+msgid "is not valid email id"
+msgstr "Non s valido id e-mail"
+
+msgctxt "discussion"
+msgid "A new link has been added."
+msgstr "È stato aggiunto un nuovo link."
+
+msgctxt "discussion"
+msgid "A new proposal has been added."
+msgstr "È stata aggiunta una nuova proposta."
+
+msgctxt "discussion"
+msgid "An opinion has been "
+msgstr "Un parere è stato "
+
+msgctxt "discussion"
+msgid "Hi"
+msgstr "Ciao"
+
+msgctxt "discussion"
+msgid "Regards"
+msgstr "Saluti"
+
+msgctxt "discussion"
+msgid "added"
+msgstr "aggiunto"
+
+msgctxt "discussion"
+msgid "added a link"
+msgstr "aggiunto un link"
+
+msgctxt "discussion"
+msgid "added a new proposal: Proposal Title"
+msgstr "ha aggiunto una nuova proposta: Proposta Titolo"
+
+msgctxt "discussion"
+msgid "an opinion"
+msgstr "un parere"
+
+msgctxt "discussion"
+msgid "updated"
+msgstr "aggiornato"
+
+msgctxt "discussion"
+msgid "An intro: The moderator"
+msgstr "Un intro: Il moderatore"
+
+msgctxt "discussion"
+msgid "Moderator "
+msgstr "Moderatore"
+
+msgctxt "discussion"
+msgid "a link"
+msgstr "un collegamento"
+
+msgctxt "discussion"
+msgid "has"
+msgstr "ha"
+
+msgctxt "discussion"
+msgid "hidden"
+msgstr "nascosto"
+
+msgctxt "discussion"
+msgid "shown"
+msgstr "mostrato"
+
+msgctxt "discussion"
+msgid "the following content:"
+msgstr "il seguente contenuto:"
+
+msgctxt "discussion"
+msgid "the opinion"
+msgstr "il parere"
+
+msgctxt "discussion"
+msgid "the proposal:"
+msgstr "proposta"
+
+msgctxt "discussion"
+msgid "Click here to access Admin Page"
+msgstr "Clicca qui per accedere alla pagina di amministrazione"
+
+msgctxt "discussion"
+msgid "An intro: The moderator {user_name} has {status} the following content"
+msgstr "Un intro: Il moderatore {user_name} ha {status} il seguente contenuto"
+
+msgctxt "discussion"
+msgid "An opinion has been {opinion_action}"
+msgstr "Un parere è stato {opinion_action}"
+
+msgctxt "discussion"
+msgid "[{site_name}] {user_name} added a new proposal: Proposal Title [{site_theme}] {title}"
+msgstr "[{site_name}] {user_name} ha aggiunto una nuova proposta: Proposta Titolo [{site_theme}] {title}"
+
+msgctxt "discussion"
+msgid "[{site_theme}] Moderator {user_name} has {status} the proposal : {title}"
+msgstr "[{site_theme}] Moderatore {user_name} ha {status} proposta: {title}"
+
+msgctxt "discussion"
+msgid "[{site_theme}] {user_name} added a link"
+msgstr "[{site_theme}] {user_name} aggiunto un link"
+
+msgctxt "discussion"
+msgid "[{site_theme}] {user_name} has {status} a link"
+msgstr "[{site_theme}] {user_name} ha {status} un link"
+
+msgctxt "discussion"
+msgid "[{site_theme}] {user_name} has {status} the opinion"
+msgstr "[{site_theme}] {user_name} ha {status} l'opinione"
+
+msgctxt "discussion"
+msgid "[{site_theme}] {user_name} {status} an opinion"
+msgstr "[{site_theme}] {user_name} {status} un'opinione"
+
+msgctxt "discussion"
+msgid "Proposal has been Updated."
+msgstr "La proposta è stata aggiornata."
+
+msgctxt "discussion"
+msgid "[{site_name}] {user_name} updated a proposal: Proposal Title [{site_theme}] {title}"
+msgstr "[{site_name}] {user_name} aggiornata una proposta: Proposta Titolo [{site_theme}] {title}"
+
+msgctxt "discussion"
+msgid "backendconnector module is missing"
+msgstr "Modulo backendconnector manca"
+
+msgctxt "discussion"
+msgid "backendconnector module is missing or not defined"
+msgstr "Modulo backendconnector è mancante o non definita"
+
+msgctxt "discussion"
+msgid "rbacconnector module is missing"
+msgstr "Modulo rbacconnector manca"
+
+msgctxt "discussion"
+msgid "rbacconnector module is missing or not defined"
+msgstr "Modulo rbacconnector è mancante o non definita"
+
+msgctxt "discussion"
+msgid "Accept the terms of Service"
+msgstr "Accettare i termini di servizio"
+
+msgctxt "discussion"
+msgid "Do you already have an account ?"
+msgstr "Hai già un account ?"
+
+msgctxt "discussion"
+msgid "First Name"
+msgstr "Nome"
+
+msgctxt "discussion"
+msgid "Last Name"
+msgstr "Cognome"
+
+msgctxt "discussion"
+msgid "Register"
+msgstr "Registrati"
+
+msgctxt "discussion"
+msgid "You have been successfully registered"
+msgstr "Sei stato registrato con successo"
+
+msgctxt "discussion"
+msgid "static/navbar module is missing"
+msgstr "Modulo statico / barra di navigazione è presente"
+
+msgctxt "discussion"
+msgid "Email id already in use, Please choose a different email id"
+msgstr "Email già in uso id, Scegliere un diverso id e-mail"
+
+msgctxt "discussion"
+msgid "Please try again"
+msgstr "Riprova"
+
+msgctxt "discussion"
+msgid "Create new account"
+msgstr "Crea nuovo account"
+
+msgctxt "discussion"
+msgid "Insert username and password"
+msgstr "Inserisci username e password"
+
+msgctxt "discussion"
+msgid "Emails"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Content Submitted By Contributor"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Export All Contributors"
+msgstr ""

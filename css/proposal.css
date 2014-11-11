@@ -1,0 +1,709 @@
+/*!
+ * CivicLinks Profiles
+ *
+ * Copyright 2013 Fondazione <ahref
+ */
+
+@import url(http://fonts.googleapis.com/css?family=Titillium+Web:400,600,700|Roboto+Slab:400,300,700);
+
+body {
+  padding-top: 60px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.title-bar
+{
+  background-color: #f5f5f5;
+  /*width: 100%;*/
+  margin-top: 40px;
+  padding: 5px 10px 10px 10px;
+  margin-bottom: 40px;
+}
+
+.title-bar h1
+{
+  color: #000;
+  text-transform: uppercase;
+}
+
+.title-bar h2
+{
+  color: rgb(0, 0, 0);
+  font-weight: 100;
+}
+
+.alert_container
+{
+  margin-top: 20px;
+  margin-bottom: -40px;
+}
+
+.allproposals { margin-bottom: 80px; }
+
+.proposal
+{
+  border: 1px solid #f5f5f5;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.proposal:hover
+{
+  background-color: #7dafbf;
+  color: white;
+}
+
+.proposal .openModal
+{
+  color: #000;
+  text-decoration: none;
+}
+
+.proposal .openModal:hover { color: #fff; }
+
+.proposalheader
+{
+  margin: -10px -10px 10px -10px;
+  background-color: #f5f5f5;
+  padding: 6px 10px;
+  line-height: 25px;
+  font-weight: 200;
+  text-transform: uppercase;
+  font-size: 22px;
+}
+
+.proposal:hover h3 { color: black; }
+
+.proposal .byline
+{
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.proposal .byline img
+{
+  width: 30px;
+  height: 30px;
+  float: left;
+}
+
+.proposal .byline .author
+{
+  padding-top: 15px;
+  padding-left: 36px;
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-weight: 700;
+}
+
+.proposal summary
+{
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-weight: 300;
+  line-height: 25px;
+  margin-bottom: 20px;
+}
+
+.proposal footer
+{
+  margin: 5px -10px -10px -10px;
+  background-color: #7dafbf;
+  color: white;
+  height: 16px;
+  padding-top: 0;
+}
+
+.proposal footer .opinions
+{
+  padding: 2px 10px 0px 5px;
+  border-right: 1px solid #fff;
+}
+
+.proposal footer .documents
+{
+  padding: 2px 10px 0px 8px;
+  border-right: 1px solid white;
+}
+
+.proposal footer .documeents
+{
+  padding: 2px 10px 0px 8px;
+  border-right: 1px solid white;
+}
+
+.proposal footer .showOpinion
+{
+  padding: 0 10px 0 8px;
+  border-right: 1px solid white;
+}
+
+.proposal footer .showLink
+{
+  padding: 0 10px 0 8px;
+  border-right: 1px solid white;
+}
+
+.footer
+{
+  background-color: #000;
+  color: #fff;
+  font-size: 12px;
+}
+
+footer { padding: 5px; }
+.proposal footer a { color: #fff !important}
+
+body .modal
+{
+  width: 800px;
+  /* must be half of the width, minus scrollbar on the left (30px) */
+  margin-left: -370px;
+}
+
+body .modal .modal-header
+{
+  background-color: #7dafbf;
+  color: white;
+  -webkit-border-radius: 6px 6px 0 0;
+  -moz-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+}
+
+body .modal .modal-body
+{
+  overflow-y: hidden;
+  height: 372px;
+  border-radius: 0 0 5px 5px;
+}
+
+body .modal article
+{
+  width: 514px;
+  float: left;
+  overflow-y: auto;
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-weight: 300;
+  padding-right: 20px;
+  line-height: 24px;
+  height: 356px;
+  margin-top: -16px;
+  padding-top: 20px;
+}
+
+body .modal .modal-byline
+{
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+body .modal .modal-byline img
+{
+  width: 30px;
+  height: 30px;
+  float: left;
+}
+
+body .modal .modal-byline .author a
+{
+  float: left;
+  padding-top: 14px;
+  padding-left: 5px;
+  color: #000;
+  text-decoration: none;
+}
+
+body .modal .documents
+{
+  height: 24px;
+  width: 549px;
+  position: absolute;
+  bottom: 0;
+  margin: 0 -15px;
+  background-color: #7dafbf;
+  text-align: center;
+  padding-top: 3px;
+  border-radius: 0 0 0 6px;
+}
+
+body .modal aside
+{
+  background-color: #E7E7E7;
+  border-radius: 0 0 7px 0;
+  float: right;
+  height: 355px;
+  margin: -15px;
+  overflow-y: scroll;
+  padding: 10px;
+  width: 30%;
+  border-radius: 0 0 6px 0;
+}
+
+aside h4
+{
+  margin-top: -2px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+aside select
+{
+  width: 220px;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+  height: 22px;
+  font-size: 13px;
+}
+
+aside .opinion
+{
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-size: 85%;
+  line-height: 120%;
+  margin-bottom: 5px;
+  padding: 5px;
+  min-height: 30px;
+  line-height: 17px;
+}
+
+aside .opinionss
+{
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-size: 85%;
+  line-height: 120%;
+  margin-bottom: 5px;
+  padding: 5px;
+  min-height: 30px;
+  line-height: 17px;
+}
+
+aside .slidess
+{
+  border-radius: 0 0 0 6px;
+  bottom: 0;
+  height: 24px;
+  margin: 0 -15px;
+  padding-top: 3px;
+  position: absolute;
+  text-align: center;
+  width: 265px;
+}
+
+.slidess a {
+  color: #FFFFFF;
+  text-decoration: none
+}
+.slidess a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+aside .opinion strong a{
+  font-weight: 700;
+  text-decoration: none;
+  color: #000;
+}
+
+aside .opinion img
+{
+  float: left;
+  height: 30px;
+  padding-right: 5px;
+  width: 30px;
+}
+
+aside .post-opinion
+{
+  background-color: #6F6F6F;
+  border-radius: 0 0 6px 0;
+  bottom: 0;
+  height: 27px;
+  margin-top: 150px !important;
+  margin-left: -10px;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  width: 251px;
+}
+
+.panelcontainer
+{
+  bottom: 27px;
+  display: none;
+  left: 0px;
+  position: absolute;
+  width: 549px;
+}
+
+.panelinner
+{
+  background-color: #F0F0F0;
+  border: 0px solid #666666;
+  border-bottom-width: 0px;
+  padding: 20px 20px 20px 20px;
+  height: 309px;
+  overflow-y: scroll;
+  width: 465px;
+  margin: 0 auto;
+  -webkit-box-shadow: 0px -5px 19px rgba(50, 50, 50, 0.35); -moz-box-shadow:    0px -5px 19px rgba(50, 50, 50, 0.35); box-shadow:         0px -5px 19px rgba(50, 50, 50, 0.35);
+  border-top: 5px solid #7dafbf;
+}
+
+.panelcontainer2
+{
+  bottom: 0px;
+  display: none;
+  left: 549px;
+  position: absolute;
+  width: 251px;
+}
+
+.panelinner2
+{
+  background-color: #999999;
+  border: 0px solid #666666;
+  border-bottom-width: 0px;
+  padding: 8px 20px 5px 20px;
+  color: #FFFFFF;
+  height: 389px;
+}
+
+.panelinner2 .msg {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.tmodal-background
+{
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #999999;
+  z-index: 1000;
+}
+
+.tmodal-content
+{
+  background-color: white;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  box-shadow: 0 0 20px 0 #222;
+  -webkit-box-shadow: 0 0 20px 0 #222;
+  -moz-box-shadow: 0 0 20px 0 #222;
+  display: none;
+  height: 100px;
+  left: 10px;
+  margin: 0px 0 0 0px;
+  padding: 10px;
+  position: absolute;
+  top: 40px;
+  width: 175px;
+  z-index: 1000;
+}
+
+.tmodal-background.active, #tmodal-content.active { display: block; }
+
+aside .post-opinion input
+{
+  background-color: #DFDFDF;
+  border: 1px solid gray;
+  font-size: 3px;
+  height: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+  min-height: 8px;
+  width: 204px;
+  margin-left: -13px;
+  -webkit-box-shadow: inset 0px 0px 3px 2px rgba(0, 0, 0, 0.2); box-shadow: inset 0px 0px 3px 2px rgba(0, 0, 0, 0.2);
+}
+
+.disagree
+{
+  border-left: #fba7b5 solid 5px;
+  border-right: #fff solid 5px;
+  background-color: #fff;
+}
+
+.agree
+{
+  border-right: #a3debd solid 5px;
+  border-left: #fff solid 5px;
+  background-color: #fff;
+}
+
+.neutral
+{
+  border-right: #fff solid 5px;
+  border-left: #fff solid 5px;
+  background-color: #fff;
+}
+
+.documents a
+{
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.documents a:hover
+{
+  color: #FFFFFF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.proposalLinks { color: #fff !important; }
+.proposalOpinion { color: #fff !important; }
+.message { color: black !important; }
+.proposal a:hover { text-decoration: none; }
+.loading-image { display: none; }
+
+.link-box
+{
+  background-color: #DDD;
+  position: relative;
+  left: -20px;
+  top: -20px;
+  padding: 5px 20px;
+  width: 100%;
+}
+
+.current-links {
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-weight: 300;
+  word-wrap: break-word;
+}
+
+#proposal-error
+{
+  margin-bottom: 5px;
+  margin-right: 170px;
+  text-spacing: space-start;
+  display: none;
+}
+.singleProposal {
+  margin-right:20px;   
+}
+.fullWindow {
+  width: 370px; float: left;
+}
+.narrowWindow{
+  width: 290px; float: left;
+}
+.midWindow{
+  width: 320px; float: left;
+}
+aside .slides
+{
+  border-radius: 0 0 0 6px;
+  bottom: 0;
+  height: 24px;
+  margin: 0 -15px;
+  padding-top: 3px;
+  position: absolute;
+  text-align: center;
+  width: 265px;
+}
+
+.slides a {
+  color: #FFFFFF;
+  text-decoration: none
+}
+.slides a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.confirm-alert {
+  background-image: url(../images/alert.jpg);
+  width: 800px;
+  height: 200px;
+}
+.text {
+  padding: 20px;
+  width: 72%;
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  text-transform: uppercase;
+  color: rgb(100,100,100);
+  font-weight:300
+}
+.action-buttons {
+  margin-top: 30px;
+}
+.subtitle {
+  font-family: 'Roboto Slab','helvetica-neue',helvetica,arial;
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 400;
+  padding-top: 5px; 
+}
+
+.openModal{
+  cursor: pointer;
+}
+.navbar-inner {
+  min-height: 31px;
+}
+
+.civiclinks-logo {
+  vertical-align: middle;
+}
+
+.navbar .brand {
+  padding-bottom: 0px;
+  padding-top: 4px;
+}
+
+#nav-main-menu .nav > li > a {
+  padding: 9px 10px 9px;
+  line-height: 10px;
+}
+
+#nav-main-menu .active a {
+  padding-bottom: 9px !important;
+  border-bottom: 4px solid rgb(9,146,140);
+}
+
+#nav-login #registration a {
+  margin-top: 3px;
+  padding: 6px 11px;
+  color: rgb(254,254,254);
+  margin-right: 5px;
+}
+
+.btn-small {
+  color: white;
+  font-size: 12px;
+  background-color: rgb(9,146,140);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  background-image: none;
+  border: 1px solid rgb(9,146,140);
+}
+
+#registration .btn {
+  text-shadow: none;
+  font-weight: normal;
+}
+
+#nav-login #registration .btn-small:hover {
+  color: rgb(60,60,60);
+  background-color: rgb(230,230,230);
+}
+
+.navbar-inverse .nav-collapse .nav > li > a:hover,
+.navbar-inverse .nav-collapse .nav > li > a:focus,
+.navbar-inverse .nav-collapse .dropdown-menu a:hover,
+.navbar-inverse .nav-collapse .dropdown-menu a:focus {
+  color: white;
+}
+
+.nav-collapse .nav > li > a, .nav-collapse .dropdown-menu a {
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.title {
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  padding: 20px 40px 0px 40px;
+}
+
+.description {
+  font-family: 'Roboto Slab', serif;
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 300;
+  padding: 0px 40px;
+  height: 100%;
+  display: block;
+}
+
+.border-line {
+  border-bottom: 1px solid #7DAFBF;
+  float: left;
+  width: 100%;
+  min-height: 60px;
+}
+
+.civici-logo {
+  position: absolute;
+  top: 18px;
+  display: block; text-indent: -5000px;
+  width: 127px;
+  height: 26px;
+  background-image: url('../images/civici.png');
+}
+
+.last {
+  margin-bottom: 50px;
+}
+
+.partecipa-gov {
+  font-family: 'Titillium Web', Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  padding-top: 25px;
+  position: relative;
+  top: 1px;
+}
+
+.partecipa-gov a {
+  color: black;
+}
+
+.partecipa-gov a:hover {
+  color: #7DAFBF;
+  text-decoration: none;
+}
+
+/***************
+Footer
+***************/
+
+.conclusion {
+	background-color: rgb(0,0,0);
+	color: rgb(255,255,255);
+	font-size: 12px;
+	bottom: 0px;
+	width: 100%;
+	margin-top: 20px;
+}
+
+footer {
+	padding: 5px 0px;
+}
+
+footer > p {
+	margin: 0;
+}
+
+footer > p > a {
+	color: rgb(255,255,255);
+	text-decoration: none;
+}
+
+footer > p > a:hover, a:focus, a:active {
+	color: rgb(255,255,255);
+	text-decoration: none;
+	font-weight: bold;
+}

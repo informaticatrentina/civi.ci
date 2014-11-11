@@ -1,0 +1,416 @@
+.. -*- coding: utf-8; mode: rst -*-
+
+CIVICO
+======
+
+In CIVICO project, one can create a discussion. All discussions must have
+different name.  There are some proposal under each discussion. These proposal
+may also have opinions. An user can have multiple proposals but will have a
+single opinion on proposal.
+
+
+Installation
+------------
+
+To setup CIVICO you have to follow some steps mentioned below:
+
+1. Download and setup yii framework (see http://www.yiiframework.com/download/)
+
+2. Checkout source code from repository into new directory
+   (git@git.ahref.eu:apps/civico.git)::
+
+
+    css                    contain all css file
+    images                 contain all images used in project
+    js                     contain all js file
+    protected/
+      components           contain all api
+      config/
+        Config.php         This file have configuration of project
+         test.php          This file have configuration for test cases
+      controllers          This directory contain all controller used in project.
+      extentions           extentions directory contain all extention used in project.
+      models               Bussiness logic puts here.
+      runtime              Application log create in this directory
+      tests                Test cases put hare.
+      views/
+        layout             This directory contain  layout of project.
+        discussion         This directory contain html page that will be rendered from discussion controller
+        template           This directory contain all templates
+    uploads                This directory contain subdirectory to save uploaded data (images file, text file etc).
+    index.php
+    index-test.php
+
+3. create database and change configuration (/protected/Config/config.php)
+
+4. Run php index-cli.php. This will show the list of avaliable commands.
+    - Run php index-cli.php makeupdatedirectoriescommand  {username}
+
+      {username} - The name of user for whom permission is to be granted.
+      For example  php index-cli.php makeupdatedirectoriescommand  www-data
+
+    - Run php index-cli.php createuploadsdirectory {username}
+
+      For saving uploaded file, this command will create directory named as define
+      in local config file "UPLOAD_DIRECTORY" constant .
+      {username} - The name of user for whom permission is to be granted.
+      For example   php index-cli.php createuploadsdirectory www-data
+
+CONFIGURATION
+-------------
+
+1. See local_config.php_sample file /protected/Config/local_config.php_sample)
+   and copy this file as local_config.php (/protected/Config/local_config.php)
+
+2. Configuration changes to be done in local_config.php
+
+    a. BASE_URL Change its value to  site base url. Caution. Do not write PROTOCOL part of url and end of url should have '/'
+
+    b. DB_HOST
+       DB_NAME
+       DB_USER
+       DB_PASS
+
+       This is setting for database connection. HOST, DATABASE_NAME,
+       DATABASE_USER, DATABASE_PASSWORD: replace with host, name of database,
+       database user name, and password of same user. (eg. host=localhost,
+       dbname=civico, username = 'root', password='123456')
+
+    c. AGGREGATOR_API_URL The complete API url of aggregator (which contains
+       api key also)
+
+    d. IDENTITY_MANAGER_API_URL The API url of identity manager installation
+       this site will use.
+
+    e. IDM_API_KEY API key of identity manager for this site.
+
+    f. APP_LOG_FILE_NAME The name of application log file. Log file will be
+       created inside /protected/runtime/LOG_FILE_NAME
+
+       The current name in sample file allows you to create separate log file
+       for each day. If you want to create one log file and have file rotation
+       on it, just use a single name (one with date function)
+
+    g. SITE_SESSION_COOKIE_NAME Name of cookie for session id.
+
+    h. 'language' => 'SITE_LANGUAGE'
+        SITE_LANGUAGE is language in which message have to be converted. (for
+        English language you can use 'en')
+
+   i.  SITE_TITLE The name of site title.
+
+   j.  ALLOWED_IMAGE_EXTENSION The list of allowed extenstion for upload image.
+       This is define in  json format.
+
+   k.  UPLOAD_IMAGE_SIZE_LIMIT The max size of uploading image in byte.
+
+   l.  UPLOAD_DIRECTORY The name of upload direactory. Upload directory should be on root.
+
+   m.  RUNTIME_DIRECTORY  The name of runtime directory. Default runtime directory
+         path is '/protected/runtime'
+
+   n.  PROFILE_IMAGE_URL The complete URL of profile manager including '/photo'
+
+   o.  PROFILE_URL The complete URL of profile manager including '/show'
+
+   p.  CIVICLINKS_NETWORK_TOKEN Civiclinks network token
+
+   q.  TITLE Constant for Site/Page Title
+
+   r. ALL_ENTRY change to 99999. Max entries that can be loaded from agg in on one query
+
+   s. SESSION_TIMEOUT_TIME set the time in seconds after which session will time out.
+
+   t. SITE_THEME The name of the theme to be used for the site.
+
+   u. CHUNK_SIZE Number of boxes to be shown on home page.
+
+   v. TRANSLATION_API_KEY Google translation API Key of your account
+
+   w. TRANSLATE_LANGUAGE Languages for which translation is to be supported.
+
+   x. CHAR_LIMIT Character limit of proposal title, introduction and opinion body.
+
+   y. USER_GENERATED_DIRECTORY The name of user generated directory.
+
+   z. GOOGLE_TRANSLATION_ENABLED The flag for manage google language detection
+      and translation. Set 1 for enable google language detection and set 0 for disabled.
+
+   - GOOGLE_ANALYTIC_AUTH_KEY  The auth key for analytic code.
+
+   - GOOGLE_ANALYTIC_COOKIE_DOMAIN  The cookie domain for analytic tracking code.
+
+   - AHREF_FOUNDATION_URL The url of ahref foundation.
+
+   - PERMISSION  Name of all permissions exists in the project.
+
+   - RBAC_ADMIN_USER  Super admin user for the project.
+
+   - OPINION_SUBMISSION  Opinion submission status. 1 if status is ON and 0 for OFF.
+
+   - LINK_SUBMISSION  Link submission status. 1 if status is ON and 0 for OFF.
+
+   - DEFAULT_EMAIL email id used as default.  Set as default sender.
+
+   - SMTP_HOST is host name used like for gmail. It is 'ssl://smtp.gmail.com'.
+
+   - SMTP_PORT is port number used. Port 465 is for smtps.
+
+   - SMTP_USER is the username or email id which is used for
+       authentication purpose.  This username or email id is set as
+       from / sender of mail sent for notification.
+
+   - SMTP_PASSWORD is the password of the SMTP_USER used.
+
+   - SMTP_AUTH it defines whether to authenticate user.  If
+       authentication does not happen mail will be sent to spams.  Set
+       true for authenticating.
+
+   - ENABLE_SENDMAIL decide whether to send mail by smtp or by
+       sendmail.  Put as 1 for sendmail and 0 for smtp.
+
+   - SMTP_SECURE is SMTP Secure used for secure the transaction(send mail) using 'tls/ssl'.
+
+   - FEED_EMAIL is the email used in the feed(s)
+
+   - THEME_FEATURE The feature available in theme. Define json string where feture is
+        key and value will be boolean.
+
+
+Modules
+-------
+
+  In this project, we have used additional module. Checkout this module in
+   '/protected/modules' directory. Module information is given below:
+
+  -   To Enable modules you need to define ENABLE_MODULES_LIST in your local_config.php file and
+      local_config.php_sample file no need to define in config.php.
+
+  -   Add in config file of project
+      for ex. 'modules'=> defined('ENABLE_MODULES_LIST') ? json_decode(ENABLE_MODULES_LIST, TRUE) : array()
+
+  1.  Backendconnector
+
+      - Checkout from git@git.ahref.eu:lib/backendconnector.git
+      - Please follow README file for setup backendconnector module.
+
+  2.  Rbacconnector
+
+      - Checkout from git@git.ahref.eu:lib/rbacconnector.git
+      - Please follow README file for setup rbacconnector module.
+
+  3.  navbar
+
+     - Checkout from git@git.ahref.eu:lib/static.git
+
+     - Please follow README file for setup navbar module.
+
+- Now CIVICO application is ready to run. If you want to run
+  application on your local machine (apache server), you have to create
+  .htaccess file on root directory(/var/www/project).  To see setting of
+  .htaccess file, Please visit
+  http://www.yiiframework.com/doc/guide/1.1/en/quickstart.apache-nginx-config
+
+
+PHP.ini Configuration
+---------------------
+
+Following configuration need to be done in php.ini file:
+
+1. For image upload size:
+
+    a. Change upload_max_filesize to 5M where 5M is 5MB. If your desired maximum
+       upload size is 5MB.
+
+    b. post_max_size. Default value is 8M. If you want to increase the post data
+       max size and than change its value.
+
+After php.ini change you need to reload apapche or the php-fpm.
+
+
+Database Migration
+------------------
+
+Prerequisite:
+
+1. You have setup the application
+2. You have create a empty database
+3. You have created config files. /protected/config/config.php and
+   protected/config/console.php and pointed the right DB in it.
+
+In order to migrate DB or perform DB updates run command::
+
+    ./protected/yiic migrate
+
+And follow instructions.
+
+
+
+Create New Discussion
+---------------------
+
+1. To create a new discussion, Please go on:
+   BASE_URL/admin/discussion/add
+
+2. Fill up discussion form and submit.
+
+Only admin user can create a discussion.
+
+In order to create admin user, Please add user email id in
+DISCUSSION_ADMIN_USERS array defined in local_config.php
+
+
+Requirements
+------------
+
+civico is developed on yii framework So all requirements of yii framework must
+be fulfilled:
+
+The minimum requirement by Yii is that your Web server supports PHP 5.1.0 or
+above.
+
+Please access the following URL to check if your Web server reaches the
+requirements by Yii, assuming "YiiPath" is where Yii is installed.
+
+
+Dependency List
+---------------
+
+PHP packages need to be installed are::
+
+    php5-cli
+    php5-gd
+    php5-curl
+    php5-mysql
+    php-pear
+    phpunit
+
+
+Development
+-----------
+
+After the database setup is possible to run a local server.
+
+.. code:: sh
+
+    cd civico
+    php5 -S localhost:8080
+    xdg-open http://localhost:8080
+
+
+Source code
+-----------
+
+The source code is manage with ``git`` using the ``git-flow`` work-flow.
+
+When a new release is ready the developer must increase at least the patch level
+(we do not have a automatic builder/continuous integration system that use the
+build number):
+
+- Bump the version number in the file ``version.txt``
+- Tag with a lightweight tag the bump version commit
+- Merge the ``develop`` branch in ``master``
+- Push the ``master`` branch, including the tags
+
+For example to bump the version to ``0.0.1.0``, assuming that we start in the
+``develop`` branch:
+
+.. code:: sh
+
+    NEW_VERSION="0.0.1.0"
+    printf "%s" "${NEW_VERSION}" > version.txt
+    git add version.txt
+    git commit -m "Bump version to ${NEW_VERSION}"
+    git tag v"${NEW_VERSION}"
+    git checkout master
+    git merge develop
+    git push
+    git push --tags
+
+
+Starting with git 1.8.3 the last two command can be replaced with:
+
+.. code:: sh
+
+    git push --follow-tags
+
+
+Deleting entries from Mongo Shell
+---------------------------------
+
+Go to entries page on site and grab the entry id you want to delete. Entry id is
+the alphanum id on single entry page url.
+
+Now login to mongo shell and go to desired DB and run below query (should
+replace ENTRY_ID with actual id):
+
+db.entry.remove( {'_id': ObjectId('ENTRY_ID')} );
+
+
+Backup and Restore
+------------------
+
+You have to backup:
+
+- the configuration files
+- the database
+- the ``uploads`` directory
+
+
+The CIVICO Developer Team
+http://www.incaendo.com
+
+
+Message Translation
+---------------------
+
+For message transalation, There is need to get all message from source
+code and convert it into .po file.
+
+To get all message from php file run in the checkout root:
+
+.. code:: sh
+
+    ./protected/yiic message protected/messages/config.php
+
+To get all message from js file, run in the checkout root:
+
+.. code:: sh
+
+    ./protected/yiic message protected/messages/jsConfig.php
+
+Now run following command to convert these php file into .po file
+
+.. code:: sh
+
+    ./protected/yiic emessage php protected/message
+
+  For Js message, A cache file (dictionary-*.js) is created in JsTrans extension.
+  All Js message for translation serve from this file. You need to remove cache dictionary
+  file on changing in js.po file so that new cache file will be generated and your updation
+  in po file will be reflected in project.
+
+  Remove file :            protected/extensions/JsTrans/assets/dictionary-*.js
+
+  Also delete directory from assets because these directory have cache files of js message translation.
+  Directory Path:    /assets/*
+
+Create/Restore Dump
+-------------------
+
+For create and restore dump of user generated data, There is need to define user
+generate directory in config file.
+
+  - For creating dump, run following command
+      php index-cli.php  generatedumpcommand
+
+      This command generates a dump_*.tar.gz file. One can change file name
+      by passing 'file name' as an additional parameter in above command
+      php index-cli.php  generatedumpcommand abc.tar.gz
+
+   - For restore dump, run following command
+     php index-cli.php  restoredumpcommand
+
+     This command restore latest .*tar.gz dump file. One can restore a
+     particular file by passing 'file name' as an additional parameter in above
+     command php index-cli.php restoredumpcommand dump.tar.gz

@@ -1,0 +1,24 @@
+# translation of yiiext.php to it_it
+# Copyright (C) 2013
+# This file is distributed under the same license as the yiiext.php package.
+#
+# FULL NAME <EMAIL@ADDRESS>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: yiiext.php\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-25 17:25+0000\n"
+"PO-Revision-Date: 2013-07-25 17:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: it_it <translation-team-it_it@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Yii EMessage\n"
+"Generated-By: Yii EMessage\n"
+"Plural-Forms: nplurals = 2; plural = n != 1;\n"
+
+msgctxt "discussion" 
+msgid "Incorrect options for \"{classType}\" [{name}]"
+msgstr ""
+

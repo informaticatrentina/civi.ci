@@ -1,0 +1,35 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner" id="nav-main-menu">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="http://www.civiclinks.it/it/" target="_blank">
+        <img src="{{constant('BASE_URL')}}images/civiclinkslogo.png" width="116" height="24" alt="civiclinks logo" class="civiclinks-logo">
+      </a>
+      <div class="nav-collapse collapse">
+        <ul class="nav" id="nav-menu">
+          <li class="hidden-desktop"><a href="http://www.civiclinks.it/it/a/register/?network=profiles">Registrati</a></li>
+          <li class="hidden-desktop"><a class='login-link' href="#">Accedi</a></li> 
+          <li><a href="http://factchecking.civiclinks.it/it/" target="_blank">Factchecking</a></li>
+          <li><a href="http://timu.civiclinks.it/it/" target="_blank">Timu</a></li>
+          <li><a href="http://civicgrant.civiclinks.it/" target="_blank">Civicgrant</a></li>
+          <li class="active"><a href="http://civi.ci/" target="_blank">Civici</a></li>
+        </ul>
+        <ul id="nav-login" class="nav pull-right visible-desktop">
+          {% if App.session is not empty %}
+          <ul class="nav pull-right" > 
+            <li><a href="{{constant('PROFILE_URL')~App.session.user.id}}">{{  App.session.user.firstname }} {{  App.session.user.lastname }}</a></li>
+            <li><a href="{{ constant('BASE_URL')}}logout">{{ t('discussion', 'Logout') }}</a></li>
+          </ul>         
+          {% else %}
+          <li id="registration"><a class="btn btn-small visible-desktop" href="http://www.civiclinks.it/it/a/register/?network={{constant('CIVICLINKS_NETWORK_TOKEN')}}">Registrati</a></li>
+          <li><a class='login-link' href="#">Accedi</a></li>        
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

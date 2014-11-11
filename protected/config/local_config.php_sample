@@ -1,0 +1,252 @@
+<?php
+
+/**
+ * This is a local config file. Created from sample file.
+ * Contains all the configurations which will be local to an installation.
+ * @author Santosh Singh <santosh@incaendo.com>
+ * @author Sankalp Mishra <sankalp@incaendo.com>
+ * This file is part of <Civico>.
+ * This file can not be copied and/or distributed without the express permission
+ * of <ahref Foundation.
+ */
+
+/**
+ * Caution: create a copy of this file as local_config.php and change
+ * required configurations in it
+ */
+
+/**
+ * set error reporting on turn it off on production. Or just remove
+ * following two lines on production
+ */
+error_reporting(0);
+ini_set('display_errors', 0);
+
+/**
+ * Setting the protocol based on url accessed.
+ */
+$protocol = 'http://';
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+  $protocol = 'https://';
+} else if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) {
+  $protocol = 'https://';
+}
+define('PROTOCOL', $protocol);
+
+/**
+ * Set the timezone
+ */
+ini_set('date.timezone', 'Europe/Rome');
+
+/**
+ * Define installation details
+ */
+define('BASE_URL', PROTOCOL . '{{ BASE_URL }}');
+define('IMAGE_URL', BASE_URL.'/images/');
+define('CONTEST_IMAGE_URL', BASE_URL.'uploads/contestImage/');
+
+/**
+ * Constant for database configuration
+ */
+define('DB_HOST', '{{ DB_HOST }}');
+define('DB_NAME', '{{ DB_NAME }}');
+define('DB_USER', '{{ DB_USER }}');
+define('DB_PASS', '{{ DB_PASSWORD }}');
+
+/**
+ * Define aggregator API URL (http://API_URL/)
+ */
+define('AGGREGATOR_API_URL', '{{ AGGREGATOR_API_URL }}');
+
+/**
+ * Define identity manager details
+ */
+define('IDENTITY_MANAGER_API_URL', '{{ IDENTITY_MANAGER_API_URL }}');
+define('IDM_USER_ENTITY', 'users');
+define('IDM_API_KEY', '{{ IDM_API_KEY }}');
+
+/**
+ * Define application log file name
+ */
+define('APP_LOG_FILE_NAME', 'civico-' . date('d-M-Y').'.log');
+
+/**
+ * Define site session cookie name
+ */
+define('SITE_SESSION_COOKIE_NAME', 'civico');
+
+/**
+ * Define contest Admin users email
+ */
+define('DISCUSSION_ADMIN_USERS', '["santosh@incaendo.com", "rahul@incaendo.com", "daniele@ahref.eu", "monica@ahref.eu"]');
+
+/**
+ * Define site language
+ */
+define('SITE_LANGUAGE', 'it_it');
+
+/**
+ * Define site title
+ */
+define('SITE_TITLE', '{{ SITE_TITLE }}');
+define('SITE_NAME', '{{ SITE_NAME }}');
+
+/**
+ * Constant for Site/Page Title
+ */
+define('TITLE', '{{TITLE}}');
+
+/**
+ * Define social settings
+ */
+define('TWITTER_USERNAME', '{{ TWITTER_USERNAME }}');
+define('FACEBOOK_USERNAME', '{{ FACEBOOK_USERNAME }}');
+define('LINKEDIN_USERNAME', '{{ LINKEDIN_USERNAME }}');
+
+/**
+ * Define constant for uploading image extension and size (in byte)
+ */
+define('ALLOWED_IMAGE_EXTENSION', '["jpg", "png", "jpeg"]');
+define('UPLOAD_IMAGE_SIZE_LIMIT', 5242880);
+
+/**
+ * define constant upload directory
+ */
+define('UPLOAD_DIRECTORY', 'uploads/');
+
+/**
+ * define constant for runtime directory
+ */
+define('RUNTIME_DIRECTORY', dirname(__FILE__).'/../runtime');
+
+/**
+ * constant for aggregator source for this site instance
+ */
+define('CIVICO', 'civico');
+
+/**
+ * define constant for civiclinks constant
+ */
+define('CIVICLINKS_NETWORK_TOKEN', '{{CIVICLINKS_NETWORK_TOKEN}}');
+
+/**
+ * Constants for profile manager.
+ */
+define('PROFILE_IMAGE_URL', '{{PROFILE_IMAGE_URL}}');
+define('PROFILE_URL', '{{PROFILE_URL}}');
+
+/**
+ * constant for registration page url (page for user's registeration)
+ */
+define('REGISTRATION_URL','{{REGISTRATION_URL}}');
+
+/**
+ * Max filesize
+ */
+ini_set('upload_max_filesize','5M');
+
+/**
+ * constant for load all entry
+ */
+define('ALL_ENTRY', 999999);
+
+/**
+ * Constant for Session Time out time.
+ */
+define('SESSION_TIMEOUT_TIME', '{{SESSION_TIMEOUT_TIME}}');
+
+/**
+ * Constant for submission
+ */
+define('SUBMISSION_CLOSED', true);
+
+/**
+ * Constant for theme. Avaliable themes: partecipa, destinazioneitalia, bagnacavallo
+ */
+define('SITE_THEME', 'partecipa');
+
+/**
+ * Constant for number of boxes to be shown in a single row on home page.
+ */
+define('CHUNK_SIZE', 3);
+
+/**
+ * This constant is used in destinazioneitalia theme. The indexes of array are the
+ * name of discussions and their values are the color of div of that discussion.
+ */
+$divColors = array('Rendere' => 'yellow', 'Attrarre' => 'red', 'Investire' => 'blue', 'Promuovere' => 'green');
+$divColors = serialize($divColors);
+define('DIV_COLORS', $divColors);
+
+/**
+ * Constant for key and languages of translation.
+ */
+define('TRANSLATION_API_KEY', 'AIzaSyAi_wN2rqgMoHUxv1BhqBjmJNIome-jwLI');
+define('TRANSLATE_LANGUAGE', '["slovenian", "italian", "english"]');
+
+/**
+ * Constant for nuber of characters 
+ */
+define('CHAR_LIMIT', '{{CHAR_LIMIT}}');
+define('USER_GENERATED_DIRECTORY', '["assets", "themes/go"]');
+
+//no of proposal submmitted by a user
+define('PROPOSAL_SUBMIT_LIMIT', 5);
+
+//constant for disable google language detection
+define('GOOGLE_TRANSLATION_ENABLED', 1);
+
+//authentication key for google analytic code
+define('GOOGLE_ANALYTIC_AUTH_KEY','{{GOOGLE_ANALYTIC_AUTH_KEY}}');
+define('GOOGLE_ANALYTIC_COOKIE_DOMAIN','{{GOOGLE_ANALYTIC_COOKIE_DOMAIN}}');
+
+/**
+ * Constant to define active log level. Possible vaues are:
+ * info, error, trace, warning
+ * we can pass multiple values as comma sepreated
+ */
+define('LOG_LEVEL_ACTIVE', 'error');
+
+//constant for ahref foundation url
+define('AHREF_FOUNDATION_URL', 'http://www.ahref.eu/it');
+//super admin user
+define('RBAC_ADMIN_USER', 'rahultripathi0123@gmail.com');
+//all permissions that can be assigned.
+define('PERMISSION', '["is admin", "Can mark highlighted", "Can post answers on opinion"]');
+
+//directory name for saving uploaded file
+define('UPLOAD_DIRECTORY', 'uploads');
+
+//constant for opinion and link submission (1 for status is on and 0 for OFF)
+define('OPINION_SUBMISSION', '{"discussion_slug":1,"discussion_slug":0}');
+define('LINK_SUBMISSION', '{"discussion_slug":1,"discussion_slug":0}');
+
+// set 1 for enable sendmail else 0
+define('ENABLE_SENDMAIL', 1);
+
+/**
+ *  Constant for send Email
+ */
+define('SMTP_HOST', '');
+define('SMTP_PORT', '');
+define('SMTP_USER', '');
+define('SMTP_PASSWORD', '');
+define('SMTP_AUTH', true);
+//constant for defual email
+define('DEFAULT_EMAIL', '');
+//constant for smtp secure
+define('SMTP_SECURE', '');
+
+/* Feed email: the email author for the feeds */
+define('FEED_EMAIL', 'noreply@civiclinks.it');
+
+//define constant for available feature in theme
+$themeFeature = array('notification_email' => true, 'visibility_changes_email' => true);
+define('THEME_FEATURE', json_encode($themeFeature));
+
+
+/**
+ * Constant to define modules(list of enabled modules)
+ */
+$enabledModules = array('backendconnector', 'rbacconnector', 'static/navbar');
+define('ENABLE_MODULES_LIST', json_encode($enabledModules));

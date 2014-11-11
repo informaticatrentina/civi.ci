@@ -1,0 +1,50 @@
+{% set isHighlighter = checkPermission('can_mark_highlighted') %}
+{% set isAdmin = checkPermission('admin') %}
+<div class="container">
+  {% if isAdmin == true %}
+    <div class="container darkheader">
+      <div class="row">
+        <div class="span2"><a class="link" href="{{constant('BASE_URL')}}admin/discussion/add"> {{ t('discussion', 'Create Discussion')}}</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <br>  
+    <table class="table table-bordered">
+      <th>{{ t('discussion','Discussion Title') }}</th>
+      <th>{{ t('discussion','Discussion Summary') }}</th>
+      <th>{{ t('discussion','Discussion Author') }}</th>
+      {% if isAdmin == true %}
+        <th>{{ t('discussion', 'Sorting Order') }}</th>
+      {% endif %}
+      {% if isAdmin == true %}
+        <th>{{ t('discussion','Edit') }}</th>      
+      {% endif %}
+      {% if isHighlighter == true %}
+        <th>{{ t('discussion','View Proposals') }}</th>
+      {% endif %}
+      {% for info in discussionInfo %}
+        <tr>
+          <td>{{ info.discussionTitle }}</td>
+          <td>{{ info.discussionSummary }}</td>
+          <td>{{ info.discussionAuthor }}</td>
+          {% if isAdmin == true %}
+            <td>
+              <input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" />
+            </td>
+          {% endif%}
+          {% if isAdmin == true %}
+            <td><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></td>
+          {% endif %}
+          {% if isHighlighter == true %}
+            <td><a href="{{constant('BASE_URL')}}discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>    
+    <br/>
+  </div>
+<script>
+  var baseUrl = "{{constant('BASE_URL')}}";
+</script>
+<script src="{{constant('THEME_URL')}}js/discussionList.js"></script>
