@@ -1016,3 +1016,15 @@ msgstr ""
 msgctxt "discussion"
 msgid "Export All Contributors"
 msgstr ""
+
+msgctxt "discussion"
+msgid "Confirm Password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Password does not match"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please enter confirm password"
+msgstr ""

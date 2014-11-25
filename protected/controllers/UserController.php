@@ -60,6 +60,12 @@ class UserController extends PageController {
         if (empty($user['password'])) {
           throw new Exception(Yii::t('discussion', 'Please enter password'));
         }       
+        if (empty($user['confirm_password'])) {
+          throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
+        }
+        if ($user['password'] !== $user['confirm_password']) {
+          throw new Exception(Yii::t('discussion', 'Password does not match'));
+        }
         $userDetail = array(
           'firstname' => $user['firstname'],
           'lastname' => $user['lastname'],

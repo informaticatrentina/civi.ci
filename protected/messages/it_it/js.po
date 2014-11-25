@@ -414,3 +414,11 @@ msgstr "Impossibile ottenere l'indirizzo email dell'utente"
 msgctxt "discussion" 
 msgid "Unable to get user email address "
 msgstr "Impossibile ottenere l'indirizzo email dell'utente"
+
+msgctxt "discussion"
+msgid "Password does not match"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please enter confirm password"
+msgstr ""
