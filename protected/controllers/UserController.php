@@ -312,18 +312,36 @@ class UserController extends PageController {
         }
         //update in identity manager
         $userIdentityApi = new UserIdentityAPI();
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $userIdentityApi = new UserIdentityAPI();
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
+        $userId = '';
+        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && array_key_exists('_id', $userInfo['_items'][0])) {
+          $userId = $userInfo['_items'][0]['_id'];
+        }
+        if (empty($userId)) {
+          throw new Exception('User id is empty for email ' . $email);
+        }
         $inputParam = array(
           'status' => 1,
-          'email' => $email
+          'id' => $userId
         );
-        $saveUser = $userIdentityApi->curlPut($inputParam);
-        $verified = TRUE;
-        $message = Yii::t("frontend", "Your account has been activated. Please login");
+        $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
+        if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+          $verified = TRUE;
+          $message = Yii::t("frontend", "Your account has been activated. Please login");
+        } else {
+          throw new Exception('Failed to update status as active for email ' . $email);
+        }
       } else { 
         $message = Yii::t("frontend", "We are sorry, the page you are looking for seems to be missing.");
       }
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in actionActivateUser');
+      $message = Yii::t('discussion', 'Some technical problem occurred, contact administrator');
     }
     $this->render('activation', array('message' => $message, 'verified' => $verified));
   }
