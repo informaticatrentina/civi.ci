@@ -422,3 +422,7 @@ msgstr ""
 msgctxt "discussion"
 msgid "Please enter confirm password"
 msgstr ""
+
+msgctxt "discussion"
+msgid "Please check privacy checkbox"
+msgstr ""
