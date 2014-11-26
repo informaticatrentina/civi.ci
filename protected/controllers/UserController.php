@@ -77,6 +77,7 @@ class UserController extends PageController {
           'lastname' => $user['lastname'],
           'email' => $user['email'],
           'password' => $user['password'],
+          'status' => 0
         );
         if (!empty($_GET['back'])) {
           $back = substr($_GET['back'], 1);
@@ -310,6 +311,12 @@ class UserController extends PageController {
           Yii::t("frontend", "This is not a valid link.");
         }
         //update in identity manager
+        $userIdentityApi = new UserIdentityAPI();
+        $inputParam = array(
+          'status' => 1,
+          'email' => $email
+        );
+        $saveUser = $userIdentityApi->curlPut($inputParam);
         $verified = TRUE;
         $message = Yii::t("frontend", "Your account has been activated. Please login");
       } else { 
