@@ -66,6 +66,12 @@ class UserController extends PageController {
         if ($user['password'] !== $user['confirm_password']) {
           throw new Exception(Yii::t('discussion', 'Password does not match'));
         }
+        if (!array_key_exists('terms_and_condition', $user)) {
+          throw new Exception(Yii::t('discussion', 'Please check term and condition checkbox'));
+        }
+        if (!array_key_exists('privacy_policy', $user)) {
+          throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
+        }
         $userDetail = array(
           'firstname' => $user['firstname'],
           'lastname' => $user['lastname'],
