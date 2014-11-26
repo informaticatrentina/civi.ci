@@ -33,12 +33,20 @@ class SendMailCommand extends CConsoleCommand {
         $email->from = DEFAULT_EMAIL;
       }
       $email->body = htmlspecialchars_decode($body);
-      $config = new Configuration();
-      $configurations = $config->get();
       $moderatorEmails = '';
-      foreach ($configurations as $confiuration) {
-        if ($confiuration['name_key'] == 'moderators_email') {
-          $moderatorEmails = $confiuration['value'];
+      if (array_key_exists(2, $args) && $args[2] == 'registeration_activation_mail') {
+        if (!array_key_exists(3, $args) || empty($args[3])) {
+          throw new Exception('Email can not be empty');
+        }
+        $moderatorEmails = $args[3];
+      }
+      if (!empty($moderatorEmails)) {
+        $config = new Configuration();
+        $configurations = $config->get();
+        foreach ($configurations as $confiuration) {
+          if ($confiuration['name_key'] == 'moderators_email') {
+            $moderatorEmails = $confiuration['value'];
+          }
         }
       }
       if (!empty($moderatorEmails)) {

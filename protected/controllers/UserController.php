@@ -91,12 +91,8 @@ class UserController extends PageController {
         $userIdentityMgr = new UserIdentityManager();
         $saveUser = $userIdentityMgr->createUser($userDetail);
         if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
+          $this->_sendActivationMail($user);
           $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
-          Yii::app()->session->open();
-          unset($user['password']);
-          $user['id'] = $saveUser['id'];
-            $user['canSubmitProposal'] = true;
-          Yii::app()->session['user'] = $user;
         } else {
           $saveUser['msg'] = Yii::t('discussion', $saveUser['msg']);
         }
@@ -236,6 +232,93 @@ class UserController extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in _getContributorsEmail');
     }
     return $userEmail;
+  }
+  
+  /**
+   * _sendActivationMail
+   * function is used for sending activation email in background
+   * @param array $user - user information
+   * @return void
+   */
+  private function _sendActivationMail($user) {
+    try {
+      $email = $user['email'];
+      $encrypted_email = encryptDataString($email);
+      $now = time();
+      $time_out = $now + ACTIVATION_LINK_TIME_OUT;
+      $key = getRegistrationtKey($email, $time_out);
+      $param = array(
+        'u1' => $key,
+        'u2' => $encrypted_email,
+        'u3' => $time_out,
+      );
+      $userInfo = array(
+        'firstname' => $user['firstname'],
+        'lastname' => $user['lastname'],
+        'activation_link' => BASE_URL . 'user/activate?' . http_build_query($param),
+      );
+      $body = $this->_prepareMailBody($userInfo);
+      $subject = Yii::t('discussion', 'Verify your account');
+      $console = new BackgroundConsoleRunner('index-cli.php');
+      $subject = str_replace("'", "$3#$", $subject);
+      $body = str_replace("'", "$3#$", $body);
+      $args = "sendmail '$subject'  '$body' 'registeration_activation_mail' '$email'";
+      $console->run($args);
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in _sendActivationMail');
+    }
+  }
+
+  /**
+   * _prepareMailBody
+   * This funtion is used to create email body for activation mail
+   * @param  array $userInfo - data for mail
+   * @return string $html
+   */
+  private function _prepareMailBody($userInfo) {
+    $html = '';
+    $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/activationEmail.html');
+    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
+    $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking
+      this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
+       array('{start_ahref_link}' => '<a href=' . $userInfo['activation_link'] . 'target="_blank">', '{end_ahref_link}' => '</a>' ));
+    $html = str_replace("{{mail_text_description}}", $mailText, $html);
+    $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
+    return $html;
+  }
+  
+  /**
+   * actionActivateUser
+   * function is used for activate by using activation link
+   */
+  public function actionActivateUser() {
+    try {
+      $this->setHeader('2.0');
+      $message = '';
+      $verified = FALSE;
+      if (array_key_exists('u1', $_GET) && array_key_exists('u2', $_GET) && array_key_exists('u3', $_GET)) {
+        $secret_key = $_GET['u1'];
+        $encrypted_email = $_GET['u2'];
+        $email = decryptDataString($encrypted_email);
+        $time_out = $_GET['u3'];
+        $encrypted_secret_key = getRegistrationtKey($email, $time_out);
+        $now = time();
+        if ($now <= $time_out) {
+          Yii::t("frontend", "We are sorry, this link has expired. You will need to sign up again.");
+        }
+        if ($secret_key != $encrypted_secret_key) {
+          Yii::t("frontend", "This is not a valid link.");
+        }
+        //update in identity manager
+        $verified = TRUE;
+        $message = Yii::t("frontend", "Your account has been activated. Please login");
+      } else { 
+        $message = Yii::t("frontend", "We are sorry, the page you are looking for seems to be missing.");
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in actionActivateUser');
+    }
+    $this->render('activation', array('message' => $message, 'verified' => $verified));
   }
 
 }
