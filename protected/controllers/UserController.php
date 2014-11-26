@@ -311,7 +311,6 @@ class UserController extends PageController {
           Yii::t("frontend", "This is not a valid link.");
         }
         //update in identity manager
-        $userIdentityApi = new UserIdentityAPI();
         $module = Yii::app()->getModule('backendconnector');
         if (empty($module)) {
           throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
