@@ -1044,3 +1044,167 @@ msgstr ""
 msgctxt "discussion"
 msgid "Please check term and condition checkbox"
 msgstr ""
+
+msgctxt "discussion"
+msgid "Age"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Civil Society"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Female"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Foreign"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Gender"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Health Authority"
+msgstr ""
+
+msgctxt "discussion"
+msgid "I have read the {ahref_start_tag} privacy {ahref_end_tag} and I authorize the processing of personal data under Article. 13 of Legislative Decree no. 196/2003"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Italian"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Local authority"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Male"
+msgstr ""
+
+msgctxt "discussion"
+msgid "No"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Not continuosly"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please add authority description"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please login to save additional information"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select age"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select authority"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select citizenship"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select education level"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select gender"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select work"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Province"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Public authority"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions."
+msgstr ""
+
+msgctxt "discussion"
+msgid "User Information"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Verify your account"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Work"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Yes"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Yes continuosly"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "citizenship"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "degree"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "education level"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "elemetary school"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "highschool"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "middle school"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "save"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select age range"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select authority"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select citizenship"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select eduction"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select gender"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "select your work"
+msgstr ""

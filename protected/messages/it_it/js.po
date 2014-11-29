@@ -426,3 +426,31 @@ msgstr ""
 msgctxt "discussion"
 msgid "Please check privacy checkbox"
 msgstr ""
+
+msgctxt "discussion"
+msgid "Please add authority description"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select age"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select authority"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select citizenship"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select education level"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select gender"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select work"
+msgstr ""
