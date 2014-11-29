@@ -1031,11 +1031,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "I agree to the principles and {ahref_start_tag} the terms of service {ahref_end_tag}"
-msgstr ""
-
-msgctxt "discussion"
-msgid "I have read the {ahref_start_tag} privacy {ahref_end_tag} and I authorize the processing of personal data under Article. 13 of Legislative Decree no. 196/2003"
-msgstr ""
+msgstr "Accetto i principi e i {ahref_start_tag} termini di servizio {ahref_end_tag}"
 
 msgctxt "discussion"
 msgid "Please check privacy policy checkbox"
@@ -1071,7 +1067,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "I have read the {ahref_start_tag} privacy {ahref_end_tag} and I authorize the processing of personal data under Article. 13 of Legislative Decree no. 196/2003"
-msgstr ""
+msgstr "Ho letto l'{ahref_start_tag}informativa alla privacy{ahref_end_tag} e autorizzo il trattamento dei dati personali in base art. 13 del D. Lgs. 196/2003"
 
 msgctxt "discussion"
 msgid "Italian"
