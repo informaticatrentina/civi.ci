@@ -345,5 +345,85 @@ class UserController extends PageController {
     $this->render('activation', array('message' => $message, 'verified' => $verified));
   }
 
+  /**
+   * saveAdditionalInfo
+   * function is used for additional information
+   */
+  public function actionSaveAdditionalInfo() {
+    try {
+      $this->setHeader('2.0');
+      $message = '';
+      Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'loginQuestion.js', CClientScript::POS_END);
+      $additionalInformation = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      $postData = array_map('trim', $_POST);
+      if (!empty($postData)) {
+        if (array_key_exists('age', $postData) && empty($postData['age'])) {
+          throw new Exception(Yii::t('discussion', 'Please select age'));
+        }
+        if (array_key_exists('gender', $postData) && empty($postData['gender'])) {
+          throw new Exception(Yii::t('discussion', 'Please select gender'));
+        }
+        if (array_key_exists('education_level', $postData) && (empty($postData['education_level'])
+          || $postData['education_level'] == 'other')) {
+          if (!array_key_exists('education_level_description', $postData) || empty($postData['education_level_description'])) {
+            throw new Exception(Yii::t('discussion', 'Please select education level'));
+          }
+        }
+        if (array_key_exists('citizenship', $postData) && empty($postData['citizenship'])) {
+          throw new Exception(Yii::t('discussion', 'Please select citizenship'));
+        }
+        if (array_key_exists('work', $postData) && empty($postData['work'])) {
+          throw new Exception(Yii::t('discussion', 'Please select work'));
+        }
+        if (array_key_exists('public_authority', $postData) && empty($postData['public_authority'])) {
+          throw new Exception(Yii::t('discussion', 'Please select authority'));
+        }
+        if (array_key_exists('authority_description', $postData) && empty($postData['authority_description'])) {
+          throw new Exception(Yii::t('discussion', 'Please add authority description'));
+        }        
+        if (isModuleExist('backendconnector') == false) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+        }
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        if (!isset( Yii::app()->session['user']['id'])) {
+          throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
+        }
+        $im = new UserIdentityManager();
+        $userInfo = array(
+            'age-range' => $postData['age'],
+            'sex' => $postData['gender'],
+            'education-level' => $postData['education_level'],
+            'work' => $postData['work'],
+            'citizenship' => $postData['citizenship'],
+            'public-authority' => array(
+                                    'name' => $postData['education_level'],
+                                    'text' => $postData['authority_description']
+                                  ),
+            'id' => Yii::app()->session['user']['id'],
+            'last-login' => date('Y-m-d H:i:s')
+        );
+        if ($postData['education_level'] == 'other') {
+          $userInfo['education-level'] = $postData['education_level_description'];
+        }
+        $updateUser = $im->updateUser($userInfo);
+        if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+          $redirectUrl = BASE_URL;
+          if (isset(Yii::app()->session['user']['back_url'])) {
+            $redirectUrl = Yii::app()->session['user']['back_url'];
+          }
+          $this->redirect($redirectUrl);
+        } else {
+          throw new Exception('discussion', 'Some technical problem occurred, contact administrator');
+        }
+      }
+    } catch (Exception $e) {
+      $message = $e->getMessage();
+      Yii::log($e->getMessage(), ERROR, 'Error in actionSaveAdditionalInfo');
+    }
+    $this->render('loginQuestion', array('additional_info' => $additionalInformation, 'message' => $message, 'post_data' => $postData));
+  }
 }
 ?>

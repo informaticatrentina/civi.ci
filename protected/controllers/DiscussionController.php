@@ -76,6 +76,7 @@ class DiscussionController  extends PageController {
       if (empty($module)) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
       }
+      $showQuestionModal = FALSE;
       $user = new UserIdentityManager();
       if (!empty($_POST)) {
         $userDetail = $_POST;
@@ -86,6 +87,7 @@ class DiscussionController  extends PageController {
           throw new Exception(Yii::t('discussion', 'Please enter password'));
         }
         $response = $user->validateUser($userDetail);
+        $showQuestionModal = TRUE;
         if (array_key_exists('success', $response) && $response['success']) {
           $discussion = new Discussion();
           $userProposals = $discussion->userSubmittedProposal('', true);
@@ -122,6 +124,11 @@ class DiscussionController  extends PageController {
           if ($isAdmin && empty($backUrl)) {
             $admin['admin'] = true;
             $admin['url'] = BASE_URL . 'admin/discussion/list';
+          }
+          $additionalInfoUrl = '';
+          if ($showQuestionModal) {
+            $additionalInfoUrl = BASE_URL . 'user/question';
+            $_SESSION['user']['back_url'] = $backUrl;
           }
         }
       }

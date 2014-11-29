@@ -242,7 +242,8 @@ return array(
                 'admin/discussion/order' => 'discussion/saveDiscussionOrder',
                 'user/info' => 'discussion/userDetail',
                 'admin/user/export' => 'user/exportUser',
-                'user/activate' => 'user/activateUser'
+                'user/activate' => 'user/activateUser',
+                'user/question' => 'user/saveAdditionalInfo'
             ),
         ),
         'session' => array(
