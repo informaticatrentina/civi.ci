@@ -305,10 +305,10 @@ class UserController extends PageController {
         $encrypted_secret_key = getRegistrationtKey($email, $time_out);
         $now = time();
         if ($now <= $time_out) {
-          Yii::t("frontend", "We are sorry, this link has expired. You will need to sign up again.");
+          Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again.");
         }
         if ($secret_key != $encrypted_secret_key) {
-          Yii::t("frontend", "This is not a valid link.");
+          Yii::t("discussion", "This is not a valid link.");
         }
         //update in identity manager
         $module = Yii::app()->getModule('backendconnector');
@@ -331,12 +331,12 @@ class UserController extends PageController {
         $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           $verified = TRUE;
-          $message = Yii::t("frontend", "Your account has been activated. Please login");
+          $message = Yii::t("discussion", "Your account has been activated. Please login");
         } else {
           throw new Exception('Failed to update status as active for email ' . $email);
         }
       } else { 
-        $message = Yii::t("frontend", "We are sorry, the page you are looking for seems to be missing.");
+        $message = Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing.");
       }
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in actionActivateUser');
@@ -478,12 +478,12 @@ class UserController extends PageController {
           throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
         }
         $userIdentityApi = new UserIdentityAPI();
-        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim(Yii::app()->session['user']['email'])), false, false);
-        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
-          $userInfo = $userInfo['_items'][0];
-          if (empty($userInfo)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $email), false, false);
+        if (array_key_exists('_items', $userInfo)) {
+          if (!array_key_exists(0, $userInfo['_items'])) {
             throw new Exception(Yii::t('discussion', 'User does not exit in system'));
           }
+          $userInfo = $userInfo['_items'][0];
           $encrypted_email = encryptDataString($email);
           $now = time();
           $time_out = $now + ACTIVATION_LINK_TIME_OUT;
@@ -533,5 +533,77 @@ class UserController extends PageController {
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
     return $html;
   }
+
+  /**
+   * actionChangePassword
+   * function is used for change password
+   */
+  public function actionChangePassword() {
+    try {
+      $this->setHeader('2.0');
+      Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'changePassword.js', CClientScript::POS_END);
+      $userId = '';
+      $response = array('status' => FALSE, 'msg' => '', 'data' => array());
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
+      $userIdentityApi = new UserIdentityAPI();
+      if (!empty($_POST)) {
+        if (empty($_POST['new_password'])) {
+          throw new Exception(Yii::t('discussion', 'Please enter new password'));
+        }
+        if (empty($_POST['confirm_password'])) {
+          throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
+        }
+        if ($_POST['new_password'] !== $_POST['confirm_password']) {
+          throw new Exception(Yii::t('discussion', 'Password does not match'));
+        }
+        $userId =  $_POST['user_id'];
+        $inputParam = array(
+          'password' => $_POST['new_password'],
+          'id' => $userId
+        );
+        $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
+        if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+          $response['status'] = TRUE;
+          $response['msg']  = Yii::t("", "Your password has been changed. Please login");
+        } else {
+          throw new Exception(Yii::t('discussion', 'Some technical problem occurred, contact administrator'));
+        }
+      } else if (array_key_exists('u1', $_GET) && array_key_exists('u2', $_GET) && array_key_exists('u3', $_GET)) {
+        $response['data'] = array('change_password' => true);
+        $secret_key = $_GET['u1'];
+        $encrypted_email = $_GET['u2'];
+        $email = decryptDataString($encrypted_email);
+        $time_out = $_GET['u3'];
+        $encrypted_secret_key = getRegistrationtKey($email, $time_out);
+        $now = time();
+        if ($now <= $time_out) {
+          throw new Exception(Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again."));
+        }
+        if ($secret_key != $encrypted_secret_key) {
+          throw new Exception(Yii::t("discussion", "This is not a valid link."));
+        }
+        //update in identity manager
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
+        $userId = '';
+        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && array_key_exists('_id', $userInfo['_items'][0])) {
+          $userId = $userInfo['_items'][0]['_id'];
+        }
+        if (empty($userId)) {
+           throw new Exception(Yii::t('discussion', 'User does not exit in system'));
+        }
+      } else {
+        throw new Exception(Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing."));
+      }
+      $response['status'] = TRUE;
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in actionChangePassword');
+      $response['msg'] = $e->getMessage();
+    }
+    $this->render('changePassword', array('response' => $response, 'user_id' => $userId));
+  }
+
 }
 ?>
