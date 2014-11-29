@@ -355,6 +355,16 @@ class UserController extends PageController {
       $message = '';
       Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'loginQuestion.js', CClientScript::POS_END);
       $additionalInformation = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      if (!isset(Yii::app()->session['user'])) {
+        throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
+      }
+      if (isModuleExist('backendconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
       $postData = array_map('trim', $_POST);
       if (!empty($postData)) {
         if (array_key_exists('age', $postData) && empty($postData['age'])) {
@@ -380,16 +390,6 @@ class UserController extends PageController {
         }
         if (array_key_exists('authority_description', $postData) && empty($postData['authority_description'])) {
           throw new Exception(Yii::t('discussion', 'Please add authority description'));
-        }        
-        if (isModuleExist('backendconnector') == false) {
-          throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
-        }
-        $module = Yii::app()->getModule('backendconnector');
-        if (empty($module)) {
-          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
-        }
-        if (!isset( Yii::app()->session['user']['id'])) {
-          throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
         }
         $im = new UserIdentityAPI();
         $userInfo = array(
@@ -399,7 +399,7 @@ class UserController extends PageController {
             'work' => $postData['work'],
             'citizenship' => $postData['citizenship'],
             'public-authority' => array(
-                                    'name' => $postData['education_level'],
+                                    'name' => $postData['public_authority'],
                                     'text' => $postData['authority_description']
                                   ),
             'id' => Yii::app()->session['user']['id'],
@@ -417,6 +417,35 @@ class UserController extends PageController {
           $this->redirect($redirectUrl);
         } else {
           throw new Exception(Yii::t('discussion', 'Some technical problem occurred, contact administrator'));
+        }
+      } else {
+        $userIdentityApi = new UserIdentityAPI();
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim(Yii::app()->session['user']['email'])), false, false);
+        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
+          $userInfo = $userInfo['_items'][0];
+          if (array_key_exists('age-range', $userInfo)) {
+            $postData['age'] = $userInfo['age-range'];
+          }
+          if (array_key_exists('sex', $userInfo)) {
+            $postData['gender'] = $userInfo['sex'][0];
+          }
+          if (array_key_exists('education-level', $userInfo)) {
+            $postData['education_level'] = $userInfo['education-level'];
+            if (!in_array($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+              $postData['education_level'] = Yii::t('discussion', 'other');
+              $postData['education_level_description'] = $userInfo['education-level'];
+            }
+          }
+          if (array_key_exists('citizenship', $userInfo)) {
+            $postData['citizenship'] = $userInfo['citizenship'];
+          }
+          if (array_key_exists('work', $userInfo)) {
+            $postData['work'] = $userInfo['work'];
+          }
+          if (array_key_exists('public-authority', $userInfo)) {
+            $postData['public_authority'] = $userInfo['public-authority']['name'];
+            $postData['authority_description'] = $userInfo['public-authority']['text'];
+          }
         }
       }
     } catch (Exception $e) {
