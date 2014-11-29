@@ -411,7 +411,7 @@ class UserController extends PageController {
         $updateUser = $im->curlPut(IDM_USER_ENTITY, $userInfo);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           $redirectUrl = BASE_URL;
-          if (isset(Yii::app()->session['user']['back_url'])) {
+          if (isset(Yii::app()->session['user']['back_url']) && !empty(Yii::app()->session['user']['back_url'])) {
             $redirectUrl = Yii::app()->session['user']['back_url'];
           }
           $this->redirect($redirectUrl);
