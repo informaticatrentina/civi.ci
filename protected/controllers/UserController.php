@@ -391,10 +391,10 @@ class UserController extends PageController {
         if (!isset( Yii::app()->session['user']['id'])) {
           throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
         }
-        $im = new UserIdentityManager();
+        $im = new UserIdentityAPI();
         $userInfo = array(
             'age-range' => $postData['age'],
-            'sex' => $postData['gender'],
+            'sex' => array($postData['gender']),
             'education-level' => $postData['education_level'],
             'work' => $postData['work'],
             'citizenship' => $postData['citizenship'],
@@ -403,12 +403,12 @@ class UserController extends PageController {
                                     'text' => $postData['authority_description']
                                   ),
             'id' => Yii::app()->session['user']['id'],
-            'last-login' => date('Y-m-d H:i:s')
+            'last-login' => time()
         );
         if ($postData['education_level'] == 'other') {
           $userInfo['education-level'] = $postData['education_level_description'];
         }
-        $updateUser = $im->updateUser($userInfo);
+        $updateUser = $im->curlPut(IDM_USER_ENTITY, $userInfo);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           $redirectUrl = BASE_URL;
           if (isset(Yii::app()->session['user']['back_url'])) {
@@ -416,7 +416,7 @@ class UserController extends PageController {
           }
           $this->redirect($redirectUrl);
         } else {
-          throw new Exception('discussion', 'Some technical problem occurred, contact administrator');
+          throw new Exception(Yii::t('discussion', 'Some technical problem occurred, contact administrator'));
         }
       }
     } catch (Exception $e) {

@@ -68,6 +68,7 @@ class DiscussionController  extends PageController {
     }
     $response = array();
     $backUrl = BASE_URL;
+    $additionalInfoUrl = '';
     try {
       if (isModuleExist('backendconnector') == false) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
@@ -87,7 +88,6 @@ class DiscussionController  extends PageController {
           throw new Exception(Yii::t('discussion', 'Please enter password'));
         }
         $response = $user->validateUser($userDetail);
-        $showQuestionModal = TRUE;
         if (array_key_exists('success', $response) && $response['success']) {
           $discussion = new Discussion();
           $userProposals = $discussion->userSubmittedProposal('', true);
@@ -111,6 +111,11 @@ class DiscussionController  extends PageController {
               }
             }
           }
+          $userIdentityApi = new UserIdentityAPI();
+          $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($userDetail['email'])), false, false);
+          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && !array_key_exists('last-login', $userInfo['_items'][0])) {
+            $showQuestionModal = TRUE;
+          }
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
           $_SESSION['user']['admin'] = $isAdmin;
@@ -125,7 +130,6 @@ class DiscussionController  extends PageController {
             $admin['admin'] = true;
             $admin['url'] = BASE_URL . 'admin/discussion/list';
           }
-          $additionalInfoUrl = '';
           if ($showQuestionModal) {
             $additionalInfoUrl = BASE_URL . 'user/question';
             $_SESSION['user']['back_url'] = $backUrl;
@@ -138,7 +142,7 @@ class DiscussionController  extends PageController {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionRegisterUser method :') . $e->getMessage());
     }
     $this->layout = 'userManager';
-    $this->render('login', array('message' => $response, 'back_url' => $backUrl, 'user' => $admin));
+    $this->render('login', array('message' => $response, 'back_url' => $backUrl, 'user' => $admin, 'additional_info_url' => $additionalInfoUrl));
   }
 
   /**
