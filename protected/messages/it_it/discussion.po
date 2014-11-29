@@ -1043,7 +1043,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Age"
-msgstr ""
+msgstr "età in anni"
 
 msgctxt "discussion"
 msgid "Civil Society"
@@ -1059,7 +1059,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Gender"
-msgstr ""
+msgstr "genere"
 
 msgctxt "discussion"
 msgid "Health Authority"
@@ -1127,7 +1127,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Public authority"
-msgstr ""
+msgstr "ente di appartenenza"
 
 msgctxt "discussion"
 msgid "Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions."
@@ -1143,7 +1143,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Work"
-msgstr ""
+msgstr "lavoro"
 
 msgctxt "discussion"
 msgid "Yes"
@@ -1155,7 +1155,7 @@ msgstr ""
 
 msgctxt "discussion" 
 msgid "citizenship"
-msgstr ""
+msgstr "cittadinanza"
 
 msgctxt "discussion" 
 msgid "degree"
@@ -1163,7 +1163,7 @@ msgstr ""
 
 msgctxt "discussion" 
 msgid "education level"
-msgstr ""
+msgstr "livello di istruzione"
 
 msgctxt "discussion" 
 msgid "elemetary school"
