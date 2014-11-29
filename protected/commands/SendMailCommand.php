@@ -34,7 +34,8 @@ class SendMailCommand extends CConsoleCommand {
       }
       $email->body = htmlspecialchars_decode($body);
       $moderatorEmails = '';
-      if (array_key_exists(2, $args) && $args[2] == 'registeration_activation_mail') {
+      if (array_key_exists(2, $args) && ($args[2] == 'registeration_activation_mail')
+        || $args[2] == 'forgot_password_mail') {
         if (!array_key_exists(3, $args) || empty($args[3])) {
           throw new Exception('Email can not be empty');
         }

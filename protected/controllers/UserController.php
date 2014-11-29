@@ -454,5 +454,84 @@ class UserController extends PageController {
     }
     $this->render('loginQuestion', array('additional_info' => $additionalInformation, 'message' => $message, 'post_data' => $postData));
   }
+
+  /**
+   * forgotPassword
+   * funcion is used for getting forgot password
+   */
+  public function actionForgotPassword() {
+    try {
+      $response = array('status' => FALSE, 'msg' => '', 'data' => '');
+      $this->layout = 'userManager';
+      Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'forgotPassword.js', CClientScript::POS_END);
+      if (!empty($_POST)) {
+        $email = trim($_POST['email']);
+        $response['data'] = $email;
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+          throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
+        }
+        if (isModuleExist('backendconnector') == false) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+        }
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $userIdentityApi = new UserIdentityAPI();
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim(Yii::app()->session['user']['email'])), false, false);
+        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
+          $userInfo = $userInfo['_items'][0];
+          if (empty($userInfo)) {
+            throw new Exception(Yii::t('discussion', 'User does not exit in system'));
+          }
+          $encrypted_email = encryptDataString($email);
+          $now = time();
+          $time_out = $now + ACTIVATION_LINK_TIME_OUT;
+          $key = getRegistrationtKey($email, $time_out);
+          $param = array(
+              'u1' => $key,
+              'u2' => $encrypted_email,
+              'u3' => $time_out,
+          );
+          $userInfo = array(
+              'firstname' => $userInfo['firstname'],
+              'lastname' => $userInfo['lastname'],
+              'activation_link' => BASE_URL . 'user/change-password?' . http_build_query($param),
+          );
+          $body = $this->_prepareForgotPasswordMailBody($userInfo);
+          $subject = Yii::t('discussion', 'Reset your password');
+          $console = new BackgroundConsoleRunner('index-cli.php');
+          $subject = str_replace("'", "$3#$", $subject);
+          $body = str_replace("'", "$3#$", $body);
+          $args = "sendmail '$subject'  '$body' 'forgot_password_mail' '$email'";
+          $console->run($args);
+          $response['status'] = TRUE;
+          $response['msg'] = Yii::t('discussion', 'Please check your mailbox for reset password');
+        }
+      }
+    } catch (Exception $e) {
+      $response['msg'] = $e->getMessage();
+      Yii::log($e->getMessage(), 'ERROR', 'Error in actionForgotPassword');
+    }
+    $this->render('forgotPassword', array('response' => $response));
+  }
+
+  /**
+   * _prepareForgotPasswordMailBody
+   * This funtion is used to create email body for forgot password mail
+   * @param  array $userInfo - data for mail
+   * @return string $html
+   */
+  private function _prepareForgotPasswordMailBody($userInfo) {
+    $html = '';
+    $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/forgotPasswordEmail.html');
+    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
+    $mailText = Yii::t('discussion', 'Please reset your password by clicking this
+      {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
+      array('{start_ahref_link}' => '<a href=' . $userInfo['activation_link'] . 'target="_blank">', '{end_ahref_link}' => '</a>' ));
+    $html = str_replace("{{mail_text_description}}", $mailText, $html);
+    $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
+    return $html;
+  }
 }
 ?>
