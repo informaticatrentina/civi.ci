@@ -325,7 +325,7 @@ class UserController extends PageController {
           throw new Exception('User id is empty for email ' . $email);
         }
         $inputParam = array(
-          'status' => 1,
+          'status' => '1',
           'id' => $userId
         );
         $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);

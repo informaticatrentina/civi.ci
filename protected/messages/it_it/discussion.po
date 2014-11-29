@@ -1204,3 +1204,7 @@ msgstr ""
 msgctxt "discussion" 
 msgid "select your work"
 msgstr ""
+
+msgctxt "discussion" 
+msgid "Please activate you account"
+msgstr ""
