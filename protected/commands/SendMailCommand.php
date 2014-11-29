@@ -40,7 +40,7 @@ class SendMailCommand extends CConsoleCommand {
         }
         $moderatorEmails = $args[3];
       }
-      if (!empty($moderatorEmails)) {
+      if (empty($moderatorEmails)) {
         $config = new Configuration();
         $configurations = $config->get();
         foreach ($configurations as $confiuration) {
