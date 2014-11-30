@@ -417,27 +417,27 @@ msgstr "Impossibile ottenere l'indirizzo email dell'utente"
 
 msgctxt "discussion"
 msgid "Password does not match"
-msgstr ""
+msgstr "Password non corrisponde"
 
 msgctxt "discussion"
 msgid "Please enter confirm password"
-msgstr ""
+msgstr "Inserisci la conferma password"
 
 msgctxt "discussion"
 msgid "Please check privacy checkbox"
 msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
-  msgid "Please add authority description"
-msgstr "Si prega di aggiungere descrizione autorità"
+msgid "Please add authority description"
+msgstr "Inserisci la descrizione dell'ente"
 
 msgctxt "discussion"
 msgid "Please select age"
-msgstr "Seleziona età"
+msgstr "Seleziona l'età"
 
 msgctxt "discussion"
 msgid "Please select authority"
-msgstr "Seleziona autorità"
+msgstr "Seleziona l'ente"
 
 msgctxt "discussion"
 msgid "Please select citizenship"
@@ -445,28 +445,28 @@ msgstr "Seleziona la cittadinanza"
 
 msgctxt "discussion"
 msgid "Please select education level"
-msgstr "Si prega di selezionare il livello di istruzione"
+msgstr "Seleziona il livello di istruzione"
 
 msgctxt "discussion"
 msgid "Please select gender"
-msgstr "Seleziona genere"
+msgstr "Seleziona il genere"
 
 msgctxt "discussion"
 msgid "Please select work"
-msgstr "Seleziona lavoro"
+msgstr "Seleziona il lavoro"
 
 msgctxt "discussion"
 msgid "Please enter new Password"
-msgstr "Inserisci nuova password"
+msgstr "Inserisci una nuova Password"
 
 msgctxt "discussion"
 msgid "Please select atleast one checkbox"
-msgstr "Seleziona atleast una casella di controllo"
+msgstr "Seleziona almeno una casella"
 
 msgctxt "discussion"
 msgid "Please add valid age"
-msgstr "Si prega di aggiungere l'età valida"
+msgstr "Inserisci un'età valida"
 
 msgctxt "discussion"
 msgid "Please select age range"
-msgstr "Seleziona fascia di età"
+msgstr "Seleziona la fascia di età"

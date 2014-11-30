@@ -1019,15 +1019,15 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Confirm Password"
-msgstr ""
+msgstr "Conferma password"
 
 msgctxt "discussion"
 msgid "Password does not match"
-msgstr ""
+msgstr "Password non corrisponde"
 
 msgctxt "discussion"
 msgid "Please enter confirm password"
-msgstr ""
+msgstr "Inserisci la conferma password"
 
 msgctxt "discussion"
 msgid "I agree to the principles and {ahref_start_tag} the terms of service {ahref_end_tag}"
@@ -1039,7 +1039,7 @@ msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
 msgid "Please check term and condition checkbox"
-msgstr ""
+msgstr "Controllare casella termine e condizioni"
 
 msgctxt "discussion"
 msgid "Age"
@@ -1091,35 +1091,35 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Please add authority description"
-msgstr ""
+msgstr "Inserisci la descrizione dell'ente"
 
 msgctxt "discussion"
 msgid "Please login to save additional information"
-msgstr ""
+msgstr "Effettua l'accesso per salvare informazioni aggiuntive"
 
 msgctxt "discussion"
 msgid "Please select age"
-msgstr ""
+msgstr "Seleziona l'età"
 
 msgctxt "discussion"
 msgid "Please select authority"
-msgstr ""
+msgstr "Seleziona l'ente"
 
 msgctxt "discussion"
 msgid "Please select citizenship"
-msgstr ""
+msgstr "Seleziona la cittadinanza"
 
 msgctxt "discussion"
 msgid "Please select education level"
-msgstr ""
+msgstr "Seleziona il livello di istruzione"
 
 msgctxt "discussion"
 msgid "Please select gender"
-msgstr ""
+msgstr "Seleziona il genere"
 
 msgctxt "discussion"
 msgid "Please select work"
-msgstr ""
+msgstr "Seleziona il lavoro"
 
 msgctxt "discussion"
 msgid "Province"
@@ -1207,100 +1207,100 @@ msgstr "seleziona il lavoro"
 
 msgctxt "discussion" 
 msgid "Please activate you account"
-msgstr ""
+msgstr "Per favore attiva il tuo account"
 
 msgctxt "discussion"
 msgid "Change Password"
-msgstr ""
+msgstr "Cambio Password"
 
 msgctxt "discussion"
 msgid "Forgot password"
-msgstr ""
+msgstr "Password dimenticata"
 
 msgctxt "discussion"
 msgid "Get password"
-msgstr ""
+msgstr "Ottieni password"
 
 msgctxt "discussion"
 msgid "Insert Email id"
-msgstr ""
+msgstr "Inserisci la tua email"
 
 msgctxt "discussion"
 msgid "New Password"
-msgstr ""
+msgstr "Nuova password"
 
 msgctxt "discussion"
 msgid "Please check your mailbox for reset password"
-msgstr ""
+msgstr "Controlla la tua casella di posta per reimpostare la password"
 
 msgctxt "discussion"
 msgid "Please enter new password"
-msgstr ""
+msgstr "Inserisci la nuova password"
 
 msgctxt "discussion"
 msgid "Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions."
-msgstr ""
+msgstr "Reimposta la tua password cliccando su questo {start_ahref_link} link {end_ahref_link} o copia e incolla il link nel browser e segui le istruzioni."
 
 msgctxt "discussion"
 msgid "Please select question"
-msgstr ""
+msgstr "Seleziona le domande"
 
 msgctxt "discussion"
 msgid "Question has been saved successfully"
-msgstr ""
+msgstr "Le domande sono state salvate correttamente"
 
 msgctxt "discussion"
 msgid "Reset Password"
-msgstr ""
+msgstr "Reimposta la Password"
 
 msgctxt "discussion"
 msgid "Reset your password"
-msgstr ""
+msgstr "Reimposta la tua password"
 
 msgctxt "discussion"
 msgid "This is not a valid link."
-msgstr ""
+msgstr "Questo link non è valido."
 
 msgctxt "discussion"
 msgid "User does not exit in system"
-msgstr ""
+msgstr "L'utente non esiste nel sistema"
 
 msgctxt "discussion"
 msgid "We are sorry, the page you are looking for seems to be missing."
-msgstr ""
+msgstr "Siamo spiacenti, la pagina che hai richiesto sembra non esistere."
 
 msgctxt "discussion"
 msgid "We are sorry, this link has expired. You will need to sign up again."
-msgstr ""
+msgstr "Siamo spiacenti, questo link è scaduto. Devi registrarti di nuovo."
 
 msgctxt "discussion"
 msgid "Your account has been activated. Please login"
-msgstr "Il tuo account è stato attivato. Esegui l'accesso."
+msgstr "Il tuo account è stato attivato. Esegui l'accesso"
 
 msgctxt "discussion"
 msgid "Your password has been changed. Please login"
-msgstr ""
+msgstr "La tua password è stata reimpostata. Esegui l'accesso"
 
 msgctxt "discussion"
 msgid "other"
-msgstr ""
+msgstr "altro"
 
 msgctxt "discussion"
 msgid "Age range"
-msgstr ""
+msgstr "Fascia di età"
 
 msgctxt "discussion"
 msgid "Please provide valid age"
-msgstr ""
+msgstr "Inserisci un'età valida"
 
 msgctxt "discussion"
 msgid "Please provide your age"
-msgstr ""
+msgstr "Inserisci la tua età"
 
 msgctxt "discussion"
 msgid "Please select age range"
-msgstr ""
+msgstr "Inserisci la fascia di età"
 
 msgctxt "discussion"
 msgid "age"
-msgstr ""
+msgstr "età"
