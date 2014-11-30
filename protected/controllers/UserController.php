@@ -353,6 +353,7 @@ class UserController extends PageController {
     try {
       $this->setHeader('2.0');
       $message = '';
+      $postData = array();
       Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'loginQuestion.js', CClientScript::POS_END);
       $additionalInformation = array();
       $additionalInformationQuestion = json_decode(ADDITIONAL_INFORMATION, TRUE);
@@ -378,16 +379,26 @@ class UserController extends PageController {
       }
       $postData = array_map('trim', $_POST);
       if (!empty($postData)) {
+        if (array_key_exists('age_range', $postData)) {
+          if (!empty($postData['age_range'])) {
+            $userInfo['age-range'] = $postData['age_range'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select age range'));
+          }
+        }
         if (array_key_exists('age', $postData)) {
           if (!empty($postData['age'])) {
-            $userInfo['age-range'] = $postData['age'];
+            if (!is_int($postData['age'])) {
+              throw new Exception(Yii::t('discussion', 'Please provide valid age'));
+            }
+            $userInfo['age'] = $postData['age'];
           } else {
-            throw new Exception(Yii::t('discussion', 'Please select age'));
+            throw new Exception(Yii::t('discussion', 'Please provide your age'));
           }
         }
         if (array_key_exists('gender', $postData)) {
           if (!empty($postData['gender'])) {
-            $userInfo['sex'] = $postData['gender'];
+            $userInfo['sex'] = array($postData['gender']);
           } else {
             throw new Exception(Yii::t('discussion', 'Please select gender'));
           }
@@ -453,7 +464,10 @@ class UserController extends PageController {
         if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
           $userInfo = $userInfo['_items'][0];
           if (array_key_exists('age-range', $userInfo)) {
-            $postData['age'] = $userInfo['age-range'];
+            $postData['age_range'] = $userInfo['age-range'];
+          }
+          if (array_key_exists('age', $userInfo)) {
+            $postData['age'] = $userInfo['age'];
           }
           if (array_key_exists('sex', $userInfo)) {
             $postData['gender'] = $userInfo['sex'][0];
