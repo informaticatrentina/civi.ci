@@ -1284,3 +1284,23 @@ msgstr ""
 msgctxt "discussion"
 msgid "other"
 msgstr ""
+
+msgctxt "discussion"
+msgid "Age range"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please provide valid age"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please provide your age"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select age range"
+msgstr ""
+
+msgctxt "discussion"
+msgid "age"
+msgstr ""

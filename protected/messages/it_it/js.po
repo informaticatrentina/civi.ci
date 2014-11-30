@@ -428,37 +428,45 @@ msgid "Please check privacy checkbox"
 msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
-msgid "Please add authority description"
-msgstr ""
+  msgid "Please add authority description"
+msgstr "Si prega di aggiungere descrizione autorità"
 
 msgctxt "discussion"
 msgid "Please select age"
-msgstr ""
+msgstr "Seleziona età"
 
 msgctxt "discussion"
 msgid "Please select authority"
-msgstr ""
+msgstr "Seleziona autorità"
 
 msgctxt "discussion"
 msgid "Please select citizenship"
-msgstr ""
+msgstr "Seleziona la cittadinanza"
 
 msgctxt "discussion"
 msgid "Please select education level"
-msgstr ""
+msgstr "Si prega di selezionare il livello di istruzione"
 
 msgctxt "discussion"
 msgid "Please select gender"
-msgstr ""
+msgstr "Seleziona genere"
 
 msgctxt "discussion"
 msgid "Please select work"
-msgstr ""
+msgstr "Seleziona lavoro"
 
 msgctxt "discussion"
 msgid "Please enter new Password"
-msgstr ""
+msgstr "Inserisci nuova password"
 
 msgctxt "discussion"
 msgid "Please select atleast one checkbox"
-msgstr ""
+msgstr "Seleziona atleast una casella di controllo"
+
+msgctxt "discussion"
+msgid "Please add valid age"
+msgstr "Si prega di aggiungere l'età valida"
+
+msgctxt "discussion"
+msgid "Please select age range"
+msgstr "Seleziona fascia di età"
