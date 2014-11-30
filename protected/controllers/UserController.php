@@ -567,7 +567,7 @@ class UserController extends PageController {
         $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           $response['status'] = TRUE;
-          $response['msg']  = Yii::t("", "Your password has been changed. Please login");
+          $response['msg']  = Yii::t("discussion", "Your password has been changed. Please login");
         } else {
           throw new Exception(Yii::t('discussion', 'Some technical problem occurred, contact administrator'));
         }
@@ -579,7 +579,7 @@ class UserController extends PageController {
         $time_out = $_GET['u3'];
         $encrypted_secret_key = getRegistrationtKey($email, $time_out);
         $now = time();
-        if ($now <= $time_out) {
+        if ($now > $time_out) {
           throw new Exception(Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again."));
         }
         if ($secret_key != $encrypted_secret_key) {
