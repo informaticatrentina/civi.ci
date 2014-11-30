@@ -8,8 +8,8 @@ class m141130_052632_add_additional_info_field_in_admin_panel extends CDbMigrati
       0, 'additional_information_status', '12')"
     );
     $this->execute("INSERT INTO `configuration` (`name`, `value`, `name_key`, `display_order`)
-      VALUES ('QUestion for collecting user data', 'age, gender, education_level, 
-      citizenship, citizenship, work, public_authority ', 'user_additional_info_question', '13')"
+      VALUES ('QUestion for collecting user data', 'age, gender, education_level, citizenship, work, public_authority ',
+      'user_additional_info_question', '13')"
     );
   }
 
