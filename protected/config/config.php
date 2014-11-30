@@ -245,7 +245,8 @@ return array(
                 'user/activate' => 'user/activateUser',
                 'user/question' => 'user/saveAdditionalInfo',
                 'user/forgot-password' => 'user/forgotPassword',
-                'user/change-password' => 'user/changePassword'
+                'user/change-password' => 'user/changePassword',
+                'question/save' => 'user/saveAdditinalInformationQuestion'
             ),
         ),
         'session' => array(

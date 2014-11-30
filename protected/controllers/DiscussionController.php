@@ -1122,7 +1122,11 @@ class DiscussionController  extends PageController {
 
     foreach ($configurations as $configuration) {
       $configuration['value'] = htmlspecialchars_decode($configuration['value']);
-      $stripped[] = $configuration;
+      if ($configuration['name_key'] == 'user_additional_info_question') {
+        $configuration['value'] = explode(',', $configuration['value']);
+        $configuration['value'] = array_map('trim', $configuration['value']);
+      }
+      $stripped[$configuration['name_key']] = $configuration;
     }
     if (!empty($_POST)) {
       if ($_POST['key'] == 'moderators_email' && !empty($_POST['value'])) {
@@ -1133,9 +1137,13 @@ class DiscussionController  extends PageController {
       $config->value = $value;
       $config->save();
     }
+    $additonalInformationQuestion = array();
+    if (defined('ADDITIONAL_INFORMATION')) {
+      $additonalInformationQuestion = json_decode(ADDITIONAL_INFORMATION, TRUE);
+    }
     $cs = Yii::app()->getClientScript();
     $cs->registerScriptFile(THEME_URL . 'js/configuration.js', CClientScript::POS_END);
-    $this->render('configuration', array('configurations' => $stripped));
+    $this->render('configuration', array('configurations' => $stripped, 'additional_info_question' => $additonalInformationQuestion));
   }
 
   /**

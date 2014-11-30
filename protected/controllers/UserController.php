@@ -608,5 +608,31 @@ class UserController extends PageController {
     $this->render('changePassword', array('response' => $response, 'user_id' => $userId));
   }
 
+  /**
+   * actionSaveAdditinalInformationQuestion
+   * function is ued for save additional information question in database
+   */
+  public function actionSaveAdditinalInformationQuestion() {
+    if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)) {
+      $this->actionError();
+      exit;
+    }
+    $response = array('status' => FALSE, 'msg' => '');
+    if (array_key_exists('additinal_user_info_question', $_POST) && !empty($_POST['additinal_user_info_question'])) {
+      $question = implode(', ', $_POST['additinal_user_info_question']);
+      $config = new Configuration();
+      $config->key = 'user_additional_info_question';
+      $config->value = $question;
+      $configurations = $config->save();
+      if (is_int($configurations)) {
+        $response['status'] = TRUE;
+        $response['msg'] = Yii::t('discussion', 'Question has been saved successfully');
+      }
+    } else {
+      $response['msg'] = Yii::t('discussion', 'Please select question');
+    }
+    echo json_encode($response);
+    exit;
+  }
 }
 ?>
