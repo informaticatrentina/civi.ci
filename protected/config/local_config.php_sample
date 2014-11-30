@@ -250,3 +250,62 @@ define('THEME_FEATURE', json_encode($themeFeature));
  */
 $enabledModules = array('backendconnector', 'rbacconnector', 'static/navbar');
 define('ENABLE_MODULES_LIST', json_encode($enabledModules));
+
+
+
+//Define constant for generate encrypted link
+define('EM_API_KEY', 'a87669e925f30da27c253e75d832af14');
+define('EM_SALT', '07d14f9b716a88cae4ce709d80ce8287793f63ae');
+define('ENCRYPTION_KEY', 'incaendo');
+define('ACTIVATION_LINK_TIME_OUT', 5 * 86400);
+
+$question = array(
+    'age_range' => array(
+               'text' => Yii::t('discussion', 'Age range'),
+               'value' => array('18-24' => '18-24', '25-39' => '25-39',
+                                '40-64' => '40-64', '65-80' => '65-80', 'over 80' => 'over 80'
+                               )
+             ),
+    'age' => array(
+               'text' => Yii::t('discussion', 'Age')
+             ),
+    'gender' => array(
+                  'text' => Yii::t('discussion', 'Gender'),
+                  'value' => array('M' => Yii::t('discussion', 'Male'), 'F' => Yii::t('discussion', 'Female'))
+                ),
+    'education_level' => array(
+                    'text' => Yii::t('discussion', 'education level'),
+                    'value' => array(
+                                'elemetaryschool' =>  Yii::t('discussion','elemetary school'),
+                                'middleschool' =>  Yii::t('discussion','middle school'),
+                              'highschool' =>  Yii::t('discussion','highschool'),
+                                'degree' =>  Yii::t('discussion', 'degree'),
+                                'other' => 'other'
+                     )
+                   ),
+    'citizenship' => array(
+                      'text' => Yii::t('discussion', 'citizenship'),
+                      'value' => array(
+                        'italian' =>  Yii::t('discussion', 'Italian'),
+                        'foreign' =>  Yii::t('discussion', 'Foreign')
+                      )
+                    ),
+    'work' => array(
+                      'text' => Yii::t('discussion', 'Work'),
+                      'value' => array(
+                                   'Y' => Yii::t('discussion', 'Yes'),
+                                   'N' => Yii::t('discussion', 'No'),
+                                   'YC' =>  Yii::t('discussion', 'Yes continuosly'),
+                                   'NC' =>  Yii::t('discussion', 'Not continuosly')
+                                 )
+                      ),
+    'public_authority' => array(
+                            'text' => Yii::t('discussion', 'Public authority'),
+                            'value' => array(
+                                'healthauthority' => Yii::t('discussion', 'Health Authority'),
+                                'province' => Yii::t('discussion', 'Province'),
+                                'localauthority' => Yii::t('discussion', 'Local authority'),
+                                'civilsociety' => Yii::t('discussion', 'Civil Society')
+                            )),
+);
+define('ADDITIONAL_INFORMATION', json_encode($question));
