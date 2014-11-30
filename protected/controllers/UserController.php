@@ -378,47 +378,65 @@ class UserController extends PageController {
       }
       $postData = array_map('trim', $_POST);
       if (!empty($postData)) {
-        if (array_key_exists('age', $postData) && empty($postData['age'])) {
-          throw new Exception(Yii::t('discussion', 'Please select age'));
+        if (array_key_exists('age', $postData)) {
+          if (!empty($postData['age'])) {
+            $userInfo['age-range'] = $postData['age'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select age'));
+          }
         }
-        if (array_key_exists('gender', $postData) && empty($postData['gender'])) {
-          throw new Exception(Yii::t('discussion', 'Please select gender'));
+        if (array_key_exists('gender', $postData)) {
+          if (!empty($postData['gender'])) {
+            $userInfo['sex'] = $postData['gender'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select gender'));
+          }
         }
-        if (array_key_exists('education_level', $postData) && (empty($postData['education_level'])
-          || $postData['education_level'] == 'other')) {
-          if (!array_key_exists('education_level_description', $postData) || empty($postData['education_level_description'])) {
+        if (array_key_exists('education_level', $postData)) {
+          if (!empty($postData['education_level'])) {
+            $userInfo['education-level'] = $postData['education_level'];
+            if ($postData['education_level'] == 'other') {
+              if (array_key_exists('education_level_description', $postData) && !empty($postData['education_level_description'])) {
+                $userInfo['education-level'] = $postData['education_level_description'];
+              } else {
+                throw new Exception(Yii::t('discussion', 'Please select education level'));
+              }
+            }
+          } else {
             throw new Exception(Yii::t('discussion', 'Please select education level'));
           }
         }
-        if (array_key_exists('citizenship', $postData) && empty($postData['citizenship'])) {
-          throw new Exception(Yii::t('discussion', 'Please select citizenship'));
+        if (array_key_exists('citizenship', $postData)) {
+          if (!empty($postData['citizenship'])) {
+            $userInfo['citizenship'] = $postData['citizenship'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select citizenship'));
+          }
         }
-        if (array_key_exists('work', $postData) && empty($postData['work'])) {
-          throw new Exception(Yii::t('discussion', 'Please select work'));
+        if (array_key_exists('work', $postData)) {
+          if (!empty($postData['work'])) {
+            $userInfo['work'] = $postData['work'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select work'));
+          }
         }
-        if (array_key_exists('public_authority', $postData) && empty($postData['public_authority'])) {
-          throw new Exception(Yii::t('discussion', 'Please select authority'));
+        if (array_key_exists('public_authority', $postData)) {
+          if (!empty($postData['public_authority'])) {
+            $userInfo['public-authority']['name'] = $postData['public_authority'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please select authority'));
+          }
         }
-        if (array_key_exists('authority_description', $postData) && empty($postData['authority_description'])) {
-          throw new Exception(Yii::t('discussion', 'Please add authority description'));
+        if (array_key_exists('authority_description', $postData)) {
+          if (!empty($postData['authority_description'])) {
+            $userInfo['public-authority']['text'] = $postData['authority_description'];
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please add authority description'));
+          }
         }
         $im = new UserIdentityAPI();
-        $userInfo = array(
-            'age-range' => $postData['age'],
-            'sex' => array($postData['gender']),
-            'education-level' => $postData['education_level'],
-            'work' => $postData['work'],
-            'citizenship' => $postData['citizenship'],
-            'public-authority' => array(
-                                    'name' => $postData['public_authority'],
-                                    'text' => $postData['authority_description']
-                                  ),
-            'id' => Yii::app()->session['user']['id'],
-            'last-login' => time()
-        );
-        if ($postData['education_level'] == 'other') {
-          $userInfo['education-level'] = $postData['education_level_description'];
-        }
+        $userInfo['id'] = Yii::app()->session['user']['id'];
+        $userInfo['last-login'] = time();
         $updateUser = $im->curlPut(IDM_USER_ENTITY, $userInfo);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           $redirectUrl = BASE_URL;
