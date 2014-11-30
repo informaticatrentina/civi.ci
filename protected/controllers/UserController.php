@@ -282,7 +282,7 @@ class UserController extends PageController {
     $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
     $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking
       this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
-       array('{start_ahref_link}' => '<a href=' . $userInfo['activation_link'] . 'target="_blank">', '{end_ahref_link}' => '</a>' ));
+       array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
     return $html;
