@@ -114,7 +114,10 @@ class DiscussionController  extends PageController {
           $userIdentityApi = new UserIdentityAPI();
           $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($userDetail['email'])), false, false);
           if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && !array_key_exists('last-login', $userInfo['_items'][0])) {
-            $showQuestionModal = TRUE;
+            if (array_key_exists('additional_information_status', Yii::app()->globaldef->params)
+              && Yii::app()->globaldef->params['additional_information_status'] == 1) {
+              $showQuestionModal = TRUE;
+            }
           }
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');

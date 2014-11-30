@@ -354,7 +354,18 @@ class UserController extends PageController {
       $this->setHeader('2.0');
       $message = '';
       Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'loginQuestion.js', CClientScript::POS_END);
-      $additionalInformation = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      $additionalInformation = array();
+      $additionalInformationQuestion = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      $definedQuestion = Yii::app()->globaldef->params['user_additional_info_question'];
+      if (!empty($definedQuestion)) {
+        $definedQuestion = explode(',', $definedQuestion);;
+        $definedQuestion = array_map('trim', $definedQuestion);
+        foreach ($additionalInformationQuestion as $key => $question) {
+          if (in_array($key, $definedQuestion)) {
+            $additionalInformation[$key] = $question;
+          }
+        }
+      }
       if (!isset(Yii::app()->session['user'])) {
         throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
       }
