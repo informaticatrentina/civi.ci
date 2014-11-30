@@ -304,36 +304,36 @@ class UserController extends PageController {
         $time_out = $_GET['u3'];
         $encrypted_secret_key = getRegistrationtKey($email, $time_out);
         $now = time();
-        if ($now <= $time_out) {
-          Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again.");
-        }
-        if ($secret_key != $encrypted_secret_key) {
-          Yii::t("discussion", "This is not a valid link.");
-        }
-        //update in identity manager
-        $module = Yii::app()->getModule('backendconnector');
-        if (empty($module)) {
-          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
-        }
-        $userIdentityApi = new UserIdentityAPI();
-        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
-        $userId = '';
-        if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && array_key_exists('_id', $userInfo['_items'][0])) {
-          $userId = $userInfo['_items'][0]['_id'];
-        }
-        if (empty($userId)) {
-          throw new Exception('User id is empty for email ' . $email);
-        }
-        $inputParam = array(
-          'status' => '1',
-          'id' => $userId
-        );
-        $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
-        if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
-          $verified = TRUE;
-          $message = Yii::t("discussion", "Your account has been activated. Please login");
+        if ($now > $time_out) {
+          $message = Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again.");
+        } else if ($secret_key != $encrypted_secret_key) {
+          $message = Yii::t("discussion", "This is not a valid link.");
         } else {
-          throw new Exception('Failed to update status as active for email ' . $email);
+          //update in identity manager
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module)) {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+          $userIdentityApi = new UserIdentityAPI();
+          $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
+          $userId = '';
+          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && array_key_exists('_id', $userInfo['_items'][0])) {
+            $userId = $userInfo['_items'][0]['_id'];
+          }
+          if (empty($userId)) {
+            throw new Exception('User id is empty for email ' . $email);
+          }
+          $inputParam = array(
+              'status' => '1',
+              'id' => $userId
+          );
+          $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
+          if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+            $verified = TRUE;
+            $message = Yii::t("discussion", "Your account has been activated. Please login");
+          } else {
+            throw new Exception('Failed to update status as active for email ' . $email);
+          }
         }
       } else { 
         $message = Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing.");
