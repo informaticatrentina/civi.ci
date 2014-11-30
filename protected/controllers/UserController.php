@@ -528,7 +528,7 @@ class UserController extends PageController {
     $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
     $mailText = Yii::t('discussion', 'Please reset your password by clicking this
       {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
-      array('{start_ahref_link}' => '<a href=' . $userInfo['activation_link'] . 'target="_blank">', '{end_ahref_link}' => '</a>' ));
+      array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
     return $html;
@@ -543,7 +543,7 @@ class UserController extends PageController {
       $this->setHeader('2.0');
       Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'changePassword.js', CClientScript::POS_END);
       $userId = '';
-      $response = array('status' => FALSE, 'msg' => '', 'data' => array());
+      $response = array('status' => FALSE, 'msg' => '', 'data' => array('change_password_html' => TRUE));
       $module = Yii::app()->getModule('backendconnector');
       if (empty($module)) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
@@ -572,7 +572,7 @@ class UserController extends PageController {
           throw new Exception(Yii::t('discussion', 'Some technical problem occurred, contact administrator'));
         }
       } else if (array_key_exists('u1', $_GET) && array_key_exists('u2', $_GET) && array_key_exists('u3', $_GET)) {
-        $response['data'] = array('change_password' => true);
+        $response['data']['change_password_html'] = TRUE;
         $secret_key = $_GET['u1'];
         $encrypted_email = $_GET['u2'];
         $email = decryptDataString($encrypted_email);
@@ -580,9 +580,11 @@ class UserController extends PageController {
         $encrypted_secret_key = getRegistrationtKey($email, $time_out);
         $now = time();
         if ($now > $time_out) {
+          $response['data']['change_password_html'] = FALSE;
           throw new Exception(Yii::t("discussion", "We are sorry, this link has expired. You will need to sign up again."));
         }
         if ($secret_key != $encrypted_secret_key) {
+          $response['data']['change_password_html'] = FALSE;
           throw new Exception(Yii::t("discussion", "This is not a valid link."));
         }
         //update in identity manager
@@ -592,12 +594,13 @@ class UserController extends PageController {
           $userId = $userInfo['_items'][0]['_id'];
         }
         if (empty($userId)) {
-           throw new Exception(Yii::t('discussion', 'User does not exit in system'));
+          $response['data']['change_password_html'] = FALSE;
+          throw new Exception(Yii::t('discussion', 'User does not exit in system'));
         }
       } else {
+        $response['data']['change_password_html'] = FALSE;
         throw new Exception(Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing."));
       }
-      $response['status'] = TRUE;
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in actionChangePassword');
       $response['msg'] = $e->getMessage();
