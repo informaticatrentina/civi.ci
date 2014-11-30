@@ -388,7 +388,7 @@ class UserController extends PageController {
         }
         if (array_key_exists('age', $postData)) {
           if (!empty($postData['age'])) {
-            if (!is_int($postData['age'])) {
+            if (!preg_match('/^[0-9]*$/', $postData['age'])) {
               throw new Exception(Yii::t('discussion', 'Please provide valid age'));
             }
             $userInfo['age'] = $postData['age'];
