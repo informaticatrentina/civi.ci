@@ -1035,7 +1035,7 @@ msgstr "Accetto i principi e i {ahref_start_tag} termini di servizio {ahref_end_
 
 msgctxt "discussion"
 msgid "Please check privacy policy checkbox"
-msgstr ""
+msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
 msgid "Please check term and condition checkbox"
@@ -1135,7 +1135,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "User Information"
-msgstr ""
+msgstr "Informazioni utente"
 
 msgctxt "discussion"
 msgid "Verify your account"
@@ -1183,28 +1183,104 @@ msgstr ""
 
 msgctxt "discussion" 
 msgid "select age range"
-msgstr ""
+msgstr "seleziona la fascia di età"
 
 msgctxt "discussion" 
 msgid "select authority"
-msgstr ""
+msgstr "seleziona l'ente di appartenenza"
 
 msgctxt "discussion" 
 msgid "select citizenship"
-msgstr ""
+msgstr "seleziona la cittadinanza"
 
 msgctxt "discussion" 
 msgid "select eduction"
-msgstr ""
+msgstr "seleziona il livello di istruzione"
 
 msgctxt "discussion" 
 msgid "select gender"
-msgstr ""
+msgstr "seleziona il genere"
 
 msgctxt "discussion" 
 msgid "select your work"
-msgstr ""
+msgstr "seleziona il lavoro"
 
 msgctxt "discussion" 
 msgid "Please activate you account"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Change Password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Forgot password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Get password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Insert Email id"
+msgstr ""
+
+msgctxt "discussion"
+msgid "New Password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please check your mailbox for reset password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please enter new password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions."
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select question"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Question has been saved successfully"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Reset Password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Reset your password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "This is not a valid link."
+msgstr ""
+
+msgctxt "discussion"
+msgid "User does not exit in system"
+msgstr ""
+
+msgctxt "discussion"
+msgid "We are sorry, the page you are looking for seems to be missing."
+msgstr ""
+
+msgctxt "discussion"
+msgid "We are sorry, this link has expired. You will need to sign up again."
+msgstr ""
+
+msgctxt "discussion"
+msgid "Your account has been activated. Please login"
+msgstr "Il tuo account è stato attivato. Esegui l'accesso."
+
+msgctxt "discussion"
+msgid "Your password has been changed. Please login"
+msgstr ""
+
+msgctxt "discussion"
+msgid "other"
 msgstr ""

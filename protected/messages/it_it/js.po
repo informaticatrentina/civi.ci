@@ -425,7 +425,7 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Please check privacy checkbox"
-msgstr ""
+msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
 msgid "Please add authority description"
@@ -453,4 +453,12 @@ msgstr ""
 
 msgctxt "discussion"
 msgid "Please select work"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please enter new Password"
+msgstr ""
+
+msgctxt "discussion"
+msgid "Please select atleast one checkbox"
 msgstr ""
