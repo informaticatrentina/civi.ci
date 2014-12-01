@@ -473,9 +473,9 @@ class UserController extends PageController {
             $postData['gender'] = $userInfo['sex'][0];
           }
           if (array_key_exists('education-level', $userInfo)) {
-            $postData['education_level'] = $userInfo['education-level'];
-            if (!in_array($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
-              $postData['education_level'] = Yii::t('discussion', 'other');
+	    $postData['education_level'] = $userInfo['education-level'];
+	    if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+              $postData['education_level'] =  'other';
               $postData['education_level_description'] = $userInfo['education-level'];
             }
           }
