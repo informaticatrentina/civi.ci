@@ -1179,7 +1179,7 @@ msgstr ""
 
 msgctxt "discussion" 
 msgid "save"
-msgstr ""
+msgstr "Salva"
 
 msgctxt "discussion" 
 msgid "select age range"
