@@ -77,7 +77,8 @@ class UserController extends PageController {
           'lastname' => $user['lastname'],
           'email' => $user['email'],
           'password' => $user['password'],
-          'status' => 0
+          'status' => 0,
+          'source' => CIVICO
         );
         if (!empty($_GET['back'])) {
           $back = substr($_GET['back'], 1);
