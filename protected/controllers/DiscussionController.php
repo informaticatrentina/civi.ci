@@ -136,6 +136,7 @@ class DiscussionController  extends PageController {
           if ($showQuestionModal) {
             $additionalInfoUrl = BASE_URL . 'user/question';
             $_SESSION['user']['back_url'] = $backUrl;
+            $_SESSION['user']['show_question_page'] = TRUE;
           }
         }
       }

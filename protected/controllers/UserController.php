@@ -351,6 +351,13 @@ class UserController extends PageController {
    */
   public function actionSaveAdditionalInfo() {
     try {
+      if (!isUserLogged()) {
+        $this->redirect(BASE_URL);
+      }
+      //check flag whether this page is shown or not
+      if (!array_key_exists('show_question_page', Yii::app()->session['user'])) {
+        $this->redirect(BASE_URL);
+      }
       $this->setHeader('2.0');
       $message = '';
       $postData = array();
@@ -366,9 +373,6 @@ class UserController extends PageController {
             $additionalInformation[$key] = $question;
           }
         }
-      }
-      if (!isset(Yii::app()->session['user'])) {
-        throw new Exception(Yii::t('discussion', 'Please login to save additional information'));
       }
       if (isModuleExist('backendconnector') == false) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
@@ -450,6 +454,7 @@ class UserController extends PageController {
         $userInfo['last-login'] = time();
         $updateUser = $im->curlPut(IDM_USER_ENTITY, $userInfo);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+          unset($_SESSION['user']['show_question_page']);
           $redirectUrl = BASE_URL;
           if (isset(Yii::app()->session['user']['back_url']) && !empty(Yii::app()->session['user']['back_url'])) {
             $redirectUrl = Yii::app()->session['user']['back_url'];
@@ -473,8 +478,8 @@ class UserController extends PageController {
             $postData['gender'] = $userInfo['sex'][0];
           }
           if (array_key_exists('education-level', $userInfo)) {
-	    $postData['education_level'] = $userInfo['education-level'];
-	    if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+            $postData['education_level'] = $userInfo['education-level'];
+	          if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
               $postData['education_level'] =  'other';
               $postData['education_level_description'] = $userInfo['education-level'];
             }
