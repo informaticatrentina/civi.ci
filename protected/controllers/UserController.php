@@ -284,8 +284,7 @@ class UserController extends PageController {
     $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/activationEmail.html');
     $html = str_replace("{{salute_text}}", $userInfo['salute_text'], $html);
     $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
-    $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking
-      this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
+    $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
        array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
@@ -582,8 +581,7 @@ class UserController extends PageController {
     $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/forgotPasswordEmail.html');
     $html = str_replace("{{salute_text}}", $userInfo['salute_text'], $html);
     $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
-    $mailText = Yii::t('discussion', 'Please reset your password by clicking this
-      {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
+    $mailText = Yii::t('discussion', 'Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions.',
       array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);

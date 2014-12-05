@@ -1307,5 +1307,5 @@ msgstr "età"
 
 msgctxt "discussion"
 msgid "Good Morning"
-msgstr ""
+msgstr "Buongiorno"
 
