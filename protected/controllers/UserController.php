@@ -255,9 +255,11 @@ class UserController extends PageController {
         'u3' => $time_out,
       );
       $userInfo = array(
+        'salute_text' => Yii::t('discussion', 'Good Morning'),
         'firstname' => $user['firstname'],
         'lastname' => $user['lastname'],
         'activation_link' => BASE_URL . 'user/activate?' . http_build_query($param),
+        'regards' => Yii::t('discussion', 'Regards'),
       );
       $body = $this->_prepareMailBody($userInfo);
       $subject = Yii::t('discussion', 'Verify your account');
@@ -280,12 +282,14 @@ class UserController extends PageController {
   private function _prepareMailBody($userInfo) {
     $html = '';
     $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/activationEmail.html');
+    $html = str_replace("{{salute_text}}", $userInfo['salute_text'], $html);
     $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
     $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking
       this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
        array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
+    $html = str_replace("{{regards}}", $userInfo['regards'], $html);
     return $html;
   }
   
