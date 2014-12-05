@@ -1239,7 +1239,7 @@ msgstr "Inserisci la nuova password"
 
 msgctxt "discussion"
 msgid "Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions."
-msgstr "Reimposta la tua password cliccando su questo {start_ahref_link} link {end_ahref_link} o copia e incolla il link nel browser e segui le istruzioni."
+msgstr "Per favore reimposta la tua password facendo click su questo {start_ahref_link} link  {end_ahref_link} oppure copia e incolla il link nel browser e segui le istruzioni."
 
 msgctxt "discussion"
 msgid "Please select question"
