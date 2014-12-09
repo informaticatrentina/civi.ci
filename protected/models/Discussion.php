@@ -622,6 +622,12 @@ class Discussion {
       $actProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
     }
     foreach ($actProposals as $proposal) {
+      if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
+        $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
+      }
+      if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
+        $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
+      }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
           if ($tag['scheme'] == TAG_SCHEME) {
@@ -646,6 +652,12 @@ class Discussion {
       $inactProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
     }
     foreach ($inactProposals as $proposal) {
+      if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
+        $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
+      }
+      if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
+        $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
+      }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
           if ($tag['scheme'] == TAG_SCHEME) {
@@ -851,6 +863,12 @@ class Discussion {
       $proposal['highlighted'] = false;
       $proposal['image'] = '';
       $proposal['video'] = '';
+      if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
+        $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
+      }
+      if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
+        $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
+      }
       if (array_key_exists('links', $proposal) && array_key_exists('enclosures', $proposal['links'])) {
         foreach ($proposal['links']['enclosures'] as $enclosures) {
           if ($enclosures['type'] == 'image') {

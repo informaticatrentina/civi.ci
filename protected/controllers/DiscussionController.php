@@ -1300,6 +1300,12 @@ class DiscussionController  extends PageController {
   public function actionEditProposal() {
     try {
       if (!empty($_POST)) {
+        if (array_key_exists('summary', $_POST) && !empty($_POST['summary'])) {
+            $_POST['summary'] = nl2br($_POST['summary']);
+        }
+        if (array_key_exists('description', $_POST) && !empty($_POST['description'])) {
+            $_POST['description'] = nl2br($_POST['description']);
+        }
         $postData = array_map('userInputPurifier', $_POST);
         $postData = array_map('trim', $postData);
         if (array_key_exists('title', $postData) && empty($postData['title'])) {
