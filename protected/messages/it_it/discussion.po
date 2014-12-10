@@ -1309,3 +1309,38 @@ msgctxt "discussion"
 msgid "Good Morning"
 msgstr "Buongiorno"
 
+msgctxt "discussion" 
+msgid "Association"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Please provide your profession"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Please provide your residence"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Please select association"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Profession"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Residence"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "profession"
+msgstr "professione"
+
+msgctxt "discussion" 
+msgid "residence"
+msgstr "luogo di residenza"
+
+msgctxt "discussion" 
+msgid "select association"
+msgstr ""
