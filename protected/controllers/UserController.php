@@ -455,27 +455,24 @@ class UserController extends PageController {
         }
         if (array_key_exists('profession', $postData)) {
           if (!empty($postData['profession'])) {
-            $profileInfo[0]['name'] = 'profession';
-            $profileInfo[0]['text'] = $postData['profession'];
+            $profileInfo['profession'] = $postData['profession'];
           } else {
             throw new Exception(Yii::t('discussion', 'Please provide your profession'));
           }
         }
         if (array_key_exists('residence', $postData)) {
           if (!empty($postData['residence'])) {
-            $profileInfo[1]['name'] = 'residence';
-            $profileInfo[1]['text'] = $postData['residence'];
+            $profileInfo['residence'] = $postData['residence'];
           } else {
             throw new Exception(Yii::t('discussion', 'Please provide your residence'));
           }
         }
         if (array_key_exists('association', $postData)) {
           if (!empty($postData['association'])) {
-            $profileInfo[2]['name'] = 'association';
-            $profileInfo[2]['text'] = $postData['association'];
+            $profileInfo['association'] = $postData['association'];
             if ($postData['association'] == 'other') {
               if (array_key_exists('association_description', $postData) && !empty($postData['association_description'])) {
-                $profileInfo[2]['text'] = $postData['association_description'];
+                $profileInfo['association'] = $postData['association_description'];
               } else {
                 throw new Exception(Yii::t('discussion', 'Please select association'));
               }
@@ -531,18 +528,18 @@ class UserController extends PageController {
             $postData['authority_description'] = $userInfo['public-authority']['text'];
           }
           if (array_key_exists('profile-info', $userInfo)) {
-            if (array_key_exists('0', $userInfo['profile-info'])) {
-              $postData['profession'] = $userInfo['profile-info'][0]['text'];
+            if (array_key_exists('profession', $userInfo['profile-info'])) {
+              $postData['profession'] = $userInfo['profile-info']['profession'];
             }
           }
           if (array_key_exists('profile-info', $userInfo)) {
-            if (array_key_exists('1', $userInfo['profile-info'])) {
-              $postData['residence'] = $userInfo['profile-info'][0]['text'];
+            if (array_key_exists('residence', $userInfo['profile-info'])) {
+              $postData['residence'] = $userInfo['profile-info']['residence'];
             }
           }
           if (array_key_exists('profile-info', $userInfo)) {
-            if (array_key_exists('2', $userInfo['profile-info'])) {
-              $postData['association'] = $userInfo['profile-info'][0]['text'];
+            if (array_key_exists('association', $userInfo['profile-info'])) {
+              $postData['association'] = $userInfo['profile-info']['association'];
             }
           }
         }
