@@ -539,7 +539,14 @@ class UserController extends PageController {
           }
           if (array_key_exists('profile-info', $userInfo)) {
             if (array_key_exists('association', $userInfo['profile-info'])) {
-              $postData['association'] = $userInfo['profile-info']['association'];
+              $association = $userInfo['profile-info']['association'];
+              $associationStoredValues = $additionalInformation['association']['value'];
+              if (array_key_exists($association, $associationStoredValues)) {
+                $postData['association'] = $association;
+              } else {
+                $postData['association'] = 'other';
+                $postData['association_description'] = $association;
+              }
             }
           }
         }
