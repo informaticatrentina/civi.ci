@@ -386,6 +386,7 @@ class UserController extends PageController {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
       }
       $postData = array_map('trim', $_POST);
+      $profileInfo = array();
       if (!empty($postData)) {
         if (array_key_exists('age_range', $postData)) {
           if (!empty($postData['age_range'])) {
@@ -481,7 +482,9 @@ class UserController extends PageController {
             throw new Exception(Yii::t('discussion', 'Please select association'));
           }
         }
-        $userInfo['profile-info'] = $profileInfo;
+        if (!empty($profileInfo)) {
+          $userInfo['profile-info'] = $profileInfo;
+        }
         $im = new UserIdentityAPI();
         $userInfo['id'] = Yii::app()->session['user']['id'];
         $userInfo['last-login'] = time();
@@ -538,7 +541,7 @@ class UserController extends PageController {
             }
           }
           if (array_key_exists('profile-info', $userInfo)) {
-            if (array_key_exists('association', $userInfo['profile-info'])) {
+            if (array_key_exists('association', $userInfo['profile-info']) && array_key_exists('association', $additionalInformation)) {
               $association = $userInfo['profile-info']['association'];
               $associationStoredValues = $additionalInformation['association']['value'];
               if (array_key_exists($association, $associationStoredValues)) {
