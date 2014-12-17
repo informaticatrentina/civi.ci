@@ -217,11 +217,16 @@ class DiscussionController  extends PageController {
       $i = 0;
       foreach ($discussionInfo as $info) {
         $entries = array();
+        $discussionDetail[$i]['discussionId'] = $info['id'];
         $discussionDetail[$i]['discussionTitle'] = $info['title'];
         $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
         $discussionDetail[$i]['discussionSlug'] = $info['slug'];
         $discussionDetail[$i]['discussionAuthor'] = $info['author'];
         $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
+        $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
+        $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
+        $discussionDetail[$i]['opinionCount'] = $discussionContent['opinion_count'];
+        $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
         $discussion->discussionSlug = $info['slug'];
         $discussion->count = 2;
         $i++;
@@ -1939,6 +1944,46 @@ class DiscussionController  extends PageController {
       }
     } else {
       throw new Exception(Yii::t('discussion', 'Missing File Name'));
+    }
+    return $response;
+  }
+
+  /**
+   * _getDiscussionProposalOpinionAndAuthor
+   * function is used for getting proposal count, opinion count and author
+   * @param string $discussionId - discussion id
+   * @return array $response - array of proposal count, opinion count and authors
+   */
+  private function _getDiscussionProposalOpinionAndAuthor($discussionId) {
+    try {
+      $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array());
+      $aggregatorManager = new AggregatorManager();
+      $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
+      '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
+      $discussionId), CIVICO);
+      foreach ($proposals as $proposal) {
+        if (array_key_exists('count', $proposal)) {
+          $response['proposal_count'] = $proposal['count'];
+        }
+        if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
+          $response['author'][] = $proposal['author']['slug'];
+        }
+        if (array_key_exists('id', $proposal)) {
+          $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '',
+          '', '1', '', '', '', '', array(), '', 'id, author', '', '', trim('proposal,' .
+          $proposal['id']), CIVICO);
+          foreach ($opinions as $opinion) {
+            if (array_key_exists('count', $opinion)) {
+              $response['opinion_count'] += $opinion['count'];
+            }
+            if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])) {
+              $response['author'][] = $opinion['author']['slug'];
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), 'Error in _getDiscussionProposalOpinionAndAuthor');
     }
     return $response;
   }
