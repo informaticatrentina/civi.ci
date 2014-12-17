@@ -555,6 +555,7 @@ class DiscussionController  extends PageController {
     } else {
       $return['msg'] = Yii::t('discussion', 'There are no proposals');
     }
+    $proposals = $this->_proposalSorting($proposals);
     $understanding = array();
     $understanding = unserialize(UNDERSTANDING);
     $heatMap = array();
@@ -1123,7 +1124,7 @@ class DiscussionController  extends PageController {
     $config = new Configuration();
     $configurations = $config->get();
     $stripped = array();
-
+    $proposalSortingBase = array();
     foreach ($configurations as $configuration) {
       $configuration['value'] = htmlspecialchars_decode($configuration['value']);
       if ($configuration['name_key'] == 'user_additional_info_question') {
@@ -1145,9 +1146,13 @@ class DiscussionController  extends PageController {
     if (defined('ADDITIONAL_INFORMATION')) {
       $additonalInformationQuestion = json_decode(ADDITIONAL_INFORMATION, TRUE);
     }
+    if (defined('PROPOSAL_SORTING_BASE')) {
+      $proposalSortingBase = json_decode(PROPOSAL_SORTING_BASE, true);
+    }
     $cs = Yii::app()->getClientScript();
     $cs->registerScriptFile(THEME_URL . 'js/configuration.js', CClientScript::POS_END);
-    $this->render('configuration', array('configurations' => $stripped, 'additional_info_question' => $additonalInformationQuestion));
+    $this->render('configuration', array('configurations' => $stripped, 'additional_info_question' => $additonalInformationQuestion,
+      'proposal_sorting' => $proposalSortingBase));
   }
 
   /**
@@ -1712,6 +1717,84 @@ class DiscussionController  extends PageController {
     return $tags;
   }
 
+  /**
+   * _proposalSorting
+   * function is used for sorting proposal according to set value in config
+   * It can sort proposal on the basis of :
+   *  1. Alphabetic
+   *  2. No of opinion
+   *  3. Custom weight
+   * @param array $proposals - all proposal to be sorted
+   * @return array $sortedProposal - sorted proposal
+   */
+  private function _proposalSorting($proposals) {
+    try {
+      $sortedProposal = array();
+      $sortOrder = '';
+      if (array_key_exists('proposal_sorting_base', Yii::app()->globaldef->params)) {
+        $sortOrder = Yii::app()->globaldef->params['proposal_sorting_base'];
+      }
+      if (empty($sortOrder)) {
+        return $proposals;
+      }
+      $proposalCount = count($proposals);
+      switch ($sortOrder) {
+        case 'albhabetical':
+          foreach ($proposals as $proposal) {
+            $sortedProposal[strtoupper($proposal['title'])] = $proposal;
+          }
+          ksort($sortedProposal, 6);
+          break;
+        case 'opinion_count':
+          foreach ($proposals as $proposal) {
+            if (array_key_exists('tags', $proposal)) {
+              $sort = FALSE;
+              foreach ($proposal['tags'] as $tag) {
+                if ($tag['scheme'] == OPINION_COUNT_TAG_SCEME && $tag['weight'] != 0) {
+                  $key = $proposalCount + $tag['weight'];
+                  if (array_key_exists($key, $sortedProposal)) {
+                    ++$proposalCount;
+                    $key = $proposalCount + $tag['weight'];
+                  }
+                  $sortedProposal[$key] = $proposal;
+                  $sort = TRUE;
+                }
+              }
+            }
+            if ($sort === FALSE) {
+              $sortedProposal[] = $proposal;
+            }
+          }
+          krsort($sortedProposal);
+          break;
+        case 'custom_weight':
+          $unSortedProposal = array();
+          foreach ($proposals as $proposal) {
+            if (array_key_exists('tags', $proposal)) {
+              $sort = FALSE;
+              foreach ($proposal['tags'] as $tag) {
+                if ($tag['scheme'] == PROPOSAL_SORTING_TAG_SCHEME && $tag['weight'] != 0) {   
+                  $sortedProposal[$tag['weight']] = $proposal;
+                  $sort = TRUE;
+                }
+              }
+            }
+            if ($sort === FALSE) {
+              $unSortedProposal[] = $proposal;
+            }
+          }
+          ksort($sortedProposal);
+          $sortedProposal = array_merge($sortedProposal, $unSortedProposal);
+          break;
+      }
+    } catch(Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in _proposalSorting function');
+    }
+    if (empty($sortedProposal)) {
+      $sortedProposal = $proposals;
+    }
+    return $sortedProposal;
+  }
 }
 
 ?>
