@@ -1635,6 +1635,83 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
+
+  /**
+   * actionSaveProposalSortingOrder
+   * Function is used for save proposal sorting order.
+   * This function is used only by ajax request
+   * It update or save sorting order on the basis of proposal id.
+   */
+  public function actionSaveProposalSortingOrder() {
+    if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)) {
+      $this->redirect(BASE_URL);
+    }
+    $response = array('success' => FALSE, 'msg' => '');
+    try {
+      $isAdmin = checkPermission('admin');
+      if ($isAdmin == FALSE) {
+        throw new Exception(Yii::t('discussion', 'Proposal is updated only by admin user'));
+      }
+      if (!array_key_exists('sorting_order', $_GET) || !array_key_exists('proposal_id', $_GET)) {
+        throw new Exception(Yii::t('discussion', 'Sorting order or proposal id is empty'));
+      }
+      $aggregatorManager = new AggregatorManager();
+      $aggregatorManager->id = $_GET['proposal_id'];
+      $aggregatorManager->tags = $this->_prepareProposalSortOrderTag($_GET['proposal_id'],
+        $_GET['sorting_order']);
+      $updateProposal = $aggregatorManager->updateProposal();
+      if ($updateProposal['success'] == TRUE) {
+        $response['success'] = TRUE;
+        $response['msg'] = Yii::t('discussion', 'Proposal order has been saved successfully');
+      } else {
+        $response['msg'] = Yii::t('discussion', 'Some technical problem occurred, For more detail check log file');
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in actionSaveProposalSortingOrder');
+      $response['msg'] = $e->getMessage();
+    }
+    echo json_encode($response);
+    exit;
+  }
+
+  /**
+   * _prepareProposalSortOrderTag
+   * function prepare tag for add sorting order on a proposal
+   * @param array $extingProposalTag - all tags of proposal
+   * @param int $sortingOrder -  sorting order of proposal
+   * @return array $proposalTag
+   */
+  private function _prepareProposalSortOrderTag($proposalId, $sortingOrder) {
+    try {
+      $tags = array();
+      $existSortingOrder = FALSE;
+      $discussion = new Discussion();
+      $discussion->id = $proposalId;
+      $proposalAllTags = $discussion->getProposalTags();
+      if (is_array($proposalAllTags) && array_key_exists(0, $proposalAllTags) &&
+        array_key_exists('tags', $proposalAllTags[0]) && !empty($proposalAllTags[0]['tags'])) {
+        $tags = $proposalAllTags[0]['tags'];
+        foreach ($tags as &$tag) {
+          if ($tag['scheme'] == PROPOSAL_SORTING_TAG_SCHEME) {
+            $tag['weight'] = trim($sortingOrder);
+            $existSortingOrder = TRUE;
+          }
+        }
+      }
+      if ($existSortingOrder == FALSE) {
+        $tags[] = array(
+          'name' => 'sort_order',
+          'slug' => 'sort_order',
+          'scheme' => PROPOSAL_SORTING_TAG_SCHEME,
+          'weight' => trim($sortingOrder)
+        );
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in actionSaveProposalSortingOrder');
+    }
+    return $tags;
+  }
+
 }
 
 ?>

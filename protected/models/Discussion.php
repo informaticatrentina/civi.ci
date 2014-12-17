@@ -642,6 +642,9 @@ class Discussion {
           if ($tag['scheme'] == HIGHLIGHT_PROPOSAL_TAG_SCEME) {
             $proposal['highlight'] = $tag['name'];
           }
+          if ($tag['scheme'] == PROPOSAL_SORTING_TAG_SCHEME) {
+            $proposal['sorting_order'] = $tag['weight'];
+          }
         }
       }
       $activeProposals[] = $proposal;

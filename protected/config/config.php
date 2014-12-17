@@ -127,6 +127,7 @@ define('THEME_URL', $url . '/themes/' . SITE_THEME . '/');
 define('HIGHLIGHT_PROPOSAL_TAG_SCEME', 'http://ahref.eu/scheme/highlight');
 define('HIGHLIGHT_TAG_NAME', 'highlight');
 define('ANSWER_TAG_SCHEME', 'http://ahref.eu/scheme/answer');
+define('PROPOSAL_SORTING_TAG_SCHEME', 'http://ahref.eu/scheme/proposal/sort_order');
 /**
  * Log level checking
  */
@@ -246,7 +247,8 @@ return array(
                 'user/question' => 'user/saveAdditionalInfo',
                 'user/forgot-password' => 'user/forgotPassword',
                 'user/change-password' => 'user/changePassword',
-                'question/save' => 'user/saveAdditinalInformationQuestion'
+                'question/save' => 'user/saveAdditinalInformationQuestion',
+                'admin/proposal/order' => 'discussion/saveProposalSortingOrder'
             ),
         ),
         'session' => array(
