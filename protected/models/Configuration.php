@@ -14,6 +14,7 @@ class Configuration {
 
   public $key;
   public $value;
+  public $type;
 
   /**
    * get
@@ -23,8 +24,10 @@ class Configuration {
    */
   public function get() {
     $connection = Yii::app()->db;
-    $sql = "SELECT * FROM configuration ORDER BY display_order ASC";
+    $sql = "SELECT * FROM configuration WHERE config_key = :config_key ORDER BY 
+      display_order ASC";
     $query = $connection->createCommand($sql);
+    $query->bindParam(":config_key", $this->type);
     $configurations = $query->queryAll();
     return $configurations;
   }
@@ -36,12 +39,18 @@ class Configuration {
    * @return (array) $contestDetails
    */
   public function save() {
-    $connection = Yii::app()->db;
-    $sql = "UPDATE configuration SET value =:value WHERE name_key = :key ";
-    $query = $connection->createCommand($sql);
-    $query->bindParam(":value", $this->value);
-    $query->bindParam(":key", $this->key);
-    $response = $query->execute();
+    try {
+      $connection = Yii::app()->db;
+      $sql = "UPDATE configuration SET value =:value WHERE name_key = :key AND 
+        config_key = :configKey";
+      $query = $connection->createCommand($sql);
+      $query->bindParam(':value', $this->value);
+      $query->bindParam(":key", $this->key);
+      $query->bindParam(":configKey", $this->type);
+      $response = $query->execute();
+    } catch (Exception $e) {
+      Yii::log('save', ERROR, 'Exception while updating : ' . $e->getMessage());
+    }
     return $response;
   }
 

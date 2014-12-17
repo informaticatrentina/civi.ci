@@ -248,7 +248,8 @@ return array(
                 'user/forgot-password' => 'user/forgotPassword',
                 'user/change-password' => 'user/changePassword',
                 'question/save' => 'user/saveAdditinalInformationQuestion',
-                'admin/proposal/order' => 'discussion/saveProposalSortingOrder'
+                'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
+                'admin/config/homepage' => 'discussion/homepageConfig'
             ),
         ),
         'session' => array(

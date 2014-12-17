@@ -481,3 +481,7 @@ msgstr ""
 msgctxt "discussion" 
 msgid "Please select residence"
 msgstr ""
+
+msgctxt "discussion" 
+msgid "Please enter valid layout columns."
+msgstr ""

@@ -43,6 +43,7 @@ class SendMailCommand extends CConsoleCommand {
       }
       if (empty($moderatorEmails)) {
         $config = new Configuration();
+        $config->type = 'config';
         $configurations = $config->get();
         foreach ($configurations as $confiuration) {
           if ($confiuration['name_key'] == 'moderators_email') {

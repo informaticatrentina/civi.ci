@@ -1344,3 +1344,75 @@ msgstr "luogo di residenza"
 msgctxt "discussion" 
 msgid "select association"
 msgstr ""
+
+msgctxt "discussion" 
+msgid "Allowed image extentions are "
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Banner"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Configuration Saved Successfully"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Configure Home Page"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Home Page Configuration Panel"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Introduction Text"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Layout"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Main Logo"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Option1"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Please enter valid layout value"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Problem uploading home banner"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Problem uploading home main logo"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Problem uploading home sub logo"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Proposal is updated only by admin user"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Proposal order has been saved successfully"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Sorting order or proposal id is empty"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Sub Logo"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Update Homepage"
+msgstr ""

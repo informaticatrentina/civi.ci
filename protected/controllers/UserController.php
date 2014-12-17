@@ -23,6 +23,7 @@ class UserController extends PageController {
       p('Site theme is not defined. Please define it in local config file');
     } else {
       $config = new Configuration;
+      $config->type = 'config';
       $data = $config->get();
       foreach ($data as $configration) {
         Yii::app()->globaldef->params[$configration['name_key']] = htmlspecialchars_decode($configration['value']);
@@ -732,6 +733,7 @@ class UserController extends PageController {
       $config = new Configuration();
       $config->key = 'user_additional_info_question';
       $config->value = $question;
+      $config->type = 'config';
       $configurations = $config->save();
       if (is_int($configurations)) {
         $response['status'] = TRUE;

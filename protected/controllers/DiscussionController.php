@@ -18,6 +18,7 @@ class DiscussionController  extends PageController {
       p('Site theme is not defined. Please define it in local config file');
     } else {
       $config = new Configuration;
+      $config->type = 'config';
       $data = $config->get();
       foreach ($data as $configration) {
         Yii::app()->globaldef->params[$configration['name_key']] = htmlspecialchars_decode($configration['value']);
@@ -48,12 +49,27 @@ class DiscussionController  extends PageController {
       $discussion['summary'] = strip_tags($discussion['summary'], '<p><i><strong><br>');
       $stripedContent[] = $discussion;
     }
-    $discussions = array_chunk($stripedContent, CHUNK_SIZE);
+    $homeConfig = new Configuration();
+    $homeConfig->type = 'homeconfig';
+    $homeConfigurations = $homeConfig->get();
+    $configuration = array();
+    foreach ($homeConfigurations as $config) {
+      if ($config['name_key'] == 'introduction_text') {
+        $configuration[$config['name_key']] = html_entity_decode(stripslashes($config['value']));
+      } else {
+        $configuration[$config['name_key']] = $config['value'];
+      }
+    }
+    $chunkSize = 1;
+    if ($configuration['layout'] != 0) {
+      $chunkSize = $configuration['layout'];
+    }
+    $discussions = array_chunk($stripedContent, $chunkSize);
     if (defined('DIV_COLORS')) {
       $color = unserialize(DIV_COLORS);
-      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text']));
+      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
     } else {
-      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text']));
+      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
     }
   }
 
@@ -592,7 +608,10 @@ class DiscussionController  extends PageController {
         'error_message' => $errorMessage,
         'proposal_detail' => $proposalData,
         'opinion_text' => Yii::app()->globaldef->params['opinion_text'],
-        'link_text' => Yii::app()->globaldef->params['link_text']
+        'link_text' => Yii::app()->globaldef->params['link_text'],
+        'all_proposal_off' => Yii::app()->globaldef->params['submission'],
+        'proposal_text' => Yii::app()->globaldef->params['proposal_text'],
+        'proposal_layout' => Yii::app()->globaldef->params['proposal_layout']
       );
     }
     $this->render('discussionProposals', $data);
@@ -1122,6 +1141,7 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL);
     }
     $config = new Configuration();
+    $config->type = 'config';
     $configurations = $config->get();
     $stripped = array();
     $proposalSortingBase = array();
@@ -1139,6 +1159,7 @@ class DiscussionController  extends PageController {
       }
       $value = htmlspecialchars($_POST['value']);
       $config->key = $_POST['key'];
+      $config->type = 'config';
       $config->value = $value;
       $config->save();
     }
@@ -1584,6 +1605,7 @@ class DiscussionController  extends PageController {
         }
         $moderatorEmail = implode(', ', $moderatorEmail);
         $config = new Configuration();
+        $config->type = 'config';
         $config->key = $_POST['key'];
         $config->value = $moderatorEmail;
         $saveModerator = $config->save();
@@ -1746,6 +1768,7 @@ class DiscussionController  extends PageController {
           ksort($sortedProposal, 6);
           break;
         case 'opinion_count':
+          $unSortedProposal = array();
           foreach ($proposals as $proposal) {
             if (array_key_exists('tags', $proposal)) {
               $sort = FALSE;
@@ -1762,10 +1785,11 @@ class DiscussionController  extends PageController {
               }
             }
             if ($sort === FALSE) {
-              $sortedProposal[] = $proposal;
+              $unSortedProposal[] = $proposal;
             }
           }
           krsort($sortedProposal);
+          $sortedProposal = array_merge($sortedProposal, $unSortedProposal);
           break;
         case 'custom_weight':
           $unSortedProposal = array();
@@ -1794,6 +1818,129 @@ class DiscussionController  extends PageController {
       $sortedProposal = $proposals;
     }
     return $sortedProposal;
+  }
+  
+  /**
+   * actionHomePageConfig
+   * This function is used for saving and getting Home page configuration.
+   */
+  public function actionHomePageConfig() {
+    $isAdmin = checkPermission('admin');
+    if ($isAdmin == false) {
+      $this->redirect(BASE_URL);
+    }
+    Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
+    $this->setHeader('2.0');
+    $cs = Yii::app()->getClientScript();
+    $config = new Configuration();
+    $config->type = 'homeconfig';
+    $message = array(
+      'success' => 0,
+      'msg' => ''
+    );
+    $homeDetails =array();
+    if (!empty($_POST)) {
+      try {
+        $homeConfigDetails = $_POST;
+        if (array_key_exists('homeMainLogo', $_FILES) && $_FILES['homeMainLogo']['error'] != 4) {
+          $response = $this->uploadImage(UPLOAD_DIRECTORY, 'homeMainLogo');
+          if (array_key_exists('msg', $response) || $response['success'] == false || empty($response['img'])) {
+            throw new Exception(Yii::t('discussion', 'Problem uploading home main logo'));
+          } else if(array_key_exists('img', $response) && !empty($response['img'])
+            && $response['success'] == true) {
+            $homeDetails['main_logo'] = $response['img'];
+          }
+        }
+        if (array_key_exists('homeSubLogo', $_FILES) && $_FILES['homeSubLogo']['error'] != 4) {
+          $response = $this->uploadImage(UPLOAD_DIRECTORY, 'homeSubLogo');
+          if (array_key_exists('msg', $response) || $response['success'] == false || empty($response['img'])) {
+            throw new Exception(Yii::t('discussion', 'Problem uploading home sub logo'));
+          } else if(array_key_exists('img', $response) && !empty($response['img'])
+            && $response['success'] == true) {
+            $homeDetails['sub_logo'] = $response['img'];
+          }
+        }
+        if (array_key_exists('homeBanner', $_FILES) && $_FILES['homeBanner']['error'] != 4) {
+          $response = $this->uploadImage(UPLOAD_DIRECTORY, 'homeBanner');
+          if (array_key_exists('msg', $response) || $response['success'] == false || empty($response['img'])) {
+            throw new Exception(Yii::t('discussion', 'Problem uploading home banner'));
+          } else if(array_key_exists('img', $response) && !empty($response['img'])
+            && $response['success'] == true) {
+            $homeDetails['banner'] = $response['img'];
+          }
+        }
+        if (array_key_exists('homeIntroduction', $homeConfigDetails) && !empty($homeConfigDetails['homeIntroduction'])) {
+          $homeDetails['introduction_text'] = trim(addslashes(htmlspecialchars(html_entity_decode($homeConfigDetails['homeIntroduction']))));
+        }
+        if (array_key_exists('homeLayout', $homeConfigDetails) && !empty($homeConfigDetails['homeLayout'])) {
+          if (preg_match("/^[1-9]/", $homeConfigDetails['homeLayout']) == 0) {
+            throw new Exception(Yii::t('discussion', 'Please enter valid layout value'));
+          }
+          $homeDetails['layout'] = $homeConfigDetails['homeLayout'];
+        }
+        foreach ($homeDetails as $homeDetailKey=>$homeDetailValue) {
+          $config->key = $homeDetailKey;
+          $config->value = $homeDetailValue;
+          $config->type = 'homeconfig';
+          $config->save();
+        }
+        $message['success'] = 1;
+        $message['msg'] = Yii::t('discussion', 'Configuration Saved Successfully');
+      } catch(Exception $e) {
+        $message['msg'] = $e->getMessage();
+        Yii::log('actionHomePageConfig', ERROR, 'Error : ' . $e->getMessage());
+      }
+    }
+    $homeConfigurations = $config->get();
+    foreach($homeConfigurations as $homeConfig) {
+      if ($homeConfig['name_key'] == 'introduction_text') {
+        $homeDetails[$homeConfig['name_key']] = stripslashes($homeConfig['value']);
+      } else {
+        $homeDetails[$homeConfig['name_key']] = $homeConfig['value'];
+      }
+    }
+    $cs->registerScriptFile(THEME_URL . 'js/homeConfig.js', CClientScript::POS_END);
+    $this->render('homepageconfig', array('homeConfig' => $homeDetails, 'message' => $message));
+  }
+  
+  /**
+   * uploadImage
+   * This function is used to check allowed image extensions and upload size limit.
+   * Then finally upload image if correct.
+   * @param string $directory Name of the path to save the image.
+   * @param string $name Name of the image.
+   * @return array
+   * @throws Exception
+   */
+  public function uploadImage($directory, $name) {
+    $response = array();
+    $extention = array();
+    $response['success'] = false;
+    if ($_FILES[$name]['error'] != 0 ) {
+      $errorMessage = setFileUploadError($_FILES[$name]['error']);
+      throw new Exception(Yii::t('discussion', $errorMessage));
+    }
+    if (!empty($_FILES[$name]['name'])) {
+      $extention = explode('.', $_FILES[$name]['name']);
+      $imageExtension = end($extention);
+      $allowedImageExtention = json_decode(ALLOWED_IMAGE_EXTENSION, true);
+      if (!in_array($imageExtension, $allowedImageExtention)) {
+        $response['msg'] = Yii::t('discussion', 'Allowed image extentions are ') . implode(', ', $allowedImageExtention) . '.';
+      } else if ($_FILES[$name]['size'] > UPLOAD_IMAGE_SIZE_LIMIT) {
+        $response['msg'] = Yii::t('discussion', 'Image size is big than '. UPLOAD_IMAGE_SIZE_LIMIT);
+      } else {
+        $imageName = uploadFile($directory, $name);
+        if ($imageName) {
+          $response['img'] = $directory . $imageName;
+          $response['success'] = true;
+        } else {
+          $response['msg'] = Yii::t('discussion', 'Some error occured in image uploading');
+        }
+      }
+    } else {
+      throw new Exception(Yii::t('discussion', 'Missing File Name'));
+    }
+    return $response;
   }
 }
 
