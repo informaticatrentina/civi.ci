@@ -2131,6 +2131,137 @@ class DiscussionController  extends PageController {
     }
     return $chartData;
   }
+
+  /**
+   * actionAllDiscussion
+   * This method is used to get all discussions, their proposals, opinions and links.
+   */
+  public function actionAllDiscussion() {
+    $isAdmin = checkPermission('admin');
+    if ($isAdmin == false) {
+      $this->redirect(BASE_URL);
+    }
+    try {
+      $this->layout = 'singleProposal';
+      $discussion = new Discussion;
+      $details = $discussion->getDiscussionDetail();
+      $understanding = array();
+      $understanding = unserialize(UNDERSTANDING);
+      $all = array();
+      foreach ($understanding as $key => $understand) {
+        $xcordinates = array();
+        $ycordinates = array();
+        $points = explode(' ', $understand['points']);
+        foreach ($points as $point) {
+          if ($point != '') {
+            $poi = explode(',', $point);
+            $xcordinates[] = $poi[0];
+            $ycordinates[] = $poi[1];
+          }
+        }
+        $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
+        $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
+        $all[$key] = $understand;
+      }
+      $proposals = array();
+      $discussionDetails = array();
+      $counter = 0;
+      foreach ($details as $disKey=>$detail) {
+        $discussionDetails[$disKey]['summary'] = $detail['summary'];
+        $discussion->id = $detail['id'];
+        $allProposals = $discussion->getProposalForAdmin(true);
+        $aggregatorManager = new AggregatorManager();
+        foreach($allProposals as $key=>$proposal){
+          $aggregatorManager = new AggregatorManager();
+          $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
+          if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
+            if ($opinions[0]['count'] == 0) {
+              array_pop($opinions);
+            }
+          } else {
+            array_pop($opinions);
+            $opinions = $discussion->getClassOfOpinion($opinions);
+          }
+          $allProposals[$key]['opinions'] = $opinions;
+          $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal['id']), CIVICO);
+          unset($links[count($links) - 1]);
+          $allProposals[$key]['links'] = $links;
+          $proposals = $allProposals;
+        }
+        $discussionDetails[$disKey]['proposal'] = $proposals;
+        $discussionDetails[$disKey]['discussionTimestamp'] = $detail['creationDate'];
+      }
+      $this->render('allDiscussion', array(
+        'understanding' => $all,
+        'discussionDetails' => $discussionDetails
+      ));
+    } catch(Exception $e) {
+      Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllDiscussion method :') . $e->getMessage());
+    }
+  }
+
+  /**
+   * actionAllProposal
+   * This method is used to get all proposals, their opinions and links for a particular discussion.
+   */
+  public function actionAllProposal() {
+    $isAdmin = checkPermission('admin');
+    if ($isAdmin == false) {
+      $this->redirect(BASE_URL);
+    }
+    try {
+      $discussion = new Discussion;
+      $discussion->slug = $_GET['slug'];
+      $details = $discussion->getDiscussionDetail();
+      $discussion->id = $details['id'];
+      $allProposals = $discussion->getProposalForAdmin(true);
+      $understanding = array();
+      $understanding = unserialize(UNDERSTANDING);
+      $all = array();
+      foreach ($understanding as $key => $understand) {
+        $xcordinates = array();
+        $ycordinates = array();
+        $points = explode(' ', $understand['points']);
+        foreach ($points as $point) {
+          if ($point != '') {
+            $poi = explode(',', $point);
+            $xcordinates[] = $poi[0];
+            $ycordinates[] = $poi[1];
+          }
+        }
+        $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
+        $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
+        $all[$key] = $understand;
+      }
+      $userIdentityApi = new UserIdentityAPI();
+      $summary = $details['summary'];
+      $aggregatorManager = new AggregatorManager();
+      foreach($allProposals as $key=>$proposal) {
+        $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
+        if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
+          if ($opinions[0]['count'] == 0) {
+            array_pop($opinions);
+          }
+        } else {
+          array_pop($opinions);
+          $opinions = $discussion->getClassOfOpinion($opinions);
+        }
+        $allProposals[$key]['opinions'] = $opinions;
+        $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal['id']), CIVICO);
+        unset($links[count($links) - 1]);
+        $allProposals[$key]['links'] = $links;
+      }
+      $this->layout = 'singleProposal';
+      $this->render('allProposal', array(
+        'summary' => $summary,
+        'allProposals' => $allProposals,
+        'understanding' => $all,
+        'discussionTimestamp' => $details['creationDate']
+      ));
+    } catch(Exception $e) {
+      Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllProposal method :') . $e->getMessage());
+    }
+  }
 }
 
 ?>

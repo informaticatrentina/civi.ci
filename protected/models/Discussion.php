@@ -804,7 +804,7 @@ class Discussion {
     $opinions = array();
     $links = array();
     $hasUserSubmitted = array();
-    $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags', '', '', trim('proposal,' . $id), CIVICO);
+    $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $id), CIVICO);
     $hasUserSubmitted = $this->hasUserSubmittedProposal($opinions, Yii::app()->session['user']['id']);
     if (is_array($hasUserSubmitted)) {
       $returnData['hasUserSubmitted'] = $hasUserSubmitted;
