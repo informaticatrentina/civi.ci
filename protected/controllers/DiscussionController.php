@@ -1987,6 +1987,150 @@ class DiscussionController  extends PageController {
     }
     return $response;
   }
+
+  /**
+   * actionStatistics
+   * function is used for getting user statistics for a discusson
+   * It uses google api for drawing chart
+   */
+  public function actionStatistics() {
+    try {
+      $response = array('success' => FALSE, 'msg' => '');
+      $disucssionId = '';
+      if (array_key_exists('id', $_GET) && is_int($_GET['id'])) {
+        $disucssionId = $_GET['id'];
+      }
+      $staticsPoint = array();
+      $graphData = array();
+      $isAdmin = checkPermission('admin');
+      if ($isAdmin == false || ctype_digit($disucssionId)) {
+        $this->redirect(BASE_URL);
+      }
+      Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
+      $this->setHeader('2.0');
+      //TODO - Remove hard code  email
+      $discussion['author'] = array(
+          'pradeep@incaendo.com', 'santosh@incaendo.com', 'om@incaendo.com'
+      );
+      if (isModuleExist('backendconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
+      if (defined('USER_STATISTIC_POINT')) {
+        $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
+      }
+      $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      $userIdentityApi = new UserIdentityAPI();
+      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $discussion['author']), false, false);
+      if (array_key_exists('_item', $userInfo)) {
+        foreach ($userInfo['_item'] as $user) {
+          if (array_key_exists('age', $user)) {
+            $graphData['age'][] = $user['age'];
+          }
+          if (array_key_exists('age_range', $user)) {
+            $graphData['age_range'][] = $user['age_range'];
+          }
+          if (array_key_exists('education-level', $user)) {
+            if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
+              $graphData['education_level'][] = 'other';
+            } else {
+              $graphData['education_level'][] = $user['education-level'];
+            }
+          }
+          if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
+            array_key_exists($user['sex'][0], $question['gender']['value'])) {
+            $graphData['sex'][] = $user['sex'][0];
+          }
+          if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+            $graphData['citizenship'][] = $user['citizenship'];
+          }
+          if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
+            $graphData['work'][] = $user['work'];
+          }
+          if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
+            if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
+              $graphData['public_authority'][] = $user['public_authority']['name'];
+            }
+          }
+        }
+        $finalArr = array();
+        foreach ($graphData as $key => $val) {
+          $finalArr[$key] = array_count_values($graphData[$key]);
+        }
+      }
+      $preparedData = $this->_prepareChartData($finalArr);
+      Yii::app()->session['user']['statistics'] = $preparedData;
+      $response['success'] = TRUE;
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in actionStatistics');
+      $response['msg'] = Yii::t('discussion', 'Some technical problem occurred, For more detail check log file');
+    }
+    $this->render('statistics', array('satistics_point' => $staticsPoint, 'response' => $response));
+  }
+  /**
+   * _prepareChartData
+   * function is used for prepared data showing on line chart
+   * @param array $data
+   * @param array $question - additional question list for user
+   * @return $chartData
+   */
+  private function _prepareChartData($userData, $question) {
+    $chartData = array();
+    foreach ($userData as $key => $data) {
+      switch($key) {
+        case 'age':
+          $chartData['age'] = array(
+              'title' => 'Age',
+              'data' => $data
+          );
+          break;
+        case 'sex':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['gender']['value'][$key]] = $val;
+          }
+          $chartData['gender'] = array(
+              'title' => 'Gender',
+              'data' => $finalData
+          );
+          break;
+        case 'citizenship':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['citizenship']['value'][$key]] = $val;
+          }
+          $chartData['citizenship'] = array(
+              'title' => 'Citizenship',
+              'data' => $finalData
+          );
+          break;
+        case 'work':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['work']['value'][$key]] = $val;
+          }
+          $chartData['work'] = array(
+              'title' => 'Work',
+              'data' => $finalData
+          );
+          break;
+        case 'education_level':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['education_level']['value'][$key]] = $val;
+          }
+          $chartData['education_level'] = array(
+              'title' => 'Work',
+              'data' => $finalData
+          );
+          break;
+      }
+    }
+    return $chartData;
+  }
 }
 
 ?>

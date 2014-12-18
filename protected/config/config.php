@@ -249,7 +249,8 @@ return array(
                 'user/change-password' => 'user/changePassword',
                 'question/save' => 'user/saveAdditinalInformationQuestion',
                 'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
-                'admin/config/homepage' => 'discussion/homepageConfig'
+                'admin/config/homepage' => 'discussion/homepageConfig',
+                'admin/discussion/statistics/<id:[\w-]+>' => 'discussion/statistics'
             ),
         ),
         'session' => array(
