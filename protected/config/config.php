@@ -250,6 +250,7 @@ return array(
                 'question/save' => 'user/saveAdditinalInformationQuestion',
                 'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
                 'admin/config/homepage' => 'discussion/homepageConfig',
+                'admin/discussion/statistics/draw' => 'discussion/drawChart',
                 'admin/discussion/statistics/<id:[\w-]+>' => 'discussion/statistics',
                 'admin/all-discussion' => 'discussion/allDiscussion',
                 'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal'

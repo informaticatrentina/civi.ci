@@ -619,8 +619,8 @@ class DiscussionController  extends PageController {
         'proposal_layout' => Yii::app()->globaldef->params['proposal_layout']
       );
     }
-    $this->render('discussionProposals', $data);
-  }
+      $this->render('discussionProposals', $data);
+    }
 
   /**
    * actionOpinion
@@ -1997,21 +1997,18 @@ class DiscussionController  extends PageController {
     try {
       $response = array('success' => FALSE, 'msg' => '');
       $disucssionId = '';
-      if (array_key_exists('id', $_GET) && is_int($_GET['id'])) {
+      if (array_key_exists('id', $_GET)) {
         $disucssionId = $_GET['id'];
       }
       $staticsPoint = array();
       $graphData = array();
+      $finalArr = array();
       $isAdmin = checkPermission('admin');
       if ($isAdmin == false || ctype_digit($disucssionId)) {
         $this->redirect(BASE_URL);
       }
       Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
       $this->setHeader('2.0');
-      //TODO - Remove hard code  email
-      $discussion['author'] = array(
-          'pradeep@incaendo.com', 'santosh@incaendo.com', 'om@incaendo.com'
-      );
       if (isModuleExist('backendconnector') == false) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
       }
@@ -2022,11 +2019,17 @@ class DiscussionController  extends PageController {
       if (defined('USER_STATISTIC_POINT')) {
         $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
       }
+      $discussionDetail = $this->_getDiscussionProposalOpinionAndAuthor($disucssionId);
       $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
       $userIdentityApi = new UserIdentityAPI();
-      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $discussion['author']), false, false);
-      if (array_key_exists('_item', $userInfo)) {
-        foreach ($userInfo['_item'] as $user) {
+      $author = array_unique($discussionDetail['author']);
+      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+      foreach ($userEmail['_items'] as $email) {
+        $emails[] = $email;
+      }
+      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails), false, false);
+      if (array_key_exists('_items', $userInfo)) {
+        foreach ($userInfo['_items'] as $user) {
           if (array_key_exists('age', $user)) {
             $graphData['age'][] = $user['age'];
           }
@@ -2056,12 +2059,11 @@ class DiscussionController  extends PageController {
             }
           }
         }
-        $finalArr = array();
         foreach ($graphData as $key => $val) {
           $finalArr[$key] = array_count_values($graphData[$key]);
         }
       }
-      $preparedData = $this->_prepareChartData($finalArr);
+      $preparedData = $this->_prepareChartData($finalArr, $question);
       Yii::app()->session['user']['statistics'] = $preparedData;
       $response['success'] = TRUE;
     } catch (Exception $e) {
@@ -2262,6 +2264,39 @@ class DiscussionController  extends PageController {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllProposal method :') . $e->getMessage());
     }
   }
+
+  /**
+   * actionDrawChart
+   * function is sued for drawing user statistics chart
+   */
+  public function actionDrawChart() {
+    try {
+      $response = array('success' => FALSE, 'msg' => '', 'data' => array());
+      $isAdmin = checkPermission('admin');
+      if ($isAdmin == FALSE) {
+        $this->redirect(BASE_URL);
+      }
+      if (!array_key_exists('chart_data', $_GET) || empty($_GET['chart_data'])) {
+        throw new Exception(Yii::t('discussion', 'Data is empty for drawing chart'));
+      }
+      if (isset(Yii::app()->session['user']) && array_key_exists('statistics', Yii::app()->session['user'])) {
+        if (array_key_exists($_GET['chart_data'], Yii::app()->session['user']['statistics'])) {
+          $chartDetail = Yii::app()->session['user']['statistics'][$_GET['chart_data']];
+          foreach ($chartDetail['data'] as $key => $val) {
+            $chartDetail['statistic_data'][] = array($key, $val);
+          }
+          $response['success'] = TRUE;
+          $response['data'] = $chartDetail;
+        }
+      }
+    } catch (Exception $e) {
+      $response['msg'] = $e->getMessage();
+      Yii::log($e->getMessage(), ERROR, 'Error in drawChart');
+    }
+    echo json_encode($response);
+    exit;
+  }
+
 }
 
 ?>
