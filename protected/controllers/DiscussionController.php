@@ -2024,10 +2024,16 @@ class DiscussionController  extends PageController {
       $userIdentityApi = new UserIdentityAPI();
       $author = array_unique($discussionDetail['author']);
       $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
-      foreach ($userEmail['_items'] as $email) {
-        $emails[] = $email['email'];
+      $emails = array();
+      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
+        foreach ($userEmail['_items'] as $email) {
+          $emails[] = $email['email'];
+        }
       }
-      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+      $userInfo = array();
+      if (!empty($emails)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+      }
       if (array_key_exists('_items', $userInfo)) {
         foreach ($userInfo['_items'] as $user) {
           if (array_key_exists('age', $user)) {
@@ -2063,8 +2069,12 @@ class DiscussionController  extends PageController {
           $finalArr[$key] = array_count_values($graphData[$key]);
         }
       }
-      $preparedData = $this->_prepareChartData($finalArr, $question);
-      $_SESSION['user']['statistics'] = $preparedData;
+      if (!empty($finalArr)) {
+        $preparedData = $this->_prepareChartData($finalArr, $question);
+        $_SESSION['user']['statistics'] = $preparedData;
+      } else {
+        unset($_SESSION['user']['statistics']);
+      }
       $response['success'] = TRUE;
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in actionStatistics');
@@ -2083,7 +2093,7 @@ class DiscussionController  extends PageController {
     $chartData = array();
     $chartInfo = array();
     if (defined('USER_STATISTIC_CHART_INFO')) {
-      $chartInfo = jsone_decode(USER_STATISTIC_CHART_INFO, TRUE);
+      $chartInfo = json_decode(USER_STATISTIC_CHART_INFO, TRUE);
     }
     foreach ($userData as $key => $data) {
       $title = '';
@@ -2291,6 +2301,9 @@ class DiscussionController  extends PageController {
       $response = array('success' => FALSE, 'msg' => '', 'data' => array());
       $isAdmin = checkPermission('admin');
       if ($isAdmin == FALSE) {
+        $this->redirect(BASE_URL);
+      }
+      if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)) {
         $this->redirect(BASE_URL);
       }
       if (!array_key_exists('chart_data', $_GET) || empty($_GET['chart_data'])) {
