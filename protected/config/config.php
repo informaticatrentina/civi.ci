@@ -232,7 +232,7 @@ return array(
                 'discussion/<slug:[\w-]+>/<id:[\w-]+>' => 'discussion/proposalDetails',
                 'admin/configuration' => 'discussion/configuration',
                 'discussion/proposal/list/<slug:[\w-]+>' => 'discussion/reports',          
-                'admin/export/<id:[\w-]+>' => 'discussion/export',
+                'admin/export/<id:[\w-]+>/<type:[\w-]+>' => 'discussion/export',
                 'discussion/proposal/edit/<slug:[\w-]+>' => 'discussion/editProposal',
                 'discussion/proposal/highlight/<slug:[\w-]+>' => 'discussion/highlightProposal',
                 'discussion/proposal/opinion/answer' => 'discussion/submitOpinionAnswer',

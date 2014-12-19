@@ -1273,6 +1273,14 @@ class DiscussionController  extends PageController {
     $discussion = new Discussion();
     $discussion->id = $_GET['id'];
     $allProposals = $discussion->getProposalForAdmin(true);    
+    if ($_GET['type'] == 'excel') {
+      goto Excel;
+    } else if ($_GET['type'] == 'csv') {
+      $this->_downloadProposalCsv($allProposals);
+    } else {
+      $this->redirect(BASE_URL . 'admin/discussion/list');
+    }
+    Excel:
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator(CIVICO);
     $headings = array('Titolo', 'Descrizione', 'Autore', 'Creation Date', 'Number of Opinions', 'Number of Opinions', 'Stato');
@@ -2329,7 +2337,37 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
-
+  public function _downloadProposalCsv($proposals) {
+    $header = array(
+      'title' => 'Title',
+      'description' => 'Description',
+      'author' => 'Author',
+      'creation_date' => 'Creation Date',
+      'total_opinion' => 'No of Opinion',
+      'total_links' => 'No of Links',
+      'status' => 'Status'
+    );
+    $row = array();
+    foreach ($proposals as $proposal) {
+      $row[] = array(
+        'title' => $proposal['title'],
+        'description' => $proposal['content']['description'],
+        'author' => $proposal['author']['name'],
+        'creation_date' => $proposal['creation_date'],
+        'total_opinion' => $proposal['totalOpinion'],
+        'total_links' => $proposal['totalLinks'],
+        'status' => $proposal['status']
+      );
+    }
+    header("Content-disposition: attachment; filename=proposal.csv");
+    header("Content-Type: text/csv");
+    $filePath = fopen("php://output", 'w');
+    @fputcsv($filePath, $header);
+    foreach ($row as $order) {
+      @fputcsv($filePath, $order);
+    }
+    exit;
+  }
 }
 
 ?>
