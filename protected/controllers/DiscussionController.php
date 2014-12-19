@@ -2004,7 +2004,7 @@ class DiscussionController  extends PageController {
       $graphData = array();
       $finalArr = array();
       $isAdmin = checkPermission('admin');
-      if ($isAdmin == false || ctype_digit($disucssionId)) {
+      if ($isAdmin == false || !ctype_digit($disucssionId)) {
         $this->redirect(BASE_URL);
       }
       Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
@@ -2025,9 +2025,9 @@ class DiscussionController  extends PageController {
       $author = array_unique($discussionDetail['author']);
       $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
       foreach ($userEmail['_items'] as $email) {
-        $emails[] = $email;
+        $emails[] = $email['email'];
       }
-      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails), false, false);
+      $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
       if (array_key_exists('_items', $userInfo)) {
         foreach ($userInfo['_items'] as $user) {
           if (array_key_exists('age', $user)) {
@@ -2064,7 +2064,7 @@ class DiscussionController  extends PageController {
         }
       }
       $preparedData = $this->_prepareChartData($finalArr, $question);
-      Yii::app()->session['user']['statistics'] = $preparedData;
+      $_SESSION['user']['statistics'] = $preparedData;
       $response['success'] = TRUE;
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in actionStatistics');
@@ -2081,11 +2081,24 @@ class DiscussionController  extends PageController {
    */
   private function _prepareChartData($userData, $question) {
     $chartData = array();
+    $chartInfo = array();
+    if (defined('USER_STATISTIC_CHART_INFO')) {
+      $chartInfo = jsone_decode(USER_STATISTIC_CHART_INFO, TRUE);
+    }
     foreach ($userData as $key => $data) {
+      $title = '';
+      if (array_key_exists($key, $chartInfo) && array_key_exists('title', $chartInfo[$key])) {
+        $title = $chartInfo[$key]['title'];
+      }
+      $header = array('X' => 'Y');
+      if (array_key_exists($key, $chartInfo) && array_key_exists('header', $chartInfo[$key])) {
+        $header = array($chartInfo[$key]['header'][0] => $chartInfo[$key]['header'][1]);
+      }  
       switch($key) {
-        case 'age':
+        case 'age':          
           $chartData['age'] = array(
-              'title' => 'Age',
+              'title' => $title,
+              'header' => $header,
               'data' => $data
           );
           break;
@@ -2095,7 +2108,8 @@ class DiscussionController  extends PageController {
             $finalData[$question['gender']['value'][$key]] = $val;
           }
           $chartData['gender'] = array(
-              'title' => 'Gender',
+              'title' => $title,
+              'header' => $header,
               'data' => $finalData
           );
           break;
@@ -2105,7 +2119,8 @@ class DiscussionController  extends PageController {
             $finalData[$question['citizenship']['value'][$key]] = $val;
           }
           $chartData['citizenship'] = array(
-              'title' => 'Citizenship',
+              'title' => $title,
+              'header' => $header,
               'data' => $finalData
           );
           break;
@@ -2115,7 +2130,8 @@ class DiscussionController  extends PageController {
             $finalData[$question['work']['value'][$key]] = $val;
           }
           $chartData['work'] = array(
-              'title' => 'Work',
+              'title' => $title,
+              'header' => $header,
               'data' => $finalData
           );
           break;
@@ -2125,7 +2141,8 @@ class DiscussionController  extends PageController {
             $finalData[$question['education_level']['value'][$key]] = $val;
           }
           $chartData['education_level'] = array(
-              'title' => 'Work',
+              'title' => $title,
+              'header' => $header,
               'data' => $finalData
           );
           break;
@@ -2282,8 +2299,11 @@ class DiscussionController  extends PageController {
       if (isset(Yii::app()->session['user']) && array_key_exists('statistics', Yii::app()->session['user'])) {
         if (array_key_exists($_GET['chart_data'], Yii::app()->session['user']['statistics'])) {
           $chartDetail = Yii::app()->session['user']['statistics'][$_GET['chart_data']];
-          foreach ($chartDetail['data'] as $key => $val) {
+          foreach ($chartDetail['header'] as $key => $val) {
             $chartDetail['statistic_data'][] = array($key, $val);
+          }
+          foreach ($chartDetail['data'] as $key => $val) {
+             $chartDetail['statistic_data'][] = array($key, $val);
           }
           $response['success'] = TRUE;
           $response['data'] = $chartDetail;
