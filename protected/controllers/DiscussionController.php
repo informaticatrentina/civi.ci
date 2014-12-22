@@ -1252,6 +1252,13 @@ class DiscussionController  extends PageController {
     $heatMap = array();
     $heatMap = unserialize(HEATMAP_COLORS);
     $allProposals = $discussion->getProposalForAdmin(true);
+    foreach($allProposals as $key=>$proposal) {
+      if(array_key_exists('content', $proposal) && !empty($proposal['content'])) {
+        if(array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
+          $allProposals[$key]['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+        }
+      }
+    }
     $this->render('reports', array('allProposals' => $allProposals, 'understanding' => $all, 
         'heatMap' => $heatMap, 'discussionTitle' => $discussionTitle, 'slug' => $_GET['slug'],
         'discussionId' => $discussionInfo['id'], 'topics' => $discussionTopics, 
