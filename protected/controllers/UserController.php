@@ -745,5 +745,80 @@ class UserController extends PageController {
     echo json_encode($response);
     exit;
   }
+
+  /**
+   * getUserAdditionalInfo
+   * This function is used to get user additional user info.
+   * @param array $authorIds
+   * @return array
+   * @throws Exception
+   */
+  public function getUserAdditionalInfo($authorIds) {
+    try {
+      $users = array();
+      if (isModuleExist('backendconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
+      if (is_array($authorIds)) {
+        $authorIds = array_unique($authorIds);
+      }
+      $userIdentityApi = new UserIdentityAPI();
+      $emails = $this->_getContributorsEmail($authorIds);
+      $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      if (!empty($emails)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+        if (array_key_exists('_items', $userInfo)) {
+          foreach ($userInfo['_items'] as $user) {
+            if (array_key_exists('age', $user)) {
+              $users[$user['_id']]['age'] = $user['age'];
+            }
+            if (array_key_exists('age_range', $user)) {
+              $users[$user['_id']]['age_range'] = $user['age_range'];
+            }
+            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
+            && array_key_exists($user['sex'][0], $question['gender']['value'])) {
+              $users[$user['_id']]['gender'] = $question['gender']['value'][$user['sex'][0]];
+            }
+            if (array_key_exists('citizenship', $user)
+            && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+              $users[$user['_id']]['citizenship'] = $question['citizenship']['value'][$user['citizenship']];
+            }
+            if (array_key_exists('education-level', $user) &&
+            array_key_exists($user['education-level'], $question['education_level']['value'])) {
+              $users[$user['_id']]['education_level'] = $question['education_level']['value'][$user['education-level']];
+            }
+            if (array_key_exists('work', $user)
+            && array_key_exists($user['work'], $question['work']['value'])) {
+              $users[$user['_id']]['work'] = $question['work']['value'][$user['work']];
+            }
+            if (array_key_exists('public_authority', $user)
+            && array_key_exists('name', $user['public_authority'])) {
+              if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
+                $users[$user['_id']]['public_authority'] = $question['public_authority']['value'][$user['public_authority']['name']];
+              }
+            }
+            if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
+              if (array_key_exists('profession', $user['profile-info'])) {
+                $users[$user['_id']]['profession'] = $user['profile-info']['profession'];
+              }
+              if (array_key_exists('residence', $user['profile-info'])) {
+                $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
+              }
+              if (array_key_exists('association', $user['profile-info'])) {
+                $users[$user['_id']]['association'] = $user['profile-info']['association'];
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getUserAdditionalInfo');
+    }
+    return $users;
+  }
 }
 ?>

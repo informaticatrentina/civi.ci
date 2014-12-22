@@ -2203,13 +2203,14 @@ class DiscussionController  extends PageController {
       $proposals = array();
       $discussionDetails = array();
       $counter = 0;
+      $author = array();
       foreach ($details as $disKey=>$detail) {
         $discussionDetails[$disKey]['summary'] = $detail['summary'];
         $discussion->id = $detail['id'];
         $allProposals = $discussion->getProposalForAdmin(true);
         $aggregatorManager = new AggregatorManager();
         foreach($allProposals as $key=>$proposal){
-          $aggregatorManager = new AggregatorManager();
+          $author[] = $proposal['author']['slug'];
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
           if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
             if ($opinions[0]['count'] == 0) {
@@ -2218,6 +2219,9 @@ class DiscussionController  extends PageController {
           } else {
             array_pop($opinions);
             $opinions = $discussion->getClassOfOpinion($opinions);
+          }
+          foreach ($opinions as $opinion) {
+            $author[] = $opinion['author']['slug'];
           }
           $allProposals[$key]['opinions'] = $opinions;
           $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal['id']), CIVICO);
@@ -2228,9 +2232,13 @@ class DiscussionController  extends PageController {
         $discussionDetails[$disKey]['proposal'] = $proposals;
         $discussionDetails[$disKey]['discussionTimestamp'] = $detail['creationDate'];
       }
+      $discussionController = new UserController('user');
+      $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
       $this->render('allDiscussion', array(
         'understanding' => $all,
-        'discussionDetails' => $discussionDetails
+        'discussionDetails' => $discussionDetails,
+        'user' => $userAdditionInfo,
+        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
       ));
     } catch(Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllDiscussion method :') . $e->getMessage());
@@ -2270,10 +2278,11 @@ class DiscussionController  extends PageController {
         $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
         $all[$key] = $understand;
       }
-      $userIdentityApi = new UserIdentityAPI();
       $summary = $details['summary'];
       $aggregatorManager = new AggregatorManager();
-      foreach($allProposals as $key=>$proposal) {
+      $author = array();
+      foreach($allProposals as $key => $proposal) {
+        $author[] = $proposal['author']['slug'];
         $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
         if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
           if ($opinions[0]['count'] == 0) {
@@ -2281,6 +2290,7 @@ class DiscussionController  extends PageController {
           }
         } else {
           array_pop($opinions);
+          $author[] = $opinions[0]['author']['slug'];
           $opinions = $discussion->getClassOfOpinion($opinions);
         }
         $allProposals[$key]['opinions'] = $opinions;
@@ -2288,12 +2298,17 @@ class DiscussionController  extends PageController {
         unset($links[count($links) - 1]);
         $allProposals[$key]['links'] = $links;
       }
+      $userIdentityApi = new UserIdentityAPI();
+      $discussionController = new UserController('user');
+      $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
       $this->layout = 'singleProposal';
       $this->render('allProposal', array(
         'summary' => $summary,
         'allProposals' => $allProposals,
         'understanding' => $all,
-        'discussionTimestamp' => $details['creationDate']
+        'discussionTimestamp' => $details['creationDate'],
+        'user' => $userAdditionInfo,
+        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
       ));
     } catch(Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllProposal method :') . $e->getMessage());
