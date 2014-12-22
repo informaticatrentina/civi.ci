@@ -2203,9 +2203,8 @@ class DiscussionController  extends PageController {
       $proposals = array();
       $discussionDetails = array();
       $counter = 0;
-      $userAdditionInfo = array();
+      $author = array();
       foreach ($details as $disKey=>$detail) {
-        $author = array();
         $discussionDetails[$disKey]['summary'] = $detail['summary'];
         $discussion->id = $detail['id'];
         $allProposals = $discussion->getProposalForAdmin(true);
@@ -2232,9 +2231,9 @@ class DiscussionController  extends PageController {
         }
         $discussionDetails[$disKey]['proposal'] = $proposals;
         $discussionDetails[$disKey]['discussionTimestamp'] = $detail['creationDate'];
-        $discussionController = new UserController('user');
-        $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
       }
+      $discussionController = new UserController('user');
+      $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
       $this->render('allDiscussion', array(
         'understanding' => $all,
         'discussionDetails' => $discussionDetails,

@@ -781,7 +781,7 @@ class UserController extends PageController {
             }
             if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
             && array_key_exists($user['sex'][0], $question['gender']['value'])) {
-              $users[$user['_id']]['sex'] = $user['sex'];
+              $users[$user['_id']]['sex'] = $question['gender']['value'][$user['sex'][0]];
             }
             if (array_key_exists('citizenship', $user)
             && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
