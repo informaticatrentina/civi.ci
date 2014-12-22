@@ -2321,10 +2321,10 @@ class DiscussionController  extends PageController {
         if (array_key_exists($_GET['chart_data'], Yii::app()->session['user']['statistics'])) {
           $chartDetail = Yii::app()->session['user']['statistics'][$_GET['chart_data']];
           foreach ($chartDetail['header'] as $key => $val) {
-            $chartDetail['statistic_data'][] = array($key, $val);
+            $chartDetail['statistic_data'][] = array((string)$key, $val);
           }
           foreach ($chartDetail['data'] as $key => $val) {
-             $chartDetail['statistic_data'][] = array($key, $val);
+             $chartDetail['statistic_data'][] = array((string)$key, $val);
           }
           $response['success'] = TRUE;
           $response['data'] = $chartDetail;
