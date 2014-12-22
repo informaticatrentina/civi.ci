@@ -777,11 +777,11 @@ class UserController extends PageController {
               $users[$user['_id']]['age'] = $user['age'];
             }
             if (array_key_exists('age_range', $user)) {
-              $users[$user['_id']]['age_rane'] = $user['age_range'];
+              $users[$user['_id']]['age_range'] = $user['age_range'];
             }
             if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
             && array_key_exists($user['sex'][0], $question['gender']['value'])) {
-              $users[$user['_id']]['sex'] = $question['gender']['value'][$user['sex'][0]];
+              $users[$user['_id']]['gender'] = $question['gender']['value'][$user['sex'][0]];
             }
             if (array_key_exists('citizenship', $user)
             && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
@@ -803,13 +803,13 @@ class UserController extends PageController {
             }
             if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
               if (array_key_exists('profession', $user['profile-info'])) {
-                $users[$user['_id']]['Profession'] = $user['profile-info']['profession'];
+                $users[$user['_id']]['profession'] = $user['profile-info']['profession'];
               }
               if (array_key_exists('residence', $user['profile-info'])) {
-                $users[$user['_id']]['Residence'] = $user['profile-info']['residence'];
+                $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
               }
               if (array_key_exists('association', $user['profile-info'])) {
-                $users[$user['_id']]['Association'] = $user['profile-info']['association'];
+                $users[$user['_id']]['association'] = $user['profile-info']['association'];
               }
             }
           }

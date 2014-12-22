@@ -2237,7 +2237,8 @@ class DiscussionController  extends PageController {
       $this->render('allDiscussion', array(
         'understanding' => $all,
         'discussionDetails' => $discussionDetails,
-        'user' => $userAdditionInfo
+        'user' => $userAdditionInfo,
+        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
       ));
     } catch(Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllDiscussion method :') . $e->getMessage());
@@ -2306,7 +2307,8 @@ class DiscussionController  extends PageController {
         'allProposals' => $allProposals,
         'understanding' => $all,
         'discussionTimestamp' => $details['creationDate'],
-        'user' => $userAdditionInfo
+        'user' => $userAdditionInfo,
+        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
       ));
     } catch(Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllProposal method :') . $e->getMessage());
