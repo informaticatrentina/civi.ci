@@ -592,6 +592,10 @@ class DiscussionController  extends PageController {
           $classColor = 'color-' . $value;
         }
       }
+      $proposalLayout = Yii::app()->globaldef->params['proposal_layout'];
+      if ($proposalLayout != 1) {
+        $proposalLayout = 3;
+      }
       $data = array(
         'ccolor' => $classColor,
         'link_st' => $linkSubmissionStatus,
@@ -617,7 +621,7 @@ class DiscussionController  extends PageController {
         'link_text' => Yii::app()->globaldef->params['link_text'],
         'all_proposal_off' => Yii::app()->globaldef->params['submission'],
         'proposal_text' => Yii::app()->globaldef->params['proposal_text'],
-        'proposal_layout' => Yii::app()->globaldef->params['proposal_layout']
+        'proposal_layout' => $proposalLayout
       );
     }
       $this->render('discussionProposals', $data);
