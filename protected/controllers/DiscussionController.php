@@ -222,6 +222,7 @@ class DiscussionController  extends PageController {
         $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
         $discussionDetail[$i]['discussionSlug'] = $info['slug'];
         $discussionDetail[$i]['discussionAuthor'] = $info['author'];
+        $discussionDetail[$i]['discussionAuthorSlug'] = $info['author_id'];
         $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
         $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
         $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
