@@ -1257,18 +1257,34 @@ class DiscussionController  extends PageController {
     $heatMap = array();
     $heatMap = unserialize(HEATMAP_COLORS);
     $allProposals = $discussion->getProposalForAdmin(true);
+    $author = array();
     foreach($allProposals as $key=>$proposal) {
+      if(array_key_exists('author', $proposal) && !empty($proposal['author'])
+      && array_key_exists('slug', $proposal['author'])
+      && !empty($proposal['author']['slug'])) {
+        $author[] = $proposal['author']['slug'];
+      }
       if(array_key_exists('content', $proposal) && !empty($proposal['content'])) {
         if(array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
           $allProposals[$key]['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
         }
       }
     }
+    $author = array_unique($author);
+    $userIdentityApi = new UserIdentityAPI();
+    $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+    $emails = array();
+    if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
+      foreach ($userEmail['_items'] as $email) {
+        $emails[$email['_id']] = $email['email'];
+      }
+    }
     $this->render('reports', array('allProposals' => $allProposals, 'understanding' => $all, 
         'heatMap' => $heatMap, 'discussionTitle' => $discussionTitle, 'slug' => $_GET['slug'],
         'discussionId' => $discussionInfo['id'], 'topics' => $discussionTopics, 
         'title_char' => intval(Yii::app()->globaldef->params['max_char_title']),
-        'intro_char' => intval(Yii::app()->globaldef->params['max_char_intro'])));
+        'intro_char' => intval(Yii::app()->globaldef->params['max_char_intro']),
+        'emails' => $emails));
   }
 
   /**
