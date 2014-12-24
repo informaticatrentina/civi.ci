@@ -1416,3 +1416,79 @@ msgstr ""
 msgctxt "discussion" 
 msgid "Update Homepage"
 msgstr ""
+
+msgctxt "discussion" 
+msgid "Citizenship"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Confirm Email"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Data is empty for drawing chart"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Education Level"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Error in actionAllDiscussion method :"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Error in actionAllProposal method :"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "No of user"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Opinion Count"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Please enter same email"
+msgstr ""
+
+msgctxt "discussion" 
+msgid ""
+"Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and "
+"paste the link below and follow the instructions."
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Print Discussion"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Proposal Count"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Statistics"
+msgstr ""
+
+msgctxt "discussion" 
+msgid ""
+"Thank you for registering. Please activate your account by clicking this {start_ahref_link} link "
+"{end_ahref_link}  or copy and paste the link below and follow the instructions."
+msgstr ""
+
+msgctxt "discussion" 
+msgid "There are no links for this proposal"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "There are no opinions for this proposal"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "View All Discussions"
+msgstr ""
+
+msgctxt "discussion" 
+msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
+msgstr "ATTENZIONE: La registrazione è andata a buon fine solo se riceverete una email di verifica e attivazione account."

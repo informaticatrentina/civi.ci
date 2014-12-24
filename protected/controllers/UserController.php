@@ -58,6 +58,12 @@ class UserController extends PageController {
         if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
           throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
         }
+        if (empty($user['cemail'])) {
+          throw new Exception(Yii::t('discussion', 'Please enter same email'));
+        }
+        if ($user['email'] != $user['cemail']) {
+          throw new Exception(Yii::t('discussion', 'Please enter same email'));
+        }
         if (empty($user['password'])) {
           throw new Exception(Yii::t('discussion', 'Please enter password'));
         }       

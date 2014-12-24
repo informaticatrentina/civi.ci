@@ -485,3 +485,7 @@ msgstr ""
 msgctxt "discussion" 
 msgid "Please enter valid layout columns."
 msgstr ""
+
+msgctxt "discussion" 
+msgid "Please enter same email id"
+msgstr ""
