@@ -205,7 +205,8 @@ class DiscussionController  extends PageController {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
     $this->setHeader('2.0');
     $isHighlighter = checkPermission('can_mark_highlighted');
-    if ($isHighlighter == false) {
+    $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
+    if ($isHighlighter == false && $can_show_hide_opinion == false) {
       $this->redirect(BASE_URL);
     }
     $discussionInfo = array();
@@ -573,6 +574,8 @@ class DiscussionController  extends PageController {
           $opinionId = '';
           if (array_key_exists('id', $response)) {
             $opinionId = $response['id'];
+          } else if (array_key_exists('opinion_id', $response)) {
+            $opinionId = $response['opinion_id'];
           }
           $resp = array('status' => $response['success'], 'msg' => $response['heatmap'],
            'opinion_text'=> $opinionText, 'opinion_id' => $opinionId);
@@ -655,7 +658,8 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL . 'login?back=' . $_SERVER['REQUEST_URI']);
     }
     $isAdmin = checkPermission('admin');
-    if ($isAdmin == false) {
+    $canShowHideOpinion = checkPermission('can_show_hide_opinion');
+    if ($isAdmin == false && $canShowHideOpinion == false) {
       $this->redirect(BASE_URL);
     }
     $opinions = array();
@@ -1251,7 +1255,8 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL . 'login?back=' . $_SERVER['REDIRECT_URL']);
     }
     $isHighlighter = checkPermission('can_mark_highlighted');
-    if ($isHighlighter == false) {
+    $canShowHideOpinion = checkPermission('can_show_hide_opinion');
+    if ($isHighlighter == false && $canShowHideOpinion == false) {
       $this->redirect(BASE_URL);
     }
     $all = array();
