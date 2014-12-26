@@ -215,6 +215,7 @@ class DiscussionController  extends PageController {
     $discussionInfo = $discussion->getDiscussionDetail();
     if (!empty($discussionInfo)) {
       $i = 0;
+      $author = array();
       foreach ($discussionInfo as $info) {
         $entries = array();
         $discussionDetail[$i]['discussionId'] = $info['id'];
@@ -230,10 +231,23 @@ class DiscussionController  extends PageController {
         $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
         $discussion->discussionSlug = $info['slug'];
         $discussion->count = 2;
+        $author[] = $info['author_id'];
         $i++;
       }
+      $author = array_unique($author);
+      $userIdentityApi = new UserIdentityAPI();
+      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+      $emails = array();
+      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
+        foreach ($userEmail['_items'] as $email) {
+          $emails[$email['_id']] = $email['email'];
+        }
+      }
     }
-    $this->render('discussionList', array('discussionInfo' => $discussionDetail));
+    $this->render('discussionList', array(
+      'discussionInfo' => $discussionDetail,
+      'emails' => $emails
+    ));
   }
 
   /**
@@ -662,6 +676,7 @@ class DiscussionController  extends PageController {
       $inactiveOpinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,related,tags', '', '', trim('proposal,' . $_GET['id']), CIVICO);
     }
     $opinions = array_merge($activeOpinions, $inactiveOpinions);
+    $author = array();
     foreach ($opinions as $opinion) {
       $proposalOpinion = array();
       if (array_key_exists('count', $opinion)) {
@@ -677,6 +692,7 @@ class DiscussionController  extends PageController {
       if (array_key_exists('author', $opinion) && !empty($opinion['author'])) {
         $proposalOpinion['author_name'] = $opinion['author']['name'];
         $proposalOpinion['author_id'] = $opinion['author']['slug'];
+        $author[] = $opinion['author']['slug'];
       }
       if (array_key_exists('content', $opinion) && !empty($opinion['content'])) {
         $proposalOpinion['description'] = $opinion['content']['description'];
@@ -695,11 +711,25 @@ class DiscussionController  extends PageController {
       }
       $proposalOpinions[] = $proposalOpinion;
     }
+    $author = array_unique($author);
+    $userIdentityApi = new UserIdentityAPI();
+    $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+    $emails = array();
+    if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
+      foreach ($userEmail['_items'] as $email) {
+        $emails[$email['_id']] = $email['email'];
+      }
+    }
     $discussionSlug = '';
     if (array_key_exists('slug', $_GET) && $_GET['slug'] != '') {
       $discussionSlug = $_GET['slug'];
     }
-    $this->render('discussionOpinion', array('opinions' => $proposalOpinions, 'title' => $title, 'slug' => $discussionSlug));
+    $this->render('discussionOpinion', array(
+      'opinions' => $proposalOpinions,
+      'title' => $title,
+      'slug' => $discussionSlug,
+      'emails' => $emails
+    ));
   }
 
   /**
