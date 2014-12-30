@@ -253,7 +253,8 @@ return array(
                 'admin/discussion/statistics/draw' => 'discussion/drawChart',
                 'admin/discussion/statistics/<id:[\w-]+>' => 'discussion/statistics',
                 'admin/all-discussion' => 'discussion/allDiscussion',
-                'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal'
+                'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal',
+                'discussion/proposals/<slug:[\w-]+>/<tag:[\w-]+>' => 'discussion/proposals',
             ),
         ),
         'session' => array(

@@ -586,6 +586,9 @@ class DiscussionController  extends PageController {
       die;
     }
     $return = array('success' => false, 'msg' => '', 'data' => array());
+    if(array_key_exists('tag', $_GET) && !empty($_GET['tag'])) {
+      $discussion->tags = $_GET['tag'] . '{' . TOPIC_TAG_SCHEME . $_GET['slug'] . '/topics}';
+    }
     $proposals = $discussion->getOnlyProposals();
     //check whether count is exist in entries array or not 
     if (!empty($proposals)) {

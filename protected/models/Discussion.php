@@ -14,7 +14,7 @@ class Discussion {
 
   public $slug;
   public $id;
-  private $_tags = array();
+  public $tags = array();
 
   public function __construct() {
     return 'In Discussion class';
@@ -859,7 +859,11 @@ class Discussion {
     $opinion = array();
     $highlightProposal = array();
     $aggregatorManager = new AggregatorManager();
-    $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', '', '', '', '', '', '', '', '', array(),
+    $tag = '';
+    if(!empty($this->tags)) {
+      $tag = $this->tags;
+    }
+    $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', $tag, '', '', '', '', '', '', '', array(),
       'tag:OpinionCount', 'status,title,author,id,content,tags,links', '', '', trim('discussion,' . $this->id), CIVICO);
     foreach ($proposals as $proposal) {
       $proposal['count'] = 0;
