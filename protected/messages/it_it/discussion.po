@@ -1423,7 +1423,7 @@ msgstr ""
 
 msgctxt "discussion" 
 msgid "Confirm Email"
-msgstr ""
+msgstr "Conferma Email"
 
 msgctxt "discussion" 
 msgid "Data is empty for drawing chart"
@@ -1492,3 +1492,7 @@ msgstr ""
 msgctxt "discussion" 
 msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
 msgstr "ATTENZIONE: La registrazione è andata a buon fine solo se riceverete una email di verifica e attivazione account."
+
+msgctxt "discussion"
+msgid "Another opinion by same author already active."
+msgstr ""
