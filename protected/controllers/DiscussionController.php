@@ -1673,7 +1673,10 @@ class DiscussionController  extends PageController {
                 throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
               }
               $isAdmin = User::checkPermission($emailId, 'is_admin');
-              if ($isAdmin == false) {
+              $canPostAnswers = User::checkPermission($emailId, 'can_post_answers_on_opinion');
+              $canHighlight = User::checkPermission($emailId, 'can_mark_highlighted');
+              $canShowHideOpinion = User::checkPermission($emailId, 'can_show_hide_opinion');
+              if (!(($isAdmin == TRUE) || ($canHighlight == TRUE && $canPostAnswers == TRUE && $canShowHideOpinion == TRUE))) {
                 throw new Exception(Yii::t('discussion', 'email id is not valid for moderator'));
               }
             } else {
