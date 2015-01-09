@@ -624,9 +624,11 @@ class Discussion {
     foreach ($actProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
         $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
+        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       }
       if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
         $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
+        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
       }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
@@ -657,9 +659,11 @@ class Discussion {
     foreach ($inactProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
         $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
+        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       }
       if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
         $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
+        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
       }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
@@ -866,6 +870,8 @@ class Discussion {
     $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', $tag, '', '', '', '', '', '', '', array(),
       'tag:OpinionCount', 'status,title,author,id,content,tags,links', '', '', trim('discussion,' . $this->id), CIVICO);
     foreach ($proposals as $proposal) {
+      $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+      $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       $proposal['count'] = 0;
       $proposal['highlighted'] = false;
       $proposal['image'] = '';

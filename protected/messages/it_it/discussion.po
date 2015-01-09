@@ -691,7 +691,7 @@ msgstr "Si è verificato un errore"
 
 msgctxt "discussion"
 msgid "Close"
-msgstr "Salva"
+msgstr "Chiudi"
 
 msgctxt "discussion"
 msgid "Configuration Panel"
