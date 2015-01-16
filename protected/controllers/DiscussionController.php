@@ -494,9 +494,7 @@ class DiscussionController  extends PageController {
       $discussionInfo['additional_description'] = nl2br($discussionInfo['additional_description']);
       $additionalDescription = htmlspecialchars_decode($discussionInfo['additional_description']);
       $additionalDescription =   str_replace('foundation_logo_text', htmlspecialchars('<ahref'),  $additionalDescription);
-      if ($discussionInfo['proposal_status'] == OPEN) {
         $proposalSubmissionStatus = $discussionInfo['proposal_status'];
-      }
     } else {
       $this->redirect(BASE_URL);
     }
