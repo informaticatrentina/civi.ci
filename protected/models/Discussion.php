@@ -415,7 +415,7 @@ class Discussion {
         $aggregatorManager->source = CIVICO;
         if (array_key_exists('update', $_POST) && (!empty($_POST['update']))) {
           if (isset($_POST['index']) && isset($_POST['previndex']) && $_POST['index'] !== $_POST['previndex']) {
-            $this->updateProposalHeatMapTag($_POST['index'], $_POST['id'], $_POST['previndex']);
+            $this->updateProposalHeatMapTag($_POST['index'], $_POST['id'], $_POST['previndex'], FALSE);
           }
           $response = $aggregatorManager->updateOpinion($savePositionOnly);
         } else {
@@ -686,9 +686,15 @@ class Discussion {
   /**
    * updateProposalHeatMapTag
    * 
-   * This function updates the weight of heat map tag
+   * This function updates the weight of heat map tag.
+   * In case opinion update, opinion count will not be increase on proposal.
+   * @param int $index - triangle position index
+   * @param string $id - id of proposal
+   * @param int $prev - index of previous selected triangle position
+   * @param boolean $updateOpinion - TRUE if opinion will be updated
+   * @return  void
    */
-  public function updateProposalHeatMapTag($index, $id, $prev = '') {
+  public function updateProposalHeatMapTag($index, $id, $prev = '', $updateOpinion = TRUE) {
     $newTags = array();
     $aggregatorManager = new AggregatorManager();
     $proposal = $aggregatorManager->getEntry('', '', $id, '', '', '', '', '', '', '', '', '', array(), '', 'tags', '', '', '', '', '');
@@ -705,7 +711,7 @@ class Discussion {
               }
             }
           } else {
-            if ($tag['scheme'] == OPINION_COUNT_TAG_SCEME) {
+            if ($updateOpinion == TRUE && $tag['scheme'] == OPINION_COUNT_TAG_SCEME) {
               $tagss['weight'] = $tag['weight'] + 1;
             }
           }
