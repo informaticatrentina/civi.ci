@@ -494,7 +494,7 @@ class DiscussionController  extends PageController {
       $discussionInfo['additional_description'] = nl2br($discussionInfo['additional_description']);
       $additionalDescription = htmlspecialchars_decode($discussionInfo['additional_description']);
       $additionalDescription =   str_replace('foundation_logo_text', htmlspecialchars('<ahref'),  $additionalDescription);
-        $proposalSubmissionStatus = $discussionInfo['proposal_status'];
+      $proposalSubmissionStatus = $discussionInfo['proposal_status'];
     } else {
       $this->redirect(BASE_URL);
     }
@@ -2348,7 +2348,9 @@ class DiscussionController  extends PageController {
       $summary = $details['summary'];
       $aggregatorManager = new AggregatorManager();
       $author = array();
-      foreach($allProposals as $key => $proposal) {
+      foreach($allProposals as $key => &$proposal) {
+        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
         $author[] = $proposal['author']['slug'];
         $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
         if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
