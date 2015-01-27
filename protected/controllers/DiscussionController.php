@@ -2276,7 +2276,9 @@ class DiscussionController  extends PageController {
         $discussion->id = $detail['id'];
         $allProposals = $discussion->getProposalForAdmin(true);
         $aggregatorManager = new AggregatorManager();
-        foreach($allProposals as $key=>$proposal){
+        foreach($allProposals as $key => &$proposal) {
+        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
           $author[] = $proposal['author']['slug'];
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
           if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
