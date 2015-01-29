@@ -3,6 +3,10 @@
  * Including local configuration file.
  */
 require_once(dirname(__FILE__).'/local_config.php');
+require_once(dirname(__FILE__).'/config.php');
+require_once(dirname(__FILE__).'/featurePermission.php');
+require_once(dirname(__FILE__) . '/../function.php');
+
 //To get commands from modules and set it at commandMap
 $commands = array('emessage' => array('class' => 'application.extensions.protected.commands.EMessageCommand'));
 if (defined('ENABLE_MODULES_LIST')) {
@@ -41,6 +45,7 @@ return array(
     'application.extensions.protected.components.helpers.CLI',
     'application.lib.*',
     'application.models.*',
+    'application.components.*',
   ),
   'commandMap' => $commands,
   'components' => array(
@@ -52,4 +57,5 @@ return array(
       'emulatePrepare' => true,
     ),        
   ),
+  'modules'=> defined('ENABLE_MODULES_LIST') ? json_decode(ENABLE_MODULES_LIST, TRUE) : array()
 );

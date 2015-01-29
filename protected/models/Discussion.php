@@ -415,7 +415,7 @@ class Discussion {
         $aggregatorManager->source = CIVICO;
         if (array_key_exists('update', $_POST) && (!empty($_POST['update']))) {
           if (isset($_POST['index']) && isset($_POST['previndex']) && $_POST['index'] !== $_POST['previndex']) {
-            $this->updateProposalHeatMapTag($_POST['index'], $_POST['id'], $_POST['previndex']);
+            $this->updateProposalHeatMapTag($_POST['index'], $_POST['id'], $_POST['previndex'], FALSE);
           }
           $response = $aggregatorManager->updateOpinion($savePositionOnly);
         } else {
@@ -624,11 +624,9 @@ class Discussion {
     foreach ($actProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
         $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
-        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       }
       if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
         $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
-        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
       }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
@@ -659,11 +657,9 @@ class Discussion {
     foreach ($inactProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
         $proposal['content']['summary'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['summary']);
-        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       }
       if (array_key_exists('content', $proposal) && array_key_exists('description', $proposal['content'])) {
         $proposal['content']['description'] = str_replace("&lt;br /&gt;", "<br />", $proposal['content']['description']);
-        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
       }
       if (array_key_exists('tags', $proposal)) {
         foreach ($proposal['tags'] as $tag) {
@@ -690,9 +686,15 @@ class Discussion {
   /**
    * updateProposalHeatMapTag
    * 
-   * This function updates the weight of heat map tag
+   * This function updates the weight of heat map tag.
+   * In case opinion update, opinion count will not be increase on proposal.
+   * @param int $index - triangle position index
+   * @param string $id - id of proposal
+   * @param int $prev - index of previous selected triangle position
+   * @param boolean $updateOpinion - TRUE if opinion will be updated
+   * @return  void
    */
-  public function updateProposalHeatMapTag($index, $id, $prev = '') {
+  public function updateProposalHeatMapTag($index, $id, $prev = '', $updateOpinion = TRUE) {
     $newTags = array();
     $aggregatorManager = new AggregatorManager();
     $proposal = $aggregatorManager->getEntry('', '', $id, '', '', '', '', '', '', '', '', '', array(), '', 'tags', '', '', '', '', '');
@@ -709,7 +711,7 @@ class Discussion {
               }
             }
           } else {
-            if ($tag['scheme'] == OPINION_COUNT_TAG_SCEME) {
+            if ($updateOpinion == TRUE && $tag['scheme'] == OPINION_COUNT_TAG_SCEME) {
               $tagss['weight'] = $tag['weight'] + 1;
             }
           }
@@ -870,8 +872,6 @@ class Discussion {
     $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', $tag, '', '', '', '', '', '', '', array(),
       'tag:OpinionCount', 'status,title,author,id,content,tags,links', '', '', trim('discussion,' . $this->id), CIVICO);
     foreach ($proposals as $proposal) {
-      $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
-      $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
       $proposal['count'] = 0;
       $proposal['highlighted'] = false;
       $proposal['image'] = '';
