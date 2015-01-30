@@ -263,7 +263,7 @@ msgstr "Evidenziare"
 
 msgctxt "discussion"
 msgid "UnHighlight"
-msgstr "Unhighlight"
+msgstr "Togliere evidenza"
 
 msgctxt "discussion"
 msgid "Proposal Image"
