@@ -808,14 +808,20 @@ class UserController extends PageController {
               }
             }
             if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
-              if (array_key_exists('profession', $user['profile-info'])) {
-                $users[$user['_id']]['profession'] = $user['profile-info']['profession'];
+              if (array_key_exists('profession', $user['profile-info']) &&
+                array_key_exists('value', $question['profession']) &&
+                array_key_exists($user['profile-info']['profession'], $question['profession']['value'])) {
+                $users[$user['_id']]['profession'] =  $question['profession']['value'][$user['profile-info']['profession']];
               }
-              if (array_key_exists('residence', $user['profile-info'])) {
-                $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
+              if (array_key_exists('residence', $user['profile-info']) &&
+                array_key_exists('value', $question['residence']) &&
+                array_key_exists($user['profile-info']['residence'], $question['residence']['value'])) {
+                $users[$user['_id']]['residence'] = $question['residence']['value'][$user['profile-info']['residence']];
               }
-              if (array_key_exists('association', $user['profile-info'])) {
-                $users[$user['_id']]['association'] = $user['profile-info']['association'];
+              if (array_key_exists('association', $user['profile-info']) &&
+                array_key_exists('value', $question['association']) &&
+                array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+                $users[$user['_id']]['association'] = $question['association']['value'][$user['profile-info']['association']];
               }
             }
           }
