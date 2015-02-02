@@ -470,22 +470,23 @@ msgstr "Inserisci un'età valida"
 msgctxt "discussion"
 msgid "Please select age range"
 msgstr "Seleziona la fascia di età"
+
 msgctxt "discussion" 
 msgid "Please select association"
-msgstr ""
+msgstr "Seleziona l'ordine"
 
 msgctxt "discussion" 
 msgid "Please select profession"
-msgstr ""
+msgstr "Seleziona la professione"
 
 msgctxt "discussion" 
 msgid "Please select residence"
-msgstr ""
+msgstr "Seleziona il luogo di residenza"
 
 msgctxt "discussion" 
 msgid "Please enter valid layout columns."
-msgstr ""
+msgstr "Inseriscu un numero valido di colonne"
 
 msgctxt "discussion" 
 msgid "Please enter same email id"
-msgstr ""
+msgstr "Inserisci lo stesso indirizzo email"
