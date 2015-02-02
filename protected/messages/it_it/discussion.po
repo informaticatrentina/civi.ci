@@ -1493,6 +1493,7 @@ msgctxt "discussion"
 msgid "Another opinion by same author already active."
 msgstr "Un'altra opinione del medesimo autore è già attiva."
 
+msgctxt "discussion"
 msgid "Export To CSV"
 msgstr "Esporta in CSV"
 
