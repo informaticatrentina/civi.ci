@@ -25,6 +25,7 @@ define('RESPONSE_FORMAT', 'json');
  */
 define('ENTRY', 'entry');
 
+setThemeForUrl();
 /**
  * define constant for default limit (number of entry to be show)
  */
@@ -215,13 +216,13 @@ return array(
                 'discussion/entries/<slug:[\w-]+>' => 'discussion/entries',
                 'discussion/entries/<slug:[\w-]+>' => 'discussion/entries',
                 'discussion/proposals/<slug:[\w-]+>' => 'discussion/proposals',
-                'discussion/proposals/<slug:[\w-]+>/opinion' => 'discussion/opinion',
-                'discussion/proposals/<slug:[\w-]+>/opinion/update' => 'discussion/updateOpinion',
+                'admin/discussion/proposals/<slug:[\w-]+>/opinion' => 'discussion/opinion',
+                'admin/discussion/proposals/<slug:[\w-]+>/opinion/update' => 'discussion/updateOpinion',
                 'discussion/brief/<slug:[\w-]+>' => 'discussion/contestBrief',
                 'discussion/proposal/view/<slug:[\w-]+>' => 'discussion/getProposal',
-                'discussion/proposals/<slug:[\w-]+>/links' => 'discussion/getLinks',
-                'discussion/proposals/<slug:[\w-]+>/links/update' => 'discussion/updateLink',
-                'discussion/proposal/status' => 'discussion/proposalStatus',
+                'admin/discussion/proposals/<slug:[\w-]+>/links' => 'discussion/getLinks',
+                'admin/discussion/proposals/<slug:[\w-]+>/links/update' => 'discussion/updateLink',
+                'admin/discussion/proposal/status' => 'discussion/proposalStatus',
                 'discussion/brief/<slug:[\w-]+>' => 'discussion/contestBrief',
                 'discussion/submission/<slug:[\w-]+>' => 'discussion/submitEntries',
                 'register' => 'user/register',
@@ -229,12 +230,11 @@ return array(
                 'logout' => 'discussion/logout',
                 'feeds/proposal' => 'feed/proposal',
                 'feeds/opinion' => 'feed/opinion',
-                'discussion/<slug:[\w-]+>/<id:[\w-]+>' => 'discussion/proposalDetails',
                 'admin/configuration' => 'discussion/configuration',
-                'discussion/proposal/list/<slug:[\w-]+>' => 'discussion/reports',          
+                'admin/discussion/proposal/list/<slug:[\w-]+>' => 'discussion/reports',
                 'admin/export/<id:[\w-]+>/<type:[\w-]+>' => 'discussion/export',
                 'discussion/proposal/edit/<slug:[\w-]+>' => 'discussion/editProposal',
-                'discussion/proposal/highlight/<slug:[\w-]+>' => 'discussion/highlightProposal',
+                'admin/discussion/proposal/highlight/<slug:[\w-]+>' => 'discussion/highlightProposal',
                 'discussion/proposal/opinion/answer' => 'discussion/submitOpinionAnswer',
                 'discussion/proposals/<slug:[\w-]+>/saveposition' => 'discussion/saveTrianglePosition',
                 'feed/rss/proposal' => 'feed/proposalFeed',
@@ -254,6 +254,7 @@ return array(
                 'admin/discussion/statistics/<id:[\w-]+>' => 'discussion/statistics',
                 'admin/all-discussion' => 'discussion/allDiscussion',
                 'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal',
+                'admin/discussion/<slug:[\w-]+>/<id:[\w-]+>' => 'discussion/proposalDetails',
                 'discussion/proposals/<slug:[\w-]+>/<tag:[\w-]+>' => 'discussion/proposals',
                 'admin/statistics' => 'discussion/allStatistics'
             ),

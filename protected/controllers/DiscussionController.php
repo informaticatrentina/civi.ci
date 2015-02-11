@@ -1458,7 +1458,7 @@ class DiscussionController  extends PageController {
     } catch (Exception $e) {
       Yii::log('Error in update proposal', ERROR, $e->getMessage());
     }
-    $this->redirect(BASE_URL . 'discussion/proposal/list/' . $_GET['slug']);
+    $this->redirect(BASE_URL . 'admin/discussion/proposal/list/' . $_GET['slug']);
   }
   
   /**actionHighlightProposal

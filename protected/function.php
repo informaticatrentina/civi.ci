@@ -507,3 +507,26 @@ function getXLSXCellName($col, $row) {
   }
   return $cellName;
 }
+/**
+ * setThemeForUrl
+ * function is used for set theme
+ *  1. for admin pages, admin theme will be used
+ *  2. For rest pages, theme defined in local config will be used
+ */
+function setThemeForUrl() {
+  $adminPagesUrl = array(
+     '/admin/'
+  );
+  $isAdminPage = FALSE;
+  foreach ($adminPagesUrl as $url) {
+    if (strpos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
+      $isAdminPage = TRUE;
+      break;
+    }
+  }
+  if ($isAdminPage === TRUE)  {
+    define('SITE_THEME', 'admin');
+  } else {
+    define('SITE_THEME', SITE_THEMES);
+  }
+}

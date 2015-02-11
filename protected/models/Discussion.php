@@ -1011,7 +1011,7 @@ class Discussion {
     $html = str_replace("{{admin_link_text}}",  Yii::t('discussion', 'Click here to access Admin Page'), $html);
     $adminPageUrl = '';
     if (array_key_exists('slug', $_GET) && trim($_GET['slug']) != '') {
-      $adminPageUrl = BASE_URL . 'discussion/proposals/' . $_GET['slug'] . '/opinion?id=' .$proposalId;
+      $adminPageUrl = BASE_URL . 'admin/discussion/proposals/' . $_GET['slug'] . '/opinion?id=' .$proposalId;
     }
     $html = str_replace("{{admin_page_url}}", $adminPageUrl, $html);
     return $html;
@@ -1037,7 +1037,7 @@ class Discussion {
     $html = str_replace("{{admin_link_text}}", Yii::t('discussion', 'Click here to access Admin Page'), $html);
     $adminPageUrl = '';
     if (array_key_exists('slug', $_GET) && trim($_GET['slug']) != '') {
-      $adminPageUrl = BASE_URL . 'discussion/proposals/' . $_GET['slug'] . '/links?id=' . $proposalId;
+      $adminPageUrl = BASE_URL . 'admin/discussion/proposals/' . $_GET['slug'] . '/links?id=' . $proposalId;
     }
     $html = str_replace("{{admin_page_url}}", $adminPageUrl, $html);
     return $html;
