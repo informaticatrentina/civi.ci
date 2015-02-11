@@ -1336,22 +1336,32 @@ class DiscussionController  extends PageController {
     $allProposals = array();
     $discussion = new Discussion();
     $discussion->id = $_GET['id'];
+    $discussionDetail = $discussion->getDiscussionDetail();
     $allProposals = $discussion->getProposalForAdmin(true);    
     if ($_GET['type'] == 'excel') {
       goto Excel;
     } else if ($_GET['type'] == 'csv') {
-      $this->_downloadProposalCsv($allProposals);
+      $this->_downloadProposalCsv($allProposals, $discussionDetail);
     } else {
       $this->redirect(BASE_URL . 'admin/discussion/list');
     }
     Excel:
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator(CIVICO);
-    $headings = array('Titolo', 'Descrizione', 'Autore', 'Creation Date', 'Number of Opinions', 'Number of Opinions', 'Stato');
+    $headings = array(
+      Yii::t('discussion', 'Discussion Title'),
+      Yii::t('discussion', 'Proposal Title'),
+      Yii::t('discussion', 'Description'),
+      Yii::t('discussion', 'Author'),
+      Yii::t('discussion', 'Creation Date'),
+      Yii::t('discussion', 'Number of Opinions'),
+      Yii::t('discussion', 'Number of Links'),
+      Yii::t('discussion', 'Status'));
     $rowCnt = count($allProposals) + 1;
     //preapre header
     $rowNumber = 1;
     $col = 'A';
+    $objPHPExcel->getActiveSheet()->getStyle("A1:H1")->getFont()->setBold(true);
     foreach ($headings as $heading) {
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $heading);
       $col++;
@@ -1360,6 +1370,8 @@ class DiscussionController  extends PageController {
     $rowNumber++;
     foreach ($allProposals as $proposal) {
       $col = 'A';
+      $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $discussionDetail['title']);
+      $col++;
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $proposal['title']);
       $col++;
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $proposal['content']['description']);
@@ -1388,7 +1400,7 @@ class DiscussionController  extends PageController {
       $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
     }
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="report' . time() . '.xls"');
+    header('Content-Disposition: attachment;filename="report_' . date("Ymd") . '.xls"');
     header('Cache-Control: max-age=0');
 
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -2423,19 +2435,21 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
-  public function _downloadProposalCsv($proposals) {
+  public function _downloadProposalCsv($proposals, $discussionDetail) {
     $header = array(
-      'title' => 'Title',
-      'description' => 'Description',
-      'author' => 'Author',
-      'creation_date' => 'Creation Date',
-      'total_opinion' => 'No of Opinion',
-      'total_links' => 'No of Links',
-      'status' => 'Status'
+      'discussion' => Yii::t('discussion', 'Discussion Title'),
+      'title' => Yii::t('discussion', 'Proposal Title'),
+      'description' => Yii::t('discussion', 'Description'),
+      'author' => Yii::t('discussion', 'Author'),
+      'creation_date' => Yii::t('discussion', 'Creation Date'),
+      'total_opinion' => Yii::t('discussion', 'Number of Opinions'),
+      'total_links' => Yii::t('discussion', 'Number of Links'),
+      'status' => Yii::t('discussion', 'Status')
     );
     $row = array();
     foreach ($proposals as $proposal) {
       $row[] = array(
+        'discussion' => $discussionDetail['title'],
         'title' => $proposal['title'],
         'description' => $proposal['content']['description'],
         'author' => $proposal['author']['name'],
@@ -2445,7 +2459,7 @@ class DiscussionController  extends PageController {
         'status' => $proposal['status']
       );
     }
-    header("Content-disposition: attachment; filename=proposal.csv");
+    header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
