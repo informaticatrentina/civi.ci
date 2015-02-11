@@ -1372,9 +1372,9 @@ class DiscussionController  extends PageController {
       $col = 'A';
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $discussionDetail['title']);
       $col++;
-      $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $proposal['title']);
+      $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, htmlspecialchars_decode(strip_tags($proposal['title'])));
       $col++;
-      $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $proposal['content']['description']);
+      $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, htmlspecialchars_decode(strip_tags($proposal['content']['description'])));
       $col++;
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $proposal['author']['name']);
       $col++;
@@ -2450,8 +2450,8 @@ class DiscussionController  extends PageController {
     foreach ($proposals as $proposal) {
       $row[] = array(
         'discussion' => $discussionDetail['title'],
-        'title' => $proposal['title'],
-        'description' => $proposal['content']['description'],
+        'title' => htmlspecialchars_decode(strip_tags($proposal['title'])),
+        'description' => htmlspecialchars_decode(strip_tags($proposal['content']['description'])),
         'author' => $proposal['author']['name'],
         'creation_date' => $proposal['creation_date'],
         'total_opinion' => $proposal['totalOpinion'],
