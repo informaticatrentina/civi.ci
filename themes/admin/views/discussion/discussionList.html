@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="container darkheader">
+    <div class="row">
+      <div class="span8">
+        <a class="link admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add"> {{ t('discussion', 'Create Discussion')}}</a>
+<!--        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="admin-discussion-link" href="{{constant('BASE_URL')}}admin/user/export"> {{ t('discussion', 'Export All Contributors')}}</a>
+    -->  
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <a class="link admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage"> {{ t('discussion', 'Configure Home Page')}}</a>
+        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <a class="link admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion"> {{ t('discussion', 'View All Discussions')}}</a>
+      </div>
+    </div>
+  </div>
+  <br>
+    <table class="table table-bordered">
+      <th>{{ t('discussion','Discussion Title') }}</th>
+      <th>{{ t('discussion','Discussion Summary') }}</th>
+      <th>{{ t('discussion','Discussion Author') }}</th>
+      <th>{{ t('discussion', 'Sorting Order') }}</th>
+      <th>{{ t('discussion', 'Proposal Count') }}</th>
+      <th>{{ t('discussion', 'Opinion Count') }}</th>
+      <th>{{ t('discussion', 'No of user') }}</th>
+      <th>{{ t('discussion','Statistics') }}</th>
+      <th>{{ t('discussion','Edit') }}</th>
+      <th>{{ t('discussion','View Proposals') }}</th>
+      <th>{{ t('discussion','Print Discussion') }}</th>
+      {% for info in discussionInfo %}
+      <tr>
+        <td>{{ info.discussionTitle }}</td>
+        <td>{{ info.discussionSummary }}</td>
+        {% set authorEmail = '' %}
+        {% if attribute(emails, info.discussionAuthorSlug) is not empty %}
+          {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
+        {% endif %}
+        <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
+        <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
+        <td>{{ info.proposalCount }}</td>
+        <td>{{ info.opinionCount}}</td>
+        <td>{{ info.userCount}}</td>
+        <td><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></td>
+        <td><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></td>
+        <td><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></td>
+        <td><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br/>
+  </div>
+<script>
+  var baseUrl = "{{constant('BASE_URL')}}";
+</script>
+<script src="{{constant('THEME_URL')}}js/discussionList.js"></script>
