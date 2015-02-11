@@ -828,6 +828,7 @@ class DiscussionController  extends PageController {
     if (isUserLogged() == false && isset($_SERVER['REQUEST_URI'])) {
       $this->redirect(BASE_URL . 'login?back=' . $_SERVER['REQUEST_URI']);
     }
+    $this->setHeader('2.0');
     $isAdmin = checkPermission('admin');
     if ($isAdmin ==false) {
       $this->redirect(BASE_URL);
