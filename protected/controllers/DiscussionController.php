@@ -217,6 +217,7 @@ class DiscussionController  extends PageController {
     if (!empty($discussionInfo)) {
       $i = 0;
       $author = array();
+      $authors = array();
       foreach ($discussionInfo as $info) {
         $entries = array();
         $discussionDetail[$i]['discussionId'] = $info['id'];
@@ -227,6 +228,7 @@ class DiscussionController  extends PageController {
         $discussionDetail[$i]['discussionAuthorSlug'] = $info['author_id'];
         $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
         $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
+        $authors[] = $discussionContent['author_name'];
         $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
         $discussionDetail[$i]['opinionCount'] = $discussionContent['opinion_count'];
         $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
@@ -234,6 +236,10 @@ class DiscussionController  extends PageController {
         $discussion->count = 2;
         $author[] = $info['author_id'];
         $i++;
+      }
+      $authorNames = array();
+      foreach($authors as $value) {
+        $authorNames = array_merge($authorNames, $value);
       }
       $author = array_unique($author);
       $userIdentityApi = new UserIdentityAPI();
@@ -247,7 +253,8 @@ class DiscussionController  extends PageController {
     }
     $this->render('discussionList', array(
       'discussionInfo' => $discussionDetail,
-      'emails' => $emails
+      'emails' => $emails,
+      'authorNames' => $authorNames
     ));
   }
 
@@ -2043,7 +2050,8 @@ class DiscussionController  extends PageController {
    */
   private function _getDiscussionProposalOpinionAndAuthor($discussionId) {
     try {
-      $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array());
+      $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array(),
+          'author_name' => array());
       $aggregatorManager = new AggregatorManager();
       $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
       '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
@@ -2052,8 +2060,10 @@ class DiscussionController  extends PageController {
         if (array_key_exists('count', $proposal)) {
           $response['proposal_count'] = $proposal['count'];
         }
-        if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
+        if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])
+              && array_key_exists('name', $proposal['author'])) {
           $response['author'][] = $proposal['author']['slug'];
+          $response['author_name'][$proposal['author']['slug']] = $proposal['author']['name'];
         }
         if (array_key_exists('id', $proposal)) {
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '',
@@ -2063,8 +2073,10 @@ class DiscussionController  extends PageController {
             if (array_key_exists('count', $opinion)) {
               $response['opinion_count'] += $opinion['count'];
             }
-            if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])) {
+            if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])
+                && array_key_exists('name', $opinion['author'])) {
               $response['author'][] = $opinion['author']['slug'];
+              $response['author_name'][$opinion['author']['slug']] = $opinion['author']['name'];
             }
           }
         }
@@ -2467,6 +2479,140 @@ class DiscussionController  extends PageController {
       @fputcsv($filePath, $order);
     }
     exit;
+  }
+  
+  public function actionAllStatistics() {
+    Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
+    $this->setHeader('2.0');
+    $isHighlighter = checkPermission('can_mark_highlighted');
+    $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
+    if ($isHighlighter == false && $can_show_hide_opinion == false) {
+      $this->redirect(BASE_URL);
+    }
+    $chartDetail = array();
+    $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
+    $staticsPoint = array();
+    Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
+    $this->setHeader('2.0');
+    if (isModuleExist('backendconnector') == false) {
+      throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+    }
+    $module = Yii::app()->getModule('backendconnector');
+    if (empty($module)) {
+      throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+    }
+    if (defined('USER_STATISTIC_POINT')) {
+      $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
+    }
+
+    $discussionInfo = array();
+    $discussionDetail = array();
+    $discussion = new Discussion();
+    $entry = array();
+    $discussionInfo = $discussion->getDiscussionDetail();
+    if (!empty($discussionInfo)) {
+      $i = 0;
+      $author = array();
+      $authors = array();
+      foreach ($discussionInfo as $info) {
+        $entries = array();
+        $discussionDetail[$i]['discussionId'] = $info['id'];
+        $discussionDetail[$i]['discussionTitle'] = $info['title'];
+        $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
+        $discussionDetail[$i]['discussionSlug'] = $info['slug'];
+        $discussionDetail[$i]['discussionAuthor'] = $info['author'];
+        $discussionDetail[$i]['discussionAuthorSlug'] = $info['author_id'];
+        $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
+        $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
+        $authors[] = $discussionContent['author_name'];
+        $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
+        $discussionDetail[$i]['opinionCount'] = $discussionContent['opinion_count'];
+        $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
+        $discussion->discussionSlug = $info['slug'];
+        $discussion->count = 2;
+        $author[] = $info['author_id'];
+        $graphData = array();
+        $finalArr = array();
+        $userIdentityApi = new UserIdentityAPI();
+        $uniqueAuthor = array_unique($discussionDetail['author']);
+        $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $uniqueAuthor), TRUE, false);
+        $emails = array();
+        if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
+          foreach ($userEmail['_items'] as $email) {
+            $emails[] = $email['email'];
+          }
+        }
+        $userInfo = array();
+        if (!empty($emails)) {
+          $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+        }
+        if (array_key_exists('_items', $userInfo)) {
+          foreach ($userInfo['_items'] as $user) {
+            if (array_key_exists('age', $user)) {
+              $graphData['age'][] = $user['age'];
+            }
+            if (array_key_exists('age_range', $user)) {
+              $graphData['age_range'][] = $user['age_range'];
+            }
+            if (array_key_exists('education-level', $user)) {
+              if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
+                $graphData['education_level'][] = 'other';
+              } else {
+                $graphData['education_level'][] = $user['education-level'];
+              }
+            }
+            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
+              array_key_exists($user['sex'][0], $question['gender']['value'])) {
+              $graphData['sex'][] = $user['sex'][0];
+            }
+            if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+              $graphData['citizenship'][] = $user['citizenship'];
+            }
+            if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
+              $graphData['work'][] = $user['work'];
+            }
+            if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
+              if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
+                $graphData['public_authority'][] = $user['public_authority']['name'];
+              }
+            }
+          }
+          foreach ($graphData as $key => $val) {
+            $finalArr[$key] = array_count_values($graphData[$key]);
+          }
+        }
+        if (!empty($finalArr)) {
+          $preparedData = $this->_prepareChartData($finalArr, $question);
+          foreach ($preparedData['header'] as $key => $val) {
+            $preparedData['statistic_data'][] = array((string)$key, $val);
+          }
+          foreach ($preparedData['data'] as $key => $val) {
+             $preparedData['statistic_data'][] = array((string)$key, $val);
+          }
+        }
+        $chartDetail[$info['title']] = $preparedData;
+        $i++;
+      }
+      $authorNames = array();
+      foreach($authors as $value) {
+        $authorNames = array_merge($authorNames, $value);
+      }
+      $author = array_unique($author);
+      $userIdentityApi = new UserIdentityAPI();
+      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+      $emails = array();
+      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
+        foreach ($userEmail['_items'] as $email) {
+          $emails[$email['_id']] = $email['email'];
+        }
+      }
+    }
+    $this->render('reportStatistics', array(
+      'discussionInfo' => $discussionDetail,
+      'emails' => $emails,
+      'authorNames' => $authorNames,
+      'chartDetails' => $chartDetail
+    ));
   }
 }
 

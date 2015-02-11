@@ -255,6 +255,7 @@ return array(
                 'admin/all-discussion' => 'discussion/allDiscussion',
                 'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal',
                 'discussion/proposals/<slug:[\w-]+>/<tag:[\w-]+>' => 'discussion/proposals',
+                'admin/statistics' => 'discussion/allStatistics'
             ),
         ),
         'session' => array(
