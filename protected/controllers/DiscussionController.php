@@ -2535,7 +2535,7 @@ class DiscussionController  extends PageController {
         $graphData = array();
         $finalArr = array();
         $userIdentityApi = new UserIdentityAPI();
-        $uniqueAuthor = array_unique($discussionDetail['author']);
+        $uniqueAuthor = array_unique($discussionContent['author']);
         $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $uniqueAuthor), TRUE, false);
         $emails = array();
         if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
@@ -2584,14 +2584,16 @@ class DiscussionController  extends PageController {
         }
         if (!empty($finalArr)) {
           $preparedData = $this->_prepareChartData($finalArr, $question);
-          foreach ($preparedData['header'] as $key => $val) {
-            $preparedData['statistic_data'][] = array((string)$key, $val);
-          }
-          foreach ($preparedData['data'] as $key => $val) {
-             $preparedData['statistic_data'][] = array((string)$key, $val);
+          foreach($preparedData as $prepareData) {
+            foreach ($prepareData['header'] as $key => $val) {
+              $prepareData['statistic_data'][] = array((string)$key, $val);
+            }
+            foreach ($prepareData['data'] as $key => $val) {
+               $prepareData['statistic_data'][] = array((string)$key, $val);
+            }
           }
         }
-        $chartDetail[$info['title']] = $preparedData;
+        $chartDetail[$info['slug']] = $preparedData;
         $i++;
       }
       $authorNames = array();
