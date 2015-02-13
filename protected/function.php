@@ -274,25 +274,31 @@ function checkPermission($permission) {
         $permission = featurePermission::$$permission;
       }
     }
-    try {
-      if (isModuleExist('rbacconnector') == false) {
-        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
-      }
-      $module = Yii::app()->getModule('rbacconnector');
-      if (empty($module)) {
-        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
-      }
-      $havePermission = User::checkPermission(Yii::app()->session['user']['email'], $permission);
-      if ($havePermission) {
-        if (array_key_exists('permission', Yii::app()->session['user'])) {
-          $perm = Yii::app()->session['user']['permission'];
-        }
-        $perm[] = $permission;
-        $_SESSION['user']['permission'] = $perm;
-      }
-    } catch (Exception $e) {
-      Yii::log($e->getMessage(), ERROR, 'Error in checkPermission');
+    $havePermission = checkRbacPermission(Yii::app()->session['user']['email'], $permission);
+  }
+  return $havePermission;
+}
+
+/**
+ * checkRbacPermission
+ * function is used for check permission fropm rbac connector
+ * @param string $email
+ * @param string $permission
+ * return boolean $havePermission
+ */
+function checkRbacPermission($email, $permission) {
+  try {
+    $havePermission = FALSE;
+    if (isModuleExist('rbacconnector') == false) {
+      throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
     }
+    $module = Yii::app()->getModule('rbacconnector');
+    if (empty($module)) {
+      throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
+    }
+    $havePermission = User::checkPermission($email, $permission);
+  } catch (Exception $e) {
+    Yii::log($e->getMessage(), ERROR, 'Error in checkRbacPermission');
   }
   return $havePermission;
 }

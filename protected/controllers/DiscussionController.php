@@ -2052,7 +2052,7 @@ class DiscussionController  extends PageController {
   private function _getDiscussionProposalOpinionAndAuthor($discussionId) {
     try {
       $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array(),
-          'author_name' => array());
+         'author_name' => array(), 'proposal_author_id' => array(), 'opinion_author_id' => array());
       $aggregatorManager = new AggregatorManager();
       $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
       '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
@@ -2065,6 +2065,7 @@ class DiscussionController  extends PageController {
               && array_key_exists('name', $proposal['author'])) {
           $response['author'][] = $proposal['author']['slug'];
           $response['author_name'][$proposal['author']['slug']] = $proposal['author']['name'];
+          $response['proposal_author_id'][] = $proposal['author']['slug'];
         }
         if (array_key_exists('id', $proposal)) {
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '',
@@ -2078,6 +2079,7 @@ class DiscussionController  extends PageController {
                 && array_key_exists('name', $opinion['author'])) {
               $response['author'][] = $opinion['author']['slug'];
               $response['author_name'][$opinion['author']['slug']] = $opinion['author']['name'];
+              $response['opinion_author_id'][] = $proposal['author']['slug'];
             }
           }
         }
@@ -2509,26 +2511,28 @@ class DiscussionController  extends PageController {
     $discussionInfo = array();
     $discussionDetail = array();
     $discussion = new Discussion();
-    $entry = array();
     $discussionInfo = $discussion->getDiscussionDetail();
+    $allAdminUser = array();
     if (!empty($discussionInfo)) {
-      $i = 0;
       $author = array();
       $authors = array();
       foreach ($discussionInfo as $info) {
-        $entries = array();
-        $discussionDetail[$i]['discussionId'] = $info['id'];
-        $discussionDetail[$i]['discussionTitle'] = $info['title'];
-        $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
-        $discussionDetail[$i]['discussionSlug'] = $info['slug'];
-        $discussionDetail[$i]['discussionAuthor'] = $info['author'];
-        $discussionDetail[$i]['discussionAuthorSlug'] = $info['author_id'];
-        $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
         $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
         $authors[] = $discussionContent['author_name'];
-        $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
-        $discussionDetail[$i]['opinionCount'] = $discussionContent['opinion_count'];
-        $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
+        $discussionDetail[$info['id']] = array(
+          'discussionId' => $info['id'],
+          'discussionTitle' => $info['title'],
+          'discussionSummary' => substr($info['summary'], 0, 20),
+          'discussionSlug' => $info['slug'],
+          'discussionAuthor' => $info['author'],
+          'discussionAuthorSlug' => $info['author_id'],
+          'discussionOrder' => $info['sort_id'], 
+          'proposalCount' => $discussionContent['proposal_count'],
+          'opinionCount' => $discussionContent['opinion_count'],
+          'userCount' => count(array_unique($discussionContent['author'])),
+          'proposalAuthor' => array_unique($discussionContent['proposal_author_id']),
+          'opinionAuthor' => array_unique($discussionContent['opinion_author_id'])
+        );
         $discussion->discussionSlug = $info['slug'];
         $discussion->count = 2;
         $author[] = $info['author_id'];
@@ -2538,11 +2542,28 @@ class DiscussionController  extends PageController {
         $uniqueAuthor = array_unique($discussionContent['author']);
         $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $uniqueAuthor), TRUE, false);
         $emails = array();
+        $adminUsersForProposal = array();
+        $adminUsersForOpinion = array();
         if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
           foreach ($userEmail['_items'] as $email) {
+            //find out all admin user for proposals and opinion
+            if (checkRbacPermission($email['email'], 'admin')) {
+              if (in_array($email['_id'], $discussionDetail[$info['id']]['proposalAuthor'])) {
+                $adminUsersForProposal[] = $email['_id'];
+                $allAdminUser[] = $email['_id'];
+              }
+              if (in_array($email['_id'], $discussionDetail[$info['id']]['opinionAuthor'])) {
+                $adminUsersForOpinion[] = $email['_id'];
+                $allAdminUser[] = $email['_id'];
+              }
+              continue;
+            }
             $emails[] = $email['email'];
           }
         }
+        //remove proposal & opinion count that is submitted by user
+        $discussionDetail[$info['id']]['proposalCount'] -= count(array_unique($adminUsersForProposal));
+        $discussionDetail[$info['id']]['opinionCount'] -= count(array_unique($adminUsersForOpinion));
         $userInfo = array();
         if (!empty($emails)) {
           $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
@@ -2582,6 +2603,7 @@ class DiscussionController  extends PageController {
             $finalArr[$key] = array_count_values($graphData[$key]);
           }
         }
+        $preparedData = array();
         if (!empty($finalArr)) {
           $preparedData = $this->_prepareChartData($finalArr, $question);
           foreach($preparedData as $prepareData) {
@@ -2594,11 +2616,14 @@ class DiscussionController  extends PageController {
           }
         }
         $chartDetail[$info['slug']] = $preparedData;
-        $i++;
       }
       $authorNames = array();
-      foreach($authors as $value) {
-        $authorNames = array_merge($authorNames, $value);
+      foreach($authors as $authorDetail) {
+        foreach ($authorDetail as $id => $name) {
+          if (!in_array($id, $allAdminUser)) {
+            $authorNames[] = $name;
+          }
+        }
       }
       $author = array_unique($author);
       $userIdentityApi = new UserIdentityAPI();
@@ -2613,7 +2638,7 @@ class DiscussionController  extends PageController {
     $this->render('reportStatistics', array(
       'discussionInfo' => $discussionDetail,
       'emails' => $emails,
-      'authorNames' => $authorNames,
+      'authorNames' => array_unique($authorNames),
       'chartDetails' => $chartDetail
     ));
   }
