@@ -471,6 +471,7 @@ class DiscussionController  extends PageController {
    */
   public function actionProposals($proposalData = array(), $errorMessage = '') {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap_3.css');
+    Yii::app()->clientScript->registerScriptFile(ADMIN_THEME_URL . 'js/admin.js', CClientScript::POS_END);
     $this->setHeader('3.0');
     $discussion = new Discussion();
     // $discussion->sort = '-creation_date';

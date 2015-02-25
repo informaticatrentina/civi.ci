@@ -125,6 +125,7 @@ define('LANGUAGE_SCHEME', 'http://ahref.eu/scheme/language');
 define('TOPIC_TAG_SCHEME', 'http://ahref.eu/scheme/');
 $url = substr(BASE_URL, 0, -1);
 define('THEME_URL', $url . '/themes/' . SITE_THEME . '/');
+define('ADMIN_THEME_URL', $url . '/themes/admin/');
 define('HIGHLIGHT_PROPOSAL_TAG_SCEME', 'http://ahref.eu/scheme/highlight');
 define('HIGHLIGHT_TAG_NAME', 'highlight');
 define('ANSWER_TAG_SCHEME', 'http://ahref.eu/scheme/answer');
@@ -256,7 +257,8 @@ return array(
                 'admin/discussion/allproposal/<slug:[\w-]+>' => 'discussion/allProposal',
                 'admin/discussion/<slug:[\w-]+>/<id:[\w-]+>' => 'discussion/proposalDetails',
                 'discussion/proposals/<slug:[\w-]+>/<tag:[\w-]+>' => 'discussion/proposals',
-                'admin/statistics' => 'discussion/allStatistics'
+                'admin/statistics' => 'discussion/allStatistics',
+                'admin/existuser' => 'admin/SessionExistence'
             ),
         ),
         'session' => array(
