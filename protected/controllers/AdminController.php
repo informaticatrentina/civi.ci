@@ -12,7 +12,7 @@
  * This file can not be copied and/or distributed without the express permission of
   <ahref Foundation.
  */
-
+ob_start();
 class AdminController extends PageController {
   
   /**
@@ -33,7 +33,58 @@ class AdminController extends PageController {
     } else {
       Yii::app()->redirect(BASE_URL);
     }
-  }  
+  }
+
+  /**
+   * actionPdfGenerate
+   * This function is used to generate PDF for exporting all proposals inside a
+   * discussion along with its opinions and links count.
+   * PDF is currently in download form.
+   *
+   * @param array $allProposals
+   * @param array $discussionDetail
+   * @param array $headings
+   */
+  public function actionPdfGenerate($allProposals, $discussionDetail, $headings) {
+    try {
+      $pdf = Yii::createComponent('application.extensions.tcpdf.tcpdf',
+        'P', 'mm', 'A4', true, 'UTF-8', false);
+      $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+      $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+      $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+      $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+      $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+      $pdf->SetPrintHeader(false);
+      $pdf->SetPrintFooter(false);
+      if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+        require_once(dirname(__FILE__) . '/lang/eng.php');
+        $pdf->setLanguageArray($l);
+      }
+      $pdf->setFontSubsetting(true);
+      $pdf->SetFont('helvetica', '', 10, '', true);
+      $pdf->AddPage();
+
+      foreach ($allProposals as &$proposal) {
+        htmlspecialchars_decode(strip_tags($proposal['title']));
+        htmlspecialchars_decode(strip_tags($proposal['content']['description']));
+      }
+      $html = $this->renderPartial('//admin/pdfReport',
+        array(
+          'allProposals' => $allProposals,
+          'discussionDetail' => $discussionDetail,
+          'headings' => $headings
+        ), true);
+      $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+      ob_get_clean();
+      $pdf->Output('report_' . date("Ymd") . '.pdf', 'D');
+      exit();
+    } catch(Exception $exception) {
+      Yii::log('Error in PDF Generation.', ERROR, $exception->getMessage());
+    }
+  }
 }
 
 ?> 

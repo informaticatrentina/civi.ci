@@ -1346,17 +1346,7 @@ class DiscussionController  extends PageController {
     $discussion = new Discussion();
     $discussion->id = $_GET['id'];
     $discussionDetail = $discussion->getDiscussionDetail();
-    $allProposals = $discussion->getProposalForAdmin(true);    
-    if ($_GET['type'] == 'excel') {
-      goto Excel;
-    } else if ($_GET['type'] == 'csv') {
-      $this->_downloadProposalCsv($allProposals, $discussionDetail);
-    } else {
-      $this->redirect(BASE_URL . 'admin/discussion/list');
-    }
-    Excel:
-    $objPHPExcel = new PHPExcel();
-    $objPHPExcel->getProperties()->setCreator(CIVICO);
+    $allProposals = $discussion->getProposalForAdmin(true);
     $headings = array(
       Yii::t('discussion', 'Discussion Title'),
       Yii::t('discussion', 'Proposal Title'),
@@ -1366,6 +1356,19 @@ class DiscussionController  extends PageController {
       Yii::t('discussion', 'Number of Opinions'),
       Yii::t('discussion', 'Number of Links'),
       Yii::t('discussion', 'Status'));
+    if ($_GET['type'] == 'excel') {
+      goto Excel;
+    } else if ($_GET['type'] == 'csv') {
+      $this->_downloadProposalCsv($allProposals, $discussionDetail);
+    } else if ($_GET['type'] == 'pdf') {
+      $adminController = new AdminController('admin');
+      $adminController->actionPdfGenerate($allProposals, $discussionDetail, $headings);
+    } else {
+      $this->redirect(BASE_URL . 'admin/discussion/list');
+    }
+    Excel:
+    $objPHPExcel = new PHPExcel();
+    $objPHPExcel->getProperties()->setCreator(CIVICO);
     $rowCnt = count($allProposals) + 1;
     //preapre header
     $rowNumber = 1;

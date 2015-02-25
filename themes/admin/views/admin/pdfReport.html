@@ -1,0 +1,29 @@
+<table border="1" cellspacing="0" cellpadding="4">
+  <thead>
+    <tr>
+      {% for key, heading in headings %}
+        {% if key == 2 %}
+          <th colspan="2">
+        {% else %}
+          <th>
+        {% endif %}
+          {{ heading }}
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for proposal in allProposals %}
+      <tr>
+        <td>{{discussionDetail.title}}</td>
+        <td>{{proposal.title}}</td>
+        <td colspan="2">{{proposal.content.description}}</td>
+        <td>{{proposal.author.name}}</td>
+        <td>{{proposal.creation_date}}</td>
+        <td>{{proposal.totalOpinion}}</td>
+        <td>{{proposal.totalLinks}}</td>
+        <td>{{proposal.status}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

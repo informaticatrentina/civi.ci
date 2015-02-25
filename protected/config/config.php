@@ -158,6 +158,7 @@ return array(
         'application.extensions.JsTrans.*',
         'application.extensions.PHPExcel',
         'application.lib.*',
+        'application.extensions.tcpdf.tcpdf'
     ),
     'sourceLanguage' => 'en',
     'language' => SITE_LANGUAGE,
