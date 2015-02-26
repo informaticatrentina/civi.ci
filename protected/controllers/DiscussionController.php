@@ -2304,6 +2304,7 @@ class DiscussionController  extends PageController {
       $author = array();
       foreach ($details as $disKey=>$detail) {
         $discussionDetails[$disKey]['summary'] = $detail['summary'];
+        $discussionDetails[$disKey]['title'] = $detail['title'];
         $discussion->id = $detail['id'];
         $allProposals = $discussion->getProposalForAdmin(true);
         $aggregatorManager = new AggregatorManager();
@@ -2379,6 +2380,7 @@ class DiscussionController  extends PageController {
         $all[$key] = $understand;
       }
       $summary = $details['summary'];
+      $title = $details['title'];
       $aggregatorManager = new AggregatorManager();
       $author = array();
       foreach($allProposals as $key => &$proposal) {
@@ -2406,6 +2408,7 @@ class DiscussionController  extends PageController {
       $this->layout = 'singleProposal';
       $this->render('allProposal', array(
         'summary' => $summary,
+        'title' => $title,
         'allProposals' => $allProposals,
         'understanding' => $all,
         'discussionTimestamp' => $details['creationDate'],

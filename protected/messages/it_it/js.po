@@ -490,3 +490,11 @@ msgstr "Inseriscu un numero valido di colonne"
 msgctxt "discussion" 
 msgid "Please enter same email id"
 msgstr "Inserisci lo stesso indirizzo email"
+
+msgctxt "discussion" 
+msgid "Press Cancel to stay on page. Press Ok to redirect to home page."
+msgstr ""
+
+msgctxt "discussion" 
+msgid "Your session has been expired. "
+msgstr ""
