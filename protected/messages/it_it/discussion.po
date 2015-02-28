@@ -1489,6 +1489,22 @@ msgctxt "discussion"
 msgid "View All Statistics"
 msgstr "Vedi tutte le statistiche"
 
+msgctxt "discussion"
+msgid "Number of Proposals"
+msgstr "Numero di proposte"
+
+msgctxt "discussion"
+msgid "Number of Visualization + Opinions"
+msgstr "Numero di voti + opinioni"
+
+msgctxt "discussion"
+msgid "Number of User Registered"
+msgstr "Numero di utenti registrati"
+
+msgctxt "discussion"
+msgid "List of User Registered who all contributed in proposal, visualization, and opinion"
+msgstr "Elenco utenti che hanno contribuito con proposte, voti, opinioni"
+
 msgctxt "discussion" 
 msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
 msgstr "ATTENZIONE: La registrazione è andata a buon fine solo se riceverete una email di verifica e attivazione account."
