@@ -1486,6 +1486,10 @@ msgid "View All Discussions"
 msgstr "Vedi tutte le discussioni"
 
 msgctxt "discussion" 
+msgid "View All Statistics"
+msgstr "Vedi tutte le statistiche"
+
+msgctxt "discussion" 
 msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
 msgstr "ATTENZIONE: La registrazione è andata a buon fine solo se riceverete una email di verifica e attivazione account."
 
