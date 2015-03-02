@@ -783,7 +783,7 @@ msgstr "Qualche errore si è verificato in un file caricato"
 
 msgctxt "discussion" 
 msgid "Sorting Order"
-msgstr "Ordinamento ordine"
+msgstr "Ordine"
 
 msgctxt "discussion" 
 msgid "Sorting order can not be empty"
