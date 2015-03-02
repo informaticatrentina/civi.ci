@@ -16236,7 +16236,7 @@ class TCPDF {
 	 * @protected
 	 * @since 3.2.000 (2008-06-20)
 	 */
-	protected function getHtmlDomArray($html) {file_put_contents('/home/manoj/Desktop/html1.txt', print_r($html, true));
+	protected function getHtmlDomArray($html) {
 		// array of CSS styles ( selector => properties).
 		$css = array();
 		// get CSS array defined at previous call

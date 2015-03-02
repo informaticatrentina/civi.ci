@@ -242,6 +242,7 @@ class DiscussionController  extends PageController {
         $authorNames = array_merge($authorNames, $value);
       }
       $author = array_unique($author);
+      $authorNames = array_unique($authorNames);
       $userIdentityApi = new UserIdentityAPI();
       $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
       $emails = array();
@@ -1166,22 +1167,79 @@ class DiscussionController  extends PageController {
     }
   }
 
+  /**
+   * actionProposalDetails
+   * This function is used to get details for single proposal in a discussion.
+   */
   public function actionProposalDetails() {
     $discussion = new Discussion;
     $discussion->slug = $_GET['slug'];
     $details = $discussion->getDiscussionDetail();
     $summary = $details['summary'];
+    $title = $details['title'];
     $discussion->getDiscussionDetail();
     $aggregatorManager = new AggregatorManager();
-    $proposal = $aggregatorManager->getEntry('', '', $_GET['id'], '', '', '', '', '', '', '', '', '', array(), '', 'title,status,author,id,content,related', '', '', '', '', '');
-    $understanding = array();
+    $proposal = $aggregatorManager->getEntry('', '', $_GET['id'], '', '', '', '', '', '', '', '', '', array(), '', 'title,status,author,id,content,related,tags', '', '', '', '', '');
+    $all = array();
+    if (array_key_exists('tags', $proposal[0])) {
+      foreach ($proposal[0]['tags'] as $tag) {
+        if ($tag['scheme'] == TAG_SCHEME) {
+          $proposal[0]['weightmap'][$tag['name']] = $tag['weight'];
+        }
+      }
+    }
     $understanding = unserialize(UNDERSTANDING);
-    $heatMap = array();
-    $heatMap = unserialize(HEATMAP_COLORS);
-    $tags = $discussion->getHeatMap($_GET['id']);
-    $opinionsAndLinks = $discussion->getOpinionsAndLinks($_GET['id']);
+    foreach ($understanding as $key => $understand) {
+      $xcordinates = array();
+      $ycordinates = array();
+      $points = explode(' ', $understand['points']);
+      foreach ($points as $point) {
+        if ($point != '') {
+          $poi = explode(',', $point);
+          $xcordinates[] = $poi[0];
+          $ycordinates[] = $poi[1];
+        }
+      }
+      $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
+      $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
+      $all[$key] = $understand;
+    }
+    $author = array();
+    $proposal[0]['content']['description'] = htmlspecialchars_decode($proposal[0]['content']['description']);
+    $proposal[0]['content']['summary'] = htmlspecialchars_decode($proposal[0]['content']['summary']);
+    $author[] = $proposal[0]['author']['slug'];
+    $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal[0]['id']), CIVICO);
+    foreach($opinions as $key=>$opinion) {
+      if(array_key_exists('tags', $opinion) && !empty($opinion['tags'])) {
+        foreach ($opinion['tags'] as $tag) {
+          if ($tag['scheme'] == TAG_SCHEME) {
+            $opinions[$key]['weightmap'][$tag['name']] = $tag['weight'];
+          }
+        }
+        $author[] = $opinion['author']['slug'];
+      } elseif(array_key_exists('count', $opinion)) {
+        unset($opinions[$key]);
+      }
+    }
+    $proposal[0]['opinions'] = $discussion->getClassOfOpinion($opinions);
+    $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal[0]['id']), CIVICO);
+    foreach($links as $key=>$link) {
+      if(array_key_exists('count', $link)) {
+        unset($links[$key]);
+      }
+    }
+    $proposal[0]['links'] = $links;
+    $discussionController = new UserController('user');
+    $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
     $this->layout = 'singleProposal';
-    $this->render('singleProposal', array('summary' => $summary, 'heatmap' => $heatMap, 'proposal' => $proposal, 'data' => $opinionsAndLinks, 'tags' => $tags, 'understanding' => $understanding));
+    $this->render('singleProposal', array(
+      'summary' => $summary,
+      'title' => $title,
+      'proposal' => $proposal,
+      'understanding' => $all,
+      'user' => $userAdditionInfo,
+      'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
+    ));
   }
 
   /**
