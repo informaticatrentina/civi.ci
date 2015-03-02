@@ -1521,3 +1521,10 @@ msgctxt "discussion"
 msgid "Export To Excel"
 msgstr "Esporta in Excel"
 
+msgctxt "discussion"
+msgid "Export To PDF"
+msgstr "Esporta PDF"
+
+msgctxt "discussion"
+msgid "Report Statistics"
+msgstr "Report statistiche"
