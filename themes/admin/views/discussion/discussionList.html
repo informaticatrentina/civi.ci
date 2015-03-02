@@ -11,13 +11,16 @@
 </div>
 <div class="row">
   <div class="span12">
+    {% set isAdmin = checkPermission('admin') %}
     <table  id="discussions-list" class="table table-bordered table-striped table-condensed">
       <thead>
         <tr>
           <th>{{ t('discussion', 'Title') }}</th>
           <th>{{ t('discussion', 'Summary') }}</th>
           <th>{{ t('discussion', 'Author') }}</th>
+        {% if isAdmin == true %}
           <th>{{ t('discussion', 'Sorting Order') }}</th>
+        {% endif %}
           <th>{{ t('discussion', 'Ops') }}</th>
           <th>{{ t('discussion', 'Proposal Count') }}</th>
           <th>{{ t('discussion', 'Opinion Count') }}</th>
@@ -25,6 +28,8 @@
         </tr>
       </thead>
       <tbody>
+        {% set totalProposal = 0 %}
+        {% set totalOpinion = 0 %}
         {% for info in discussionInfo %}
         <tr>
           <td>{{ info.discussionTitle }}</td>
@@ -40,10 +45,14 @@
                 <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
 
                 <ul class="dropdown-menu">
+                {% if isAdmin == true %}
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
+                {% endif %}  
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
+                {% if isAdmin == true %}
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
+                {% endif %}
                 </ul>
               </div>
           </td>
@@ -51,6 +60,8 @@
           <td>{{ info.opinionCount}}</td>
           <td>{{ info.userCount}}</td>
         </tr>
+        {% set totalProposal = totalProposal + info.proposalCount %}
+        {% set totalOpinion = totalOpinion + info.opinionCount %}
         {% endfor %}
       </tbody>
     </table>
