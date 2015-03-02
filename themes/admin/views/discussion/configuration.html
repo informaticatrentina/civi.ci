@@ -1,44 +1,48 @@
-<div class="container">
   <div class="row">
-    <br>
-      <table class="table table-bordered">
-        <th>{{ t('discussion','Configuration Name') }}</th>
-        <th>{{ t('discussion','Configuration Value') }}</th>
-        {% for configuration in configurations %}
-          {% if configuration.name_key != 'user_additional_info_question' %}
-            {% if configuration.name_key == 'additional_information_status' and configuration.value == 1 %}
-              {% set configuration = { 'name' : configuration.name ~ '<br/><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Show question for addtional information</button>', 
-                                       'value' : configuration.value,
-                                       'name_key': configuration.name_key
-                                     }
-              %}
+    <div class="span12">
+      <table class="table table-bordered table-striped table-condensed">
+        <thead>
+          <tr>
+            <th>{{ t('discussion','Configuration Name') }}</th>
+            <th>{{ t('discussion','Configuration Value') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for configuration in configurations %}
+            {% if configuration.name_key != 'user_additional_info_question' %}
+              {% if configuration.name_key == 'additional_information_status' and configuration.value == 1 %}
+                {% set configuration = { 'name' : configuration.name ~ '<br/><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Show question for addtional information</button>', 
+                                         'value' : configuration.value,
+                                         'name_key': configuration.name_key
+                                       }
+                %}
+              {% endif %}
+              {% if configuration.name_key == 'proposal_sorting_base' %}
+                {% set proposalSortingHtml = '' %}
+                {% for key,sorting_order in  proposal_sorting %}
+                  {% set proposalChecked = '' %}
+                  {% if key == configuration.value %}
+                    {% set proposalChecked = 'checked="checked"' %}
+                  {% endif %}
+                  {% set proposalSortingHtml = proposalSortingHtml ~ '<input class="proposal-sorting-option"' ~ proposalChecked ~ 'type="radio" name="proposal_sorting" value="' ~ key ~ '">&nbsp;&nbsp;' ~ sorting_order %}
+                {% endfor %}
+                {% set configuration = { 'name' : 'Proposal sorting',
+                                         'value' : proposalSortingHtml,
+                                         'name_key': configuration.name_key
+                                       }
+                %}
+              {% endif %}
+              <tr>
+                <td class='hidden'>{{ configuration.name_key }}</td>
+                <td class='name'>{{ configuration.name }}</td>
+                <td class='value'>{{ configuration.value }}</td>
+              </tr>
             {% endif %}
-            {% if configuration.name_key == 'proposal_sorting_base' %}
-              {% set proposalSortingHtml = '' %}
-              {% for key,sorting_order in  proposal_sorting %}
-                {% set proposalChecked = '' %}
-                {% if key == configuration.value %}
-                  {% set proposalChecked = 'checked="checked"' %}
-                {% endif %}
-                {% set proposalSortingHtml = proposalSortingHtml ~ '<input class="proposal-sorting-option"' ~ proposalChecked ~ 'type="radio" name="proposal_sorting" value="' ~ key ~ '">&nbsp;&nbsp;' ~ sorting_order %}
-              {% endfor %}
-              {% set configuration = { 'name' : 'Proposal sorting',
-                                       'value' : proposalSortingHtml,
-                                       'name_key': configuration.name_key
-                                     }
-              %}
-            {% endif %}
-            <tr>
-              <td class='hidden'>{{ configuration.name_key }}</td>
-              <td class='name'>{{ configuration.name }}</td>
-              <td class='value'>{{ configuration.value }}</td>
-            </tr>
-          {% endif %}
-        {% endfor %}
+          {% endfor %}
+        </tbody>
       </table>
-      <br/>
+    </div>
   </div>
-</div>
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <form role="form" action="" method="POST" id="additional-info-question-form">

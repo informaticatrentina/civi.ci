@@ -26,11 +26,15 @@
     </script>
   </head>
   <body>
-    {% include '/views/template/header.html' %}
-
-    {{  content }}
-
-    {% include '/views/template/footer.html' %}
+    <header class="header">
+      {% include '/views/template/header.html' %}
+    </header>
+    <div id="content" class="container content">
+      {{  content }}
+    </div>
+    <footer class="footer">
+      {% include '/views/template/footer.html' %}
+    </footer>
     <script src="{{constant('THEME_URL')}}js/bootstrap.js"></script>
 <!--    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>-->
     <script src="{{constant('THEME_URL')}}js/jquery.pageslide.min.js"></script>

@@ -29,10 +29,10 @@ $(document).ready(function() {
   $('.edit-proposal').click(function(){
     $('#proposal-error').addClass('hidden');
     var proposalId = $(this).attr('proposal-id');
-    var proposalTitle = $(this).siblings('td').children('.proposal-title').html();
+    var proposalTitle = $(this).parents('tr').children('td').children('.proposal-title').html();
     var proposalSummary = $(this).attr('proposal-summary');
     var newProposalSummary = proposalSummary.replace(/<br \/>/g, '');
-    var proposalDescription = $(this).siblings('.proposal-description').html(); 
+    var proposalDescription = $(this).parents('tr').children('td').siblings('.proposal-description').html();
     var newProposalDescription = proposalDescription.replace(/<br>/g, '');
     $('#title').val(proposalTitle);
     $('#proposal-summary').val(newProposalSummary);
