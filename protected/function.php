@@ -525,7 +525,7 @@ function setThemeForUrl() {
   );
   $isAdminPage = FALSE;
   foreach ($adminPagesUrl as $url) {
-    if (strpos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
+    if (array_key_exists('REQUEST_URI', $_SERVER) && strpos($_SERVER['REQUEST_URI'], $url) !== FALSE) {
       $isAdminPage = TRUE;
       break;
     }
