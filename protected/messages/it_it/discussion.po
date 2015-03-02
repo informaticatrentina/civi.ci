@@ -547,7 +547,7 @@ msgstr "Errore dovuto ad Identitity Manager"
 
 msgctxt "discussion"
 msgid "Number of Opinions"
-msgstr "Numero di opinioni"
+msgstr "Opinioni"
 
 msgctxt "discussion"
 msgid "One topic should be selected"
@@ -1447,7 +1447,19 @@ msgstr "Numero utenti"
 
 msgctxt "discussion" 
 msgid "Opinion Count"
-msgstr "Numero opinioni"
+msgstr "Opinioni"
+
+msgctxt "discussion"
+msgid "Users Count"
+msgstr "Utenti"
+
+msgctxt "discussion"
+msgid "Ops"
+msgstr "Azioni"
+
+msgctxt "discussion"
+msgid "Opinions"
+msgstr "Opinioni"
 
 msgctxt "discussion" 
 msgid "Please enter same email"
@@ -1463,7 +1475,7 @@ msgstr "Stampa discussione"
 
 msgctxt "discussion" 
 msgid "Proposal Count"
-msgstr "Numero proposte"
+msgstr "Proposte"
 
 msgctxt "discussion" 
 msgid "Statistics"
@@ -1491,15 +1503,15 @@ msgstr "Vedi tutte le statistiche"
 
 msgctxt "discussion"
 msgid "Number of Proposals"
-msgstr "Numero di proposte"
+msgstr "Proposte"
 
 msgctxt "discussion"
 msgid "Number of Visualization + Opinions"
-msgstr "Numero di voti + opinioni"
+msgstr "Voti + opinioni"
 
 msgctxt "discussion"
 msgid "Number of User Registered"
-msgstr "Numero di utenti registrati"
+msgstr "Utenti registrati"
 
 msgctxt "discussion"
 msgid "List of User Registered who all contributed in proposal, visualization, and opinion"
@@ -1528,3 +1540,7 @@ msgstr "Esporta PDF"
 msgctxt "discussion"
 msgid "Report Statistics"
 msgstr "Report statistiche"
+
+msgctxt "discussion"
+msgid "Discussions List"
+msgstr "Elenco discussioni"
