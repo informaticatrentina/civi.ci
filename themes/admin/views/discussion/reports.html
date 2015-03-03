@@ -52,6 +52,7 @@
           {% set authorEmail = attribute(emails, proposal.author.slug) %}
         {% endif %}
         <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
+        <td>{{ proposal.creation_date }}</td>
         {% if proposal.totalOpinion != '' %}
         <td>{{ proposal.totalOpinion }}</td>
         {%else %}
@@ -76,7 +77,6 @@
           {{proposal.weightmap}}
           {%endif%}
         </td>
-        <td>{{ proposal.creation_date }}</td>
         {% if isAdmin == true %}
           <td><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
         {% endif %}      
