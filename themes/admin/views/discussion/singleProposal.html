@@ -11,7 +11,7 @@
 
   <div class="text">
     <h2>{{proposal.0.title}}</h2>
-    <h5>{{proposal.0.creation_date}}</h5>
+    <h5>{{proposal.0.creation_date|date("d/m/Y H:i:s")}}</h5>
     <br/><br/>
     <div class="author">
       <img src="{{constant('PROFILE_IMAGE_URL')~proposal.0.author.slug}}/{{constant('PROFILE_IMAGE_SIZE')}}" class="avatar">
@@ -69,7 +69,7 @@
         </svg>
         <img src="{{constant('PROFILE_IMAGE_URL')~value.author.slug}}/{{constant('PROFILE_IMAGE_SIZE')}}" class="avatar person"/>
         <div class="name"><a href="{{constant('PROFILE_URL')}}{{value.author.slug}}">{{value.author.name}}</a></div>
-        {{value.creation_date}}
+        {{value.creation_date|date("d/m/Y H:i:s")}}
         <br/>
         {% set userSlug = value.author.slug %}
         {% if attribute(user, userSlug) is not empty %}
