@@ -11,11 +11,6 @@
     </div>
     {% if isAdmin == true %}
       <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <form method="post" action="{{constant('BASE_URL')}}admin/export/{{discussionId}}/excel">
-          <button class=" btn-info" >{{ t('discussion', 'Export To Excel') }}</button>
-        </form>
-      </div>
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
         <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">
           <button class=" btn-info" >{{ t('discussion', 'Export To CSV') }}</button>
         </a>
