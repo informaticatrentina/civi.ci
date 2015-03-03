@@ -11,11 +11,6 @@
     </div>
     {% if isAdmin == true %}
       <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <form method="post" action="{{constant('BASE_URL')}}admin/export/{{discussionId}}/excel">
-          <button class="btn btn-info" >{{ t('discussion', 'Export To Excel') }}</button>
-        </form>
-      </div>
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
         <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">
           <button class="btn btn-info" >{{ t('discussion', 'Export To CSV') }}</button>
         </a>
@@ -37,15 +32,15 @@
           <th>{{ t('discussion','Description') }}</th>
           <th>{{ t('discussion','Author') }}</th>
           <th>{{ t('discussion','Creation Date') }}</th>
+          <th>{{ t('discussion','Number of Opinions') }}</th>
+          <th>{{ t('discussion','Number of Links') }}</th>
+          <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
           {% if isAdmin == true %}
             <th>{{ t('discussion', 'Sorting Order') }}</th>
           {% endif %}
           {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) %}
             <th class="sorter-false">{{ t('discussion','Ops') }}</th>
           {% endif %}
-          <th>{{ t('discussion','Number of Opinions') }}</th>
-          <th>{{ t('discussion','Number of Links') }}</th>
-          <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
         </tr>
       </thead>
       {% for proposal in allProposals %}
@@ -57,6 +52,30 @@
           {% set authorEmail = attribute(emails, proposal.author.slug) %}
         {% endif %}
         <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
+        {% if proposal.totalOpinion != '' %}
+        <td>{{ proposal.totalOpinion }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        {% if proposal.totalLinks != '' %}
+        <td>{{ proposal.totalLinks }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        <td>
+          {% if proposal.weightmap is iterable %} 
+          <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
+          <g>
+          {% for key,value in proposal.weightmap %}
+          <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
+          <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
+          {% endfor %}
+          </g>
+          </svg> 
+          {% else %}
+          {{proposal.weightmap}}
+          {%endif%}
+        </td>
         <td>{{ proposal.creation_date }}</td>
         {% if isAdmin == true %}
           <td><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
@@ -104,30 +123,6 @@
               {% endif %}
             </ul>
           </div>
-        </td>
-        {% if proposal.totalOpinion != '' %}
-        <td>{{ proposal.totalOpinion }}</td>
-        {%else %}
-        <td>0</td>
-        {%endif%}
-        {% if proposal.totalLinks != '' %}
-        <td>{{ proposal.totalLinks }}</td>
-        {%else %}
-        <td>0</td>
-        {%endif%}
-        <td>
-          {% if proposal.weightmap is iterable %} 
-          <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
-          <g>
-          {% for key,value in proposal.weightmap %}
-          <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
-          <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
-          {% endfor %}
-          </g>
-          </svg> 
-          {% else %}
-          {{proposal.weightmap}}
-          {%endif%}
         </td>
       </tr>
       {% endfor %}
