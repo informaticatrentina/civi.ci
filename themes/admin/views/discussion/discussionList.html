@@ -21,10 +21,10 @@
         {% if isAdmin == true %}
           <th>{{ t('discussion', 'Sorting Order') }}</th>
         {% endif %}
-          <th>{{ t('discussion', 'Ops') }}</th>
           <th>{{ t('discussion', 'Proposal Count') }}</th>
           <th>{{ t('discussion', 'Opinion Count') }}</th>
           <th>{{ t('discussion', 'Users Count') }}</th>
+          <th>{{ t('discussion', 'Ops') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -40,25 +40,25 @@
           {% endif %}
           <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
           <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
-          <td>
-              <div class="dropdown">
-                <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
-
-                <ul class="dropdown-menu">
-                {% if isAdmin == true %}
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
-                {% endif %}  
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
-                {% if isAdmin == true %}
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
-                {% endif %}
-                </ul>
-              </div>
-          </td>
           <td>{{ info.proposalCount }}</td>
           <td>{{ info.opinionCount}}</td>
           <td>{{ info.userCount}}</td>
+          <td>
+            <div class="dropdown">
+              <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+              {% if isAdmin == true %}
+                <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
+              {% endif %}  
+                <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
+                <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
+              {% if isAdmin == true %}
+                <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
+              {% endif %}
+              </ul>
+            </div>
+          </td>
         </tr>
         {% set totalProposal = totalProposal + info.proposalCount %}
         {% set totalOpinion = totalOpinion + info.opinionCount %}
