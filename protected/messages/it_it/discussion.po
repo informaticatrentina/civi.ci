@@ -1495,7 +1495,7 @@ msgstr "Numero di proposte"
 
 msgctxt "discussion"
 msgid "Number of Visualization + Opinions"
-msgstr "Numero di voti + opinioni"
+msgstr "Numero di valutazioni + opinioni"
 
 msgctxt "discussion"
 msgid "Number of User Registered"
@@ -1503,7 +1503,7 @@ msgstr "Numero di utenti registrati"
 
 msgctxt "discussion"
 msgid "List of User Registered who all contributed in proposal, visualization, and opinion"
-msgstr "Elenco utenti che hanno contribuito con proposte, voti, opinioni"
+msgstr "Elenco utenti che hanno contribuito con proposte, valutazioni, opinioni"
 
 msgctxt "discussion" 
 msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
