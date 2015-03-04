@@ -34,7 +34,6 @@
       <th>{{ t('discussion','View Proposals') }}</th>
       {% if isAdmin == true %}
         <th>{{ t('discussion','Print Discussion') }}</th>
-        <th>{{ t('discussion','Export To CSV') }}</th>
       {% endif %}
       {% set totalProposal = 0 %}
       {% set totalOpinion = 0 %}
@@ -60,11 +59,6 @@
         <td><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></td>
         {% if isAdmin == true %}
           <td><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></td>
-          <td>
-            <a href="{{constant('BASE_URL')}}admin/export/{{info.discussionId }}/csv">
-             {{t('discussion', 'Export To CSV')}}
-            </a>
-          </td>
         {% endif %}
       </tr>
       {% set totalProposal = totalProposal + info.proposalCount %}
