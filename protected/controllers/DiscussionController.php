@@ -209,56 +209,11 @@ class DiscussionController  extends PageController {
     if ($isHighlighter == false && $can_show_hide_opinion == false) {
       $this->redirect(BASE_URL);
     }
-    $discussionInfo = array();
-    $discussionDetail = array();
-    $discussion = new Discussion();
-    $discussionInfo = $discussion->getDiscussionDetail();
-    $userController = new UserController('user');
-    $authorName = array();
-    $authorNames = array();
-    $authorId = array();
-    $discussionWiseAuthor = array();
-    if (!empty($discussionInfo)) {
-      foreach ($discussionInfo as $info) {
-        $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
-        $discussionDetail[] = array(
-          'discussionId' => $info['id'],
-          'discussionTitle' => $info['title'],
-          'discussionSummary' => substr($info['summary'], 0, 20),
-          'discussionSlug' => $info['slug'],
-          'discussionAuthor' => $info['author'],
-          'discussionAuthorSlug' => $info['author_id'],
-          'discussionOrder' => $info['sort_id'],
-          'proposalCount' => $discussionContent['proposal_count'],
-          'opinionCount' => $discussionContent['opinion_count'],
-          'userCount' => 0
-        );
-        $authorName = array_merge($authorName, $discussionContent['author_name']);
-        $authorId = array_merge($authorId, $discussionContent['author']);
-        $discussionWiseAuthor[$info['id']] = $discussionContent['author'];
-      }
-    }
-    $user = $userController->getAuthorEmail($authorId, TRUE);
-    //get non admin user count for each discussion
-    foreach ($discussionDetail as &$discussion) {
-      $authorId = array_unique($discussionWiseAuthor[$discussion['discussionId']]);
-      foreach ($authorId as $id) {
-        if (array_key_exists($id, $user['user'])) {
-          $discussion['userCount'] += 1;
-        }
-      }
-    }
-    //get all non admin user name
-    foreach ($authorName as $authorId => $author) {
-      if (array_key_exists($authorId, $user['user'])) {
-        $authorNames[$authorId] = $author;
-      }
-    }
-    $emails = array_merge($user['user'], $user['admin_user']);
+    $discussion = $this->_getDiscussionProposalOpinionLinks();
     $this->render('discussionList', array(
-        'discussionInfo' => $discussionDetail,
-        'emails' => $emails,
-        'authorNames' => $authorNames
+        'discussionInfo' => $discussion['discussion'],
+        'emails' => $discussion['emails'],
+        'authorNames' => $discussion['author_name']
     ));
   }
 
@@ -2575,140 +2530,162 @@ class DiscussionController  extends PageController {
     if (defined('USER_STATISTIC_POINT')) {
       $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
     }
-
-    $discussionInfo = array();
-    $discussionDetail = array();
-    $discussion = new Discussion();
-    $discussionInfo = $discussion->getDiscussionDetail();
-    $allAdminUser = array();
-    if (!empty($discussionInfo)) {
-      $author = array();
-      $authors = array();
-      foreach ($discussionInfo as $info) {
-        $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
-        $authors[] = $discussionContent['author_name'];
-        $discussionDetail[$info['id']] = array(
-          'discussionId' => $info['id'],
-          'discussionTitle' => $info['title'],
-          'discussionSummary' => substr($info['summary'], 0, 20),
-          'discussionSlug' => $info['slug'],
-          'discussionAuthor' => $info['author'],
-          'discussionAuthorSlug' => $info['author_id'],
-          'discussionOrder' => $info['sort_id'], 
-          'proposalCount' => $discussionContent['proposal_count'],
-          'opinionCount' => $discussionContent['opinion_count'],
-          'userCount' => count(array_unique($discussionContent['author'])),
-          'proposalAuthor' => array_unique($discussionContent['proposal_author_id']),
-          'opinionAuthor' => array_unique($discussionContent['opinion_author_id'])
-        );
-        $discussion->discussionSlug = $info['slug'];
-        $discussion->count = 2;
-        $author[] = $info['author_id'];
-        $graphData = array();
-        $finalArr = array();
-        $userIdentityApi = new UserIdentityAPI();
-        $uniqueAuthor = array_unique($discussionContent['author']);
-        $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $uniqueAuthor), TRUE, false);
-        $emails = array();
-        $adminUsersForProposal = array();
-        $adminUsersForOpinion = array();
-        if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
-          foreach ($userEmail['_items'] as $email) {
-            //find out all admin user for proposals and opinion
-            if (checkRbacPermission($email['email'], 'admin')) {
-              if (in_array($email['_id'], $discussionDetail[$info['id']]['proposalAuthor'])) {
-                $adminUsersForProposal[] = $email['_id'];
-                $allAdminUser[] = $email['_id'];
-              }
-              if (in_array($email['_id'], $discussionDetail[$info['id']]['opinionAuthor'])) {
-                $adminUsersForOpinion[] = $email['_id'];
-                $allAdminUser[] = $email['_id'];
-              }
-              continue;
-            }
-            $emails[] = $email['email'];
-          }
-        }
-        //remove proposal & opinion count that is submitted by user
-        $discussionDetail[$info['id']]['proposalCount'] -= count(array_unique($adminUsersForProposal));
-        $discussionDetail[$info['id']]['opinionCount'] -= count(array_unique($adminUsersForOpinion));
-        $userInfo = array();
-        if (!empty($emails)) {
-          $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
-        }
-        if (array_key_exists('_items', $userInfo)) {
-          foreach ($userInfo['_items'] as $user) {
-            if (array_key_exists('age', $user)) {
-              $graphData['age'][] = $user['age'];
-            }
-            if (array_key_exists('age_range', $user)) {
-              $graphData['age_range'][] = $user['age_range'];
-            }
-            if (array_key_exists('education-level', $user)) {
-              if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
-                $graphData['education_level'][] = 'other';
-              } else {
-                $graphData['education_level'][] = $user['education-level'];
-              }
-            }
-            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
-              array_key_exists($user['sex'][0], $question['gender']['value'])) {
-              $graphData['sex'][] = $user['sex'][0];
-            }
-            if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
-              $graphData['citizenship'][] = $user['citizenship'];
-            }
-            if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
-              $graphData['work'][] = $user['work'];
-            }
-            if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
-              if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
-                $graphData['public_authority'][] = $user['public_authority']['name'];
-              }
-            }
-          }
-          foreach ($graphData as $key => $val) {
-            $finalArr[$key] = array_count_values($graphData[$key]);
-          }
-        }
-        $preparedData = array();
-        if (!empty($finalArr)) {
-          $preparedData = $this->_prepareChartData($finalArr, $question);
-          foreach($preparedData as $prepareData) {
-            foreach ($prepareData['header'] as $key => $val) {
-              $prepareData['statistic_data'][] = array((string)$key, $val);
-            }
-            foreach ($prepareData['data'] as $key => $val) {
-               $prepareData['statistic_data'][] = array((string)$key, $val);
-            }
-          }
-        }
-        $chartDetail[$info['slug']] = $preparedData;
-      }
-      $authorNames = array();
-      foreach($authors as $authorDetail) {
-        foreach ($authorDetail as $id => $name) {
-          if (!in_array($id, $allAdminUser)) {
-            $authorNames[] = $name;
+    $userController = new UserController('user');
+    $userIdentityApi = new UserIdentityAPI();
+    $discussions = $this->_getDiscussionProposalOpinionLinks();
+    $emails = array();
+    foreach ($discussions['discussion'] as $discussion) {
+      $authors = $discussions['discussion_author'][$discussion['discussionId']];
+      foreach ($authors as $author) {
+        if (array_key_exists($author, $discussions['emails'])) {
+          if (array_key_exists($author, $discussions['user']['user'])) {
+            $emails[$author] = $discussions['emails'][$author];
           }
         }
       }
-      $author = array_unique($author);
-      $userIdentityApi = new UserIdentityAPI();
-      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
-      $emails = array();
-      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
-        foreach ($userEmail['_items'] as $email) {
-          $emails[$email['_id']] = $email['email'];
+      $userInfo = array();
+      if (!empty($emails)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+      }
+      $graphData = array();
+      if (array_key_exists('_items', $userInfo)) {
+        foreach ($userInfo['_items'] as $user) {
+          if (array_key_exists('age', $user)) {
+            $graphData['age'][] = $user['age'];
+          }
+          if (array_key_exists('age_range', $user)) {
+            $graphData['age_range'][] = $user['age_range'];
+          }
+          if (array_key_exists('education-level', $user)) {
+            if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
+              $graphData['education_level'][] = 'other';
+            } else {
+              $graphData['education_level'][] = $user['education-level'];
+            }
+          }
+          if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
+                  array_key_exists($user['sex'][0], $question['gender']['value'])) {
+            $graphData['sex'][] = $user['sex'][0];
+          }
+          if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+            $graphData['citizenship'][] = $user['citizenship'];
+          }
+          if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
+            $graphData['work'][] = $user['work'];
+          }
+          if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
+            if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
+              $graphData['public_authority'][] = $user['public_authority']['name'];
+            }
+          }
+        }
+        foreach ($graphData as $key => $val) {
+          $finalArr[$key] = array_count_values($graphData[$key]);
         }
       }
+      $preparedData = array();
+      if (!empty($finalArr)) {
+        $preparedData = $this->_prepareChartData($finalArr, $question);
+        foreach ($preparedData as $prepareData) {
+          foreach ($prepareData['header'] as $key => $val) {
+            $prepareData['statistic_data'][] = array((string) $key, $val);
+          }
+          foreach ($prepareData['data'] as $key => $val) {
+            $prepareData['statistic_data'][] = array((string) $key, $val);
+          }
+        }
+      }
+      $chartDetail[$discussion['discussionSlug']] = $preparedData;
     }
     $this->render('reportStatistics', array(
-      'discussionInfo' => $discussionDetail,
-      'emails' => $emails,
-      'authorNames' => array_unique($authorNames),
-      'chartDetails' => $chartDetail
+        'discussionInfo' => $discussions['discussion'],
+        'emails' => $discussions['emails'],
+        'authorNames' => $discussions['author_name'],
+        'chartDetails' => $chartDetail
     ));
+  }
+  
+  /**
+   * _getDiscussionProposalOpinionLinks
+   * function is used for getting 
+   *  1) discussion detail
+   *  2) Proposal count for each discussion
+   *  3) Total no of user for each discussion
+   * @return array
+   */
+  private function _getDiscussionProposalOpinionLinks() {
+    try {
+      $resp = array('discussion' => array(), 'emails' => array(), 'user' => array(), 
+          'author_name' => array(), 'discussion_author' => array());
+      $discussionDetail = array();
+      $discussion = new Discussion();
+      $discussionInfo = $discussion->getDiscussionDetail();      
+      $authorName = array();
+      $authorId = array();
+      $discussionWiseAuthor = array();
+      $discussionWiseProposalAuthor = array();
+      $discussionWiseOpinionAuthor = array();
+      if (!empty($discussionInfo)) {
+        foreach ($discussionInfo as $info) {
+          $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
+          $discussionDetail[] = array(
+            'discussionId' => $info['id'],
+            'discussionTitle' => $info['title'],
+            'discussionSummary' => substr($info['summary'], 0, 20),
+            'discussionSlug' => $info['slug'],
+            'discussionAuthor' => $info['author'],
+            'discussionAuthorSlug' => $info['author_id'],
+            'discussionOrder' => $info['sort_id'],
+            'proposalCount' => $discussionContent['proposal_count'],
+            'opinionCount' => $discussionContent['opinion_count'],
+            'userCount' => 0
+          );
+          $authorName = array_merge($authorName, $discussionContent['author_name']);
+          $authorId = array_merge($authorId, $discussionContent['author']);
+          $discussionWiseAuthor[$info['id']] = $discussionContent['author'];
+          $discussionWiseProposalAuthor[$info['id']] = $discussionContent['proposal_author_id'];
+          $discussionWiseOpinionAuthor[$info['id']] = $discussionContent['opinion_author_id'];
+        }
+      }
+      $userController = new UserController('user');
+      $user = $userController->getAuthorEmail($authorId, TRUE);
+      //get non admin user count for each discussion
+      foreach ($discussionDetail as &$discussion) {
+        $authorId = array_unique($discussionWiseAuthor[$discussion['discussionId']]);
+        foreach ($authorId as $id) {
+          if (array_key_exists($id, $user['user'])) {
+            $discussion['userCount'] += 1;
+          }
+        }
+        //remove count for proposal that is submitted by admin user
+        $proposalAuthorId = $discussionWiseProposalAuthor[$discussion['discussionId']];
+        foreach ($proposalAuthorId as $id) {
+          if (array_key_exists($id, $user['admin_user'])) {
+            $discussion['proposalCount'] -= 1;
+          }
+        }
+        //remove count for opinion that is submitted by admin user
+        $opinionAuthorId = $discussionWiseOpinionAuthor[$discussion['discussionId']];
+        foreach ($opinionAuthorId as $id) {
+          if (array_key_exists($id, $user['admin_user'])) {
+            $discussion['opinionCount'] -= 1;
+          }
+        }
+      }
+      $resp['discussion'] = $discussionDetail;
+      //get all non admin user name
+      foreach ($authorName as $authorId => $author) {
+        if (array_key_exists($authorId, $user['user'])) {
+          $resp['author_name'][$authorId] = $author;
+        }
+      }
+      $resp['emails'] = array_merge($user['user'], $user['admin_user']);
+      $resp['user'] = $user;
+      $resp['discussion_author'] = $discussionWiseAuthor;
+    } catch (Exception $e) {p($e);
+      Yii::log($e->getMessage(), ERROR, 'Error in _getDiscussionProposalOpinionLinks');
+    }
+    return $resp;
   }
 }
 
