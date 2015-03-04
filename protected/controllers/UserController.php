@@ -832,5 +832,46 @@ class UserController extends PageController {
     }
     return $users;
   }
+
+  /**
+   * getAuthorEmail
+   * function is used for getting author email on tthe basis of author id
+   * @param array $authorId  - author slug
+   * @param boolean $checkAdmin - if true then return admin user on admin key
+   *   else it return all email on user key
+   * @return array $userEmail
+   */
+  public function getAuthorEmail($authorIds, $checkAdmin = FALSE) {
+    try {
+      $userEmail = array('user' => array(), 'admin_user' => array());
+      if (isModuleExist('rbacconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('rbacconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
+      }
+      if (is_array($authorIds)) {
+        $authorIds = array_unique($authorIds);
+      }
+      $emails = $this->_getContributorsEmail($authorIds);
+      if (!empty($emails) && $checkAdmin == TRUE) {
+        foreach ($emails as $key => $email) {
+          $isAdmin = User::checkPermission($email, 'is_admin');
+          if ($isAdmin == TRUE) {
+            $userEmail['admin_user'][$key] = $email;
+          } else {
+            $userEmail['user'][$key] = $email;
+          }
+        }
+      } else {
+        $userEmail['user'] = $emails;
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getAuthorEmail ');
+    }
+    return $userEmail;
+  }
+
 }
 ?>

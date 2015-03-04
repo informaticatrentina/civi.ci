@@ -212,50 +212,53 @@ class DiscussionController  extends PageController {
     $discussionInfo = array();
     $discussionDetail = array();
     $discussion = new Discussion();
-    $entry = array();
     $discussionInfo = $discussion->getDiscussionDetail();
+    $userController = new UserController('user');
+    $authorName = array();
+    $authorNames = array();
+    $authorId = array();
+    $discussionWiseAuthor = array();
     if (!empty($discussionInfo)) {
-      $i = 0;
-      $author = array();
-      $authors = array();
       foreach ($discussionInfo as $info) {
-        $entries = array();
-        $discussionDetail[$i]['discussionId'] = $info['id'];
-        $discussionDetail[$i]['discussionTitle'] = $info['title'];
-        $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
-        $discussionDetail[$i]['discussionSlug'] = $info['slug'];
-        $discussionDetail[$i]['discussionAuthor'] = $info['author'];
-        $discussionDetail[$i]['discussionAuthorSlug'] = $info['author_id'];
-        $discussionDetail[$i]['discussionOrder'] = $info['sort_id'];
         $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
-        $authors[] = $discussionContent['author_name'];
-        $discussionDetail[$i]['proposalCount'] = $discussionContent['proposal_count'];
-        $discussionDetail[$i]['opinionCount'] = $discussionContent['opinion_count'];
-        $discussionDetail[$i]['userCount'] = count(array_unique($discussionContent['author']));
-        $discussion->discussionSlug = $info['slug'];
-        $discussion->count = 2;
-        $author[] = $info['author_id'];
-        $i++;
+        $discussionDetail[] = array(
+          'discussionId' => $info['id'],
+          'discussionTitle' => $info['title'],
+          'discussionSummary' => substr($info['summary'], 0, 20),
+          'discussionSlug' => $info['slug'],
+          'discussionAuthor' => $info['author'],
+          'discussionAuthorSlug' => $info['author_id'],
+          'discussionOrder' => $info['sort_id'],
+          'proposalCount' => $discussionContent['proposal_count'],
+          'opinionCount' => $discussionContent['opinion_count'],
+          'userCount' => 0
+        );
+        $authorName = array_merge($authorName, $discussionContent['author_name']);
+        $authorId = array_merge($authorId, $discussionContent['author']);
+        $discussionWiseAuthor[$info['id']] = $discussionContent['author'];
       }
-      $authorNames = array();
-      foreach($authors as $value) {
-        $authorNames = array_merge($authorNames, $value);
-      }
-      $author = array_unique($author);
-      $authorNames = array_unique($authorNames);
-      $userIdentityApi = new UserIdentityAPI();
-      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
-      $emails = array();
-      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
-        foreach ($userEmail['_items'] as $email) {
-          $emails[$email['_id']] = $email['email'];
+    }
+    $user = $userController->getAuthorEmail($authorId, TRUE);
+    //get non admin user count for each discussion
+    foreach ($discussionDetail as &$discussion) {
+      $authorId = array_unique($discussionWiseAuthor[$discussion['discussionId']]);
+      foreach ($authorId as $id) {
+        if (array_key_exists($id, $user['user'])) {
+          $discussion['userCount'] += 1;
         }
       }
     }
+    //get all non admin user name
+    foreach ($authorName as $authorId => $author) {
+      if (array_key_exists($authorId, $user['user'])) {
+        $authorNames[$authorId] = $author;
+      }
+    }
+    $emails = array_merge($user['user'], $user['admin_user']);
     $this->render('discussionList', array(
-      'discussionInfo' => $discussionDetail,
-      'emails' => $emails,
-      'authorNames' => $authorNames
+        'discussionInfo' => $discussionDetail,
+        'emails' => $emails,
+        'authorNames' => $authorNames
     ));
   }
 
