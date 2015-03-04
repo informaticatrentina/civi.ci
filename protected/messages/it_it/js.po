@@ -493,7 +493,7 @@ msgstr "Inserisci lo stesso indirizzo email"
 
 msgctxt "discussion" 
 msgid "Press Cancel to stay on page. Press Ok to redirect to home page."
-msgstr "Premi Cancel per rimanere su questa pagina. Premi OK per tornare alla home page."
+msgstr "Premi ANNULLA per rimanere su questa pagina. Premi OK per tornare alla home page."
 
 msgctxt "discussion" 
 msgid "Your session has expired."
