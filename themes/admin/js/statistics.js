@@ -7,7 +7,7 @@ $(document).ready(function() {
     if (chartData == '') {
       $('#statistics-error-block').show();
       $('#line-chart').hide();
-      $('#statistics-error-msg').html('We are getting some error.');
+      $('#statistics-error-msg').html(Yii.t('js','We are getting some error'));
       return false;
     }   
     $.ajax({
@@ -19,15 +19,21 @@ $(document).ready(function() {
       },  
       success: function(resp) {
         if (resp.success) {
-          drawChart(resp.data);
+          if(resp.data != '') {
+            drawChart(resp.data);
+          } else {
+            $('#statistics-error-msg').html(Yii.t('js', 'No data to show'));
+            $('#statistics-error-block').show();
+            $('#line-chart').hide();
+          }
         } else {
-          $('#statistics-error-msg').html('We are getting some error.');
+          $('#statistics-error-msg').html(Yii.t('js', 'We are getting some error'));
           $('#statistics-error-block').show();
           $('#line-chart').hide();
         }   
       },  
       error: function(resp) {
-        $('#statistics-error-msg').html('We are getting some error.');
+        $('#statistics-error-msg').html(Yii.t('js','We are getting some error'));
         $('#statistics-error-block').show();
         $('#line-chart').hide();
       }   
