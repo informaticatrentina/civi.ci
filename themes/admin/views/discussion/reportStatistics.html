@@ -7,9 +7,6 @@
           <th>{{ t('discussion','Title') }}</th>
           <th>{{ t('discussion','Summary') }}</th>
           <th>{{ t('discussion','Author') }}</th>
-          {% if isAdmin == true %}
-          <th>{{ t('discussion', 'Sorting Order') }}</th>
-          {% endif %}
           <th>{{ t('discussion', 'Proposal Count') }}</th>
           <th>{{ t('discussion', 'Opinion Count') }}</th>
           <th>{{ t('discussion', 'Users Count') }}</th>
@@ -27,9 +24,6 @@
           {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
           {% endif %}
           <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
-          {% if isAdmin == true %}
-          <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
-          {% endif %}
           <td>{{ info.proposalCount }}</td>
           <td>{{ info.opinionCount}}</td>
           <td>{{ info.userCount}}</td>
