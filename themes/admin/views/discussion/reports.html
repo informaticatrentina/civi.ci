@@ -10,15 +10,9 @@
       </h1>
     </div>
     {% if isAdmin == true %}
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">
-          <button class="btn btn-info" >{{ t('discussion', 'Export To CSV') }}</button>
-        </a>
-      </div>
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">
-          <button class="btn btn-info" >{{ t('discussion', 'Export To PDF') }}</button>
-        </a>
+      <div class="pull-right btn-toolbar">
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">{{ t('discussion', 'Export To PDF') }}</a>
       </div>
     {% endif %}
   </div>
