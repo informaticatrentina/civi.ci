@@ -2138,8 +2138,8 @@ class DiscussionController  extends PageController {
       if (empty($module)) {
         throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
       }
-      if (defined('USER_STATISTIC_POINT')) {
-        $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
+      if (defined('STATS')) {
+        $staticsPoint = json_decode(STATS, TRUE);
       }
       $discussionDetail = $this->_getDiscussionProposalOpinionAndAuthor($disucssionId);
       $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
@@ -2196,6 +2196,14 @@ class DiscussionController  extends PageController {
         $_SESSION['user']['statistics'] = $preparedData;
       } else {
         unset($_SESSION['user']['statistics']);
+      }
+      if (!empty(Yii::app()->globaldef->params['user_additional_info_question'])) {
+        $additionalQuestion = array_map('trim', explode(",", Yii::app()->globaldef->params['user_additional_info_question']));
+        foreach ($staticsPoint as $key => $value) {
+          if (!in_array($key, $additionalQuestion)) {
+            unset($staticsPoint[$key]);
+          }
+        }
       }
       $response['success'] = TRUE;
     } catch (Exception $e) {

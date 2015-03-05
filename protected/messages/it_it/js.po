@@ -498,3 +498,11 @@ msgstr "Premi ANNULLA per rimanere su questa pagina. Premi OK per tornare alla h
 msgctxt "discussion" 
 msgid "Your session has expired."
 msgstr "La tua sessione è scaduta."
+
+msgctxt "discussion"
+msgid "No data to show"
+msgstr "Sono dati da visualizzare."
+
+msgctxt "discussion"
+msgid "We are getting some error"
+msgstr "Stiamo ottenendo alcuni errori."
