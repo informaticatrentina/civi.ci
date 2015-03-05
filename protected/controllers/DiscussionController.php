@@ -1358,11 +1358,20 @@ class DiscussionController  extends PageController {
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
+    $getProposalForAllDiscussion = FALSE;
     $allProposals = array();
     $discussion = new Discussion();
-    $discussion->id = $_GET['id'];
-    $discussionDetail = $discussion->getDiscussionDetail();
-    $allProposals = $discussion->getProposalForAdmin(true);
+    if ($_GET['id'] == 'all') {
+      $getProposalForAllDiscussion = TRUE;
+      $discussions = $discussion->getDiscussionDetail();
+    } else {
+      $discussion->id = $_GET['id'];
+      $discussions[] = $discussion->getDiscussionDetail();
+    }
+    foreach ($discussions as $discusion) {
+      $discussionDetail[$discusion['id']] = $discusion;
+    }
+    $allProposals = $discussion->getProposalForAdmin(true, $getProposalForAllDiscussion);
     $headings = array(
       Yii::t('discussion', 'Discussion Title'),
       Yii::t('discussion', 'Proposal Title'),
@@ -2494,8 +2503,13 @@ class DiscussionController  extends PageController {
     );
     $row = array();
     foreach ($proposals as $proposal) {
+      $discussionTitle = '';
+      if (array_key_exists('related', $proposal) && array_key_exists('id', $proposal['related'])
+         && array_key_exists($proposal['related']['id'], $discussionDetail)) {
+        $discussionTitle = $discussionDetail[$proposal['related']['id']]['title'];
+      }
       $row[] = array(
-        'discussion' => $discussionDetail['title'],
+        'discussion' => $discussionTitle,
         'title' => htmlspecialchars_decode(strip_tags($proposal['title'])),
         'description' => htmlspecialchars_decode(strip_tags($proposal['content']['description'])),
         'author' => $proposal['author']['name'],

@@ -609,17 +609,29 @@ class Discussion {
     return $response;
   }
 
-  public function getProposalForAdmin($all = false) {
+  /**
+   * getProposalForAdmin
+   * function is used for getting proposal for admin pages - active and inactive  both proposal
+   * @param $all - TRUE for getting all proposal else  return opinion link of a single proposal etc.
+   * @param $forAllDiscussion - TRUE for getting data all proposal.
+   * return array
+   */
+  public function getProposalForAdmin($all = false, $forAllDiscussion = FALSE) {
     $proposals = array();
     $activeProposals = array();
     $actProposals = array();
     $inactiveProposals = array();
     $inactProposals = array();
     $aggregatorManager = new AggregatorManager();
-    if ($all) {
-      $actProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . PROPOSAL_TAG_SCEME . '}', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
+    if ($forAllDiscussion) {
+      $discussionId = '';
     } else {
-      $actProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
+      $discussionId = trim('discussion,' . $this->id);
+    }
+    if ($all) {
+      $actProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . PROPOSAL_TAG_SCEME . '}', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags,related', '', '', $discussionId, CIVICO);
+    } else {
+      $actProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags,related', '', '', $discussionId, CIVICO);
     }
     foreach ($actProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
@@ -650,9 +662,9 @@ class Discussion {
       $activeProposals[] = $proposal;
     }
     if ($all) {
-      $inactProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', 'link{' . PROPOSAL_TAG_SCEME . '}', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
+      $inactProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', 'link{' . PROPOSAL_TAG_SCEME . '}', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags,related', '', '', $discussionId, CIVICO);
     } else {
-      $inactProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags', '', '', trim('discussion,' . $this->id), CIVICO);
+      $inactProposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', '', '', '', '', '', '', '', '', array(), '', 'creation_date,status,title,author,id,content,tags,related', '', '', $discussionId, CIVICO);
     }
     foreach ($inactProposals as $proposal) {
       if (array_key_exists('content', $proposal) && array_key_exists('summary', $proposal['content'])) {
