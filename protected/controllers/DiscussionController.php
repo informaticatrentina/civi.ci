@@ -2181,7 +2181,7 @@ class DiscussionController  extends PageController {
             }
           }
           if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
-            array_key_exists($user['sex'][0], $question['gender']['value'])) {
+            array_key_exists($user['sex'][0], $question['sex']['value'])) {
             $graphData['sex'][] = $user['sex'][0];
           }
           if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
@@ -2190,9 +2190,9 @@ class DiscussionController  extends PageController {
           if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
             $graphData['work'][] = $user['work'];
           }
-          if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
-            if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
-              $graphData['public_authority'][] = $user['public_authority']['name'];
+          if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
+            if (array_key_exists($user['public-authority']['name'], $question['public_authority']['value'])) {
+              $graphData['public_authority'][] = $user['public-authority']['name'];
             }
           }
         }
@@ -2234,6 +2234,11 @@ class DiscussionController  extends PageController {
     if (defined('USER_STATISTIC_CHART_INFO')) {
       $chartInfo = json_decode(USER_STATISTIC_CHART_INFO, TRUE);
     }
+    //allowed stat points for particular theme
+    $statPoints = array();
+    if (defined('STATS')) {
+      $statPoints = json_decode(STATS, TRUE);
+    }
     foreach ($userData as $key => $data) {
       $title = '';
       if (array_key_exists($key, $chartInfo) && array_key_exists('title', $chartInfo[$key])) {
@@ -2242,7 +2247,11 @@ class DiscussionController  extends PageController {
       $header = array('X' => 'Y');
       if (array_key_exists($key, $chartInfo) && array_key_exists('header', $chartInfo[$key])) {
         $header = array($chartInfo[$key]['header'][0] => $chartInfo[$key]['header'][1]);
-      }  
+      }
+      //key is in allowed stat points, if not then skip that data
+      if (!array_key_exists($key, $statPoints)) {
+        continue;
+      }
       switch($key) {
         case 'age':          
           $chartData['age'] = array(
@@ -2254,9 +2263,9 @@ class DiscussionController  extends PageController {
         case 'sex':
           $finalData = array();
           foreach ($data as $key => $val) {
-            $finalData[$question['gender']['value'][$key]] = $val;
+            $finalData[$question['sex']['value'][$key]] = $val;
           }
-          $chartData['gender'] = array(
+          $chartData['sex'] = array(
               'title' => $title,
               'header' => $header,
               'data' => $finalData
@@ -2290,6 +2299,17 @@ class DiscussionController  extends PageController {
             $finalData[$question['education_level']['value'][$key]] = $val;
           }
           $chartData['education_level'] = array(
+              'title' => $title,
+              'header' => $header,
+              'data' => $finalData
+          );
+          break;
+        case 'public_authority':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['public_authority']['value'][$key]] = $val;
+          }
+          $chartData['public_authority'] = array(
               'title' => $title,
               'header' => $header,
               'data' => $finalData
@@ -2549,8 +2569,8 @@ class DiscussionController  extends PageController {
     if (empty($module)) {
       throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
     }
-    if (defined('USER_STATISTIC_POINT')) {
-      $staticsPoint = json_decode(USER_STATISTIC_POINT, TRUE);
+    if (defined('STATS')) {
+      $staticsPoint = json_decode(STATS, TRUE);
     }
     $userController = new UserController('user');
     $userIdentityApi = new UserIdentityAPI();
@@ -2586,7 +2606,7 @@ class DiscussionController  extends PageController {
             }
           }
           if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex']) &&
-                  array_key_exists($user['sex'][0], $question['gender']['value'])) {
+                  array_key_exists($user['sex'][0], $question['sex']['value'])) {
             $graphData['sex'][] = $user['sex'][0];
           }
           if (array_key_exists('citizenship', $user) && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
@@ -2595,9 +2615,9 @@ class DiscussionController  extends PageController {
           if (array_key_exists('work', $user) && array_key_exists($user['work'], $question['work']['value'])) {
             $graphData['work'][] = $user['work'];
           }
-          if (array_key_exists('public_authority', $user) && array_key_exists('name', $user['public_authority'])) {
-            if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
-              $graphData['public_authority'][] = $user['public_authority']['name'];
+          if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
+            if (array_key_exists($user['public-authority']['name'], $question['public_authority']['value'])) {
+              $graphData['public_authority'][] = $user['public-authority']['name'];
             }
           }
         }

@@ -412,9 +412,9 @@ class UserController extends PageController {
             throw new Exception(Yii::t('discussion', 'Please provide your age'));
           }
         }
-        if (array_key_exists('gender', $postData)) {
-          if (!empty($postData['gender'])) {
-            $userInfo['sex'] = array($postData['gender']);
+        if (array_key_exists('sex', $postData)) {
+          if (!empty($postData['sex'])) {
+            $userInfo['sex'] = array($postData['sex']);
           } else {
             throw new Exception(Yii::t('discussion', 'Please select gender'));
           }
@@ -518,7 +518,7 @@ class UserController extends PageController {
             $postData['age'] = $userInfo['age'];
           }
           if (array_key_exists('sex', $userInfo)) {
-            $postData['gender'] = $userInfo['sex'][0];
+            $postData['sex'] = $userInfo['sex'][0];
           }
           if (array_key_exists('education-level', $userInfo)) {
             $postData['education_level'] = $userInfo['education-level'];
@@ -786,8 +786,8 @@ class UserController extends PageController {
               $users[$user['_id']]['age_range'] = $user['age_range'];
             }
             if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
-            && array_key_exists($user['sex'][0], $question['gender']['value'])) {
-              $users[$user['_id']]['gender'] = $question['gender']['value'][$user['sex'][0]];
+            && array_key_exists($user['sex'][0], $question['sex']['value'])) {
+              $users[$user['_id']]['sex'] = $question['sex']['value'][$user['sex'][0]];
             }
             if (array_key_exists('citizenship', $user)
             && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
