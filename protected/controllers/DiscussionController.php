@@ -2195,6 +2195,18 @@ class DiscussionController  extends PageController {
               $graphData['public_authority'][] = $user['public-authority']['name'];
             }
           }
+          if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
+            if (array_key_exists('residence', $user['profile-info'])) {
+              $graphData['residence'][] = $user['profile-info']['residence'];
+            }
+            if (array_key_exists('profession', $user['profile-info'])) {
+              $graphData['profession'][] = $user['profile-info']['profession'];
+            }
+            if (array_key_exists('association', $user['profile-info']) &&
+              array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+              $graphData['association'][] = $user['profile-info']['association'];
+            }
+          }
         }
         foreach ($graphData as $key => $val) {
           $finalArr[$key] = array_count_values($graphData[$key]);
@@ -2313,6 +2325,31 @@ class DiscussionController  extends PageController {
               'title' => $title,
               'header' => $header,
               'data' => $finalData
+          );
+          break;
+        case 'association':
+          $finalData = array();
+          foreach ($data as $key => $val) {
+            $finalData[$question['association']['value'][$key]] = $val;
+          }
+          $chartData['association'] = array(
+              'title' => $title,
+              'header' => $header,
+              'data' => $finalData
+          );
+          break;
+        case 'profession':
+          $chartData['profession'] = array(
+              'title' => $title,
+              'header' => $header,
+              'data' => $data
+          );
+          break;
+        case 'residence':
+          $chartData['residence'] = array(
+              'title' => $title,
+              'header' => $header,
+              'data' => $data
           );
           break;
       }
@@ -2618,6 +2655,18 @@ class DiscussionController  extends PageController {
           if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
             if (array_key_exists($user['public-authority']['name'], $question['public_authority']['value'])) {
               $graphData['public_authority'][] = $user['public-authority']['name'];
+            }
+          }
+          if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
+            if (array_key_exists('residence', $user['profile-info'])) {
+              $graphData['residence'][] = $user['profile-info']['residence'];
+            }
+            if (array_key_exists('profession', $user['profile-info'])) {
+              $graphData['profession'][] = $user['profile-info']['profession'];
+            }
+            if (array_key_exists('association', $user['profile-info']) &&
+              array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+              $graphData['association'][] = $user['profile-info']['association'];
             }
           }
         }
