@@ -2510,8 +2510,8 @@ class DiscussionController  extends PageController {
       }
       $row[] = array(
         'discussion' => $discussionTitle,
-        'title' => htmlspecialchars_decode(strip_tags($proposal['title'])),
-        'description' => htmlspecialchars_decode(strip_tags($proposal['content']['description'])),
+        'title' => htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title']))),
+        'description' => htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description']))),
         'author' => $proposal['author']['name'],
         'creation_date' => $proposal['creation_date'],
         'total_opinion' => $proposal['totalOpinion'],
