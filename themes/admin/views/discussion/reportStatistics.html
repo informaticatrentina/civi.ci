@@ -60,11 +60,15 @@
       {% set discussionTitle = discussionTitle|capitalize %}
       <h3>{{discussionTitle}}</h3>
     </div>
-    {% for chartKey, chartValue in chartDetailValue %}
-    <div  class="span8">
-      <div id="line_chart_{{chartDetailKey}}_{{chartKey}}"></div>
-    </div>
-    {%endfor%}
+    {% if chartDetailValue is empty %}
+       <div class="alert-success text-center">{{t('discussion', 'There is no data for showing stats.')}}</div>
+    {% else %}
+      {% for chartKey, chartValue in chartDetailValue %}
+        <div  class="span8">
+          <div id="line_chart_{{chartDetailKey}}_{{chartKey}}"></div>
+        </div>
+      {%endfor%}
+    {% endif %}
   </div>
   {%endfor%}
 </div>

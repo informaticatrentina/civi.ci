@@ -2132,7 +2132,10 @@ class DiscussionController  extends PageController {
         $disucssionId = $_GET['id'];
       }
       $staticsPoint = array();
-      $graphData = array();
+      $graphData = array('age' => array(), 'age_range' => array(), 'sex' => array(),
+          'education_level' => array(), 'citizenship' => array(), 'work' => array(),
+          'public_authority' => array(), 'residence' => array(), 'profession' => array(),
+          'association' => array());
       $finalArr = array();
       $isAdmin = checkPermission('admin');
       if ($isAdmin == false || !ctype_digit($disucssionId)) {
@@ -2161,9 +2164,11 @@ class DiscussionController  extends PageController {
           $emails[] = $email['email'];
         }
       }
+      $userController = new UserController('user');
+      $contributorsEmail = $userController->getAuthorEmail($author, TRUE);
       $userInfo = array();
-      if (!empty($emails)) {
-        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+      if (!empty($contributorsEmail)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $contributorsEmail['user']));
       }
       if (array_key_exists('_items', $userInfo)) {
         foreach ($userInfo['_items'] as $user) {
@@ -2534,12 +2539,12 @@ class DiscussionController  extends PageController {
             $chartDetail['statistic_data'][] = array((string)$key, $val);
           }
           foreach ($chartDetail['data'] as $key => $val) {
-             $chartDetail['statistic_data'][] = array((string)$key, $val);
+            $chartDetail['statistic_data'][] = array((string)$key, $val);
           }
-          $response['success'] = TRUE;
           $response['data'] = $chartDetail;
         }
       }
+      $response['success'] = TRUE;
     } catch (Exception $e) {
       $response['msg'] = $e->getMessage();
       Yii::log($e->getMessage(), ERROR, 'Error in drawChart');
@@ -2612,8 +2617,8 @@ class DiscussionController  extends PageController {
     $userController = new UserController('user');
     $userIdentityApi = new UserIdentityAPI();
     $discussions = $this->_getDiscussionProposalOpinionLinks();
-    $emails = array();
     foreach ($discussions['discussion'] as $discussion) {
+      $emails = array();
       $authors = $discussions['discussion_author'][$discussion['discussionId']];
       foreach ($authors as $author) {
         if (array_key_exists($author, $discussions['emails'])) {
@@ -2627,6 +2632,7 @@ class DiscussionController  extends PageController {
         $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
       }
       $graphData = array();
+      $finalArr = array();
       if (array_key_exists('_items', $userInfo)) {
         foreach ($userInfo['_items'] as $user) {
           if (array_key_exists('age', $user)) {
