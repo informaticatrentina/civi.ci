@@ -1528,3 +1528,7 @@ msgstr "Esporta PDF"
 msgctxt "discussion"
 msgid "Report Statistics"
 msgstr "Report statistiche"
+
+msgctxt "discussion"
+msgid "There is no data for showing stats."
+msgstr "Non ci sono dati per la visualizzazione delle statistiche."
