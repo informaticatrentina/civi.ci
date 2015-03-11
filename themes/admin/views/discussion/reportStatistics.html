@@ -7,7 +7,8 @@
           <th>{{ t('discussion','Title') }}</th>
           <th>{{ t('discussion','Summary') }}</th>
           <th>{{ t('discussion','Author') }}</th>
-          <th>{{ t('discussion', 'Proposal Count') }}</th>
+          <th>{{ t('discussion', 'Users Proposal Count') }}</th>
+          <th>{{ t('discussion', 'Admin Proposal Count') }}</th>
           <th>{{ t('discussion', 'Opinion Count') }}</th>
           <th>{{ t('discussion', 'Users Count') }}</th>
         </tr>
@@ -25,6 +26,7 @@
           {% endif %}
           <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
           <td>{{ info.proposalCount }}</td>
+          <td>{{ info.adminUser.proposalCount }}</td>
           <td>{{ info.opinionCount}}</td>
           <td>{{ info.userCount}}</td>
         </tr>
@@ -41,11 +43,11 @@
     <p><strong>{{ t('discussion','Number of Visualization + Opinions') }}:</strong> {{totalOpinion}}</p>
     <p><strong>{{ t('discussion','Number of User Registered') }}:</strong> {{authorNames|length}}</p>
     <p><strong>{{ t('discussion','List of User Registered who all contributed in proposal, visualization, and opinion') }}</strong></p>
-    <div>
-      {% for author in authorNames %}
-        {{author}}<br>
-      {% endfor %}
-    </div>
+    <table class="table table-condensed">
+    {% for author in authorNames %}
+      <td>{{author}}</td>
+    {% endfor %}
+    </table>
   </div>
 </div>
 <div class="row">
