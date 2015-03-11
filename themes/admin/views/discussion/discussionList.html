@@ -1,97 +1,87 @@
-<div class="container">
-  <div class="container darkheader">
-    <div class="row">
-      <div class="span8">
-        <a class="link admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add"> {{ t('discussion', 'Create Discussion')}}</a>
-<!--        &nbsp;&nbsp;|&nbsp;&nbsp;
-        <a class="admin-discussion-link" href="{{constant('BASE_URL')}}admin/user/export"> {{ t('discussion', 'Export All Contributors')}}</a>
-    -->  
-        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-        <a class="link admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage"> {{ t('discussion', 'Configure Home Page')}}</a>
-        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-        <a class="link admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion"> {{ t('discussion', 'View All Discussions')}}</a>
-        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-        <a class="link admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/statistics"> {{ t('discussion', 'Report Statistics')}}</a>
-      </div>
-      <div class="pull-right">
-        <a href="{{constant('BASE_URL')}}admin/export/all/csv">
-          <button class="btn-info" >{{ t('discussion', 'Export To CSV') }}</button>
-        </a>
-      </div>
+<div class="row">
+  <div class="span12">
+    <h1 class="title">{{ t('discussion','Discussions List') }}</h1>
+    <div class="btn-toolbar">
+      <a class="btn btn-success admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add">{{ t('discussion', 'Create Discussion') }}</a>
+      <a class="btn btn-warning admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage">{{ t('discussion', 'Configure Home Page') }}</a>
+      <a class="btn btn-info admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion">{{ t('discussion', 'View All Discussions') }}</a>
+      <a class="btn btn-info admin-allStatistics-link" href="{{constant('BASE_URL')}}admin/statistics">{{ t('discussion', 'View All Statistics') }}</a>
+      <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/all/csv">{{ t('discussion', 'Export To CSV') }}</a>
     </div>
   </div>
-  <br>
+</div>
+<div class="row">
+  <div class="span12">
     {% set isAdmin = checkPermission('admin') %}
-    <table class="table table-bordered">
-      <th>{{ t('discussion','Discussion Title') }}</th>
-      <th>{{ t('discussion','Discussion Summary') }}</th>
-      <th>{{ t('discussion','Discussion Author') }}</th>
-      {% if isAdmin == true %}
-        <th>{{ t('discussion', 'Sorting Order') }}</th>
-      {% endif %}
-      <th>{{ t('discussion', 'Proposal Count') }}</th>
-      <th>{{ t('discussion', 'Proposal Count - admin user') }}</th>
-      <th>{{ t('discussion', 'Opinion Count') }}</th>
-      <th>{{ t('discussion', 'No of user') }}</th>
-      {% if isAdmin == true %}
-        <th>{{ t('discussion','Statistics') }}</th>
-        <th>{{ t('discussion','Edit') }}</th>
-      {% endif %}
-      <th>{{ t('discussion','View Proposals') }}</th>
-      {% if isAdmin == true %}
-        <th>{{ t('discussion','Print Discussion') }}</th>
-      {% endif %}
-      {% set totalProposal = 0 %}
-      {% set totalOpinion = 0 %}
-      {% for info in discussionInfo %}
-      <tr>
-        <td>{{ info.discussionTitle }}</td>
-        <td>{{ info.discussionSummary }}</td>
-        {% set authorEmail = '' %}
-        {% if attribute(emails, info.discussionAuthorSlug) is not empty %}
-          {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
-        {% endif %}
-        <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
-        {% if isAdmin == true %}
+    <table  id="discussions-list" class="table table-bordered table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>{{ t('discussion', 'Title') }}</th>
+          <th>{{ t('discussion', 'Summary') }}</th>
+          <th>{{ t('discussion', 'Author') }}</th>
+          <th>{{ t('discussion', 'Users Proposal Count') }}</th>
+          <th>{{ t('discussion', 'Admin Proposal Count') }}</th>
+          <th>{{ t('discussion', 'Opinion Count') }}</th>
+          <th>{{ t('discussion', 'Users Count') }}</th>
+          {% if isAdmin == true %}
+            <th>{{ t('discussion', 'Sorting Order') }}</th>
+          {% endif %}
+          <th>{{ t('discussion', 'Ops') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set totalProposal = 0 %}
+        {% set totalOpinion = 0 %}
+        {% for info in discussionInfo %}
+        <tr>
+          <td>{{ info.discussionTitle }}</td>
+          <td>{{ info.discussionSummary }}</td>
+          {% set authorEmail = '' %}
+          {% if attribute(emails, info.discussionAuthorSlug) is not empty %}
+            {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
+          {% endif %}
+          <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
+          <td>{{ info.proposalCount }}</td>
+          <td>{{ info.adminUser.proposalCount }}</td>
+          <td>{{ info.opinionCount}}</td>
+          <td>{{ info.userCount}}</td>
           <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
-        {% endif %}
-        <td>{{ info.proposalCount }}</td>
-        <td>{{ info.adminUser.proposalCount }}</td>
-        <td>{{ info.opinionCount}}</td>
-        <td>{{ info.userCount}}</td>
-        {% if isAdmin == true %}
-          <td><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></td>
-          <td><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></td>
-        {% endif %}
-        <td><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></td>
-        {% if isAdmin == true %}
-          <td><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></td>
-        {% endif %}
-      </tr>
-      {% set totalProposal = totalProposal + info.proposalCount %}
-      {% set totalOpinion = totalOpinion + info.opinionCount %}
-      {% endfor %}
+          <td>
+            <div class="dropdown">
+              <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% if isAdmin == true %}
+                  <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
+                {% endif %}  
+                  <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
+                  <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
+                {% if isAdmin == true %}
+                  <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </td>
+        </tr>
+        {% set totalProposal = totalProposal + info.proposalCount %}
+        {% set totalOpinion = totalOpinion + info.opinionCount %}
+        {% endfor %}
+      </tbody>
     </table>
-    <br/>
-    <b>
-      {{ t('discussion','Number of Proposals') }}
-      : {{totalProposal}}
-      <br/>
-      {{ t('discussion','Number of Visualization + Opinions') }}
-      : {{totalOpinion}}
-      <br/>
-      {{ t('discussion','Number of User Registered') }}
-      : {{authorNames|length}}
-      <br/>
-      <br/>
-      {{ t('discussion','List of User Registered who all contributed in proposal, visualization, and opinion') }}
-      <br/>
-      <br/>
-    </b>
-    {% for author in authorNames %}
-      {{author}}<br>
-    {% endfor %}
   </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <p><strong>{{ t('discussion','Number of Proposals') }}:</strong> {{totalProposal}} </p>
+    <p><strong>{{ t('discussion','Number of Visualization + Opinions') }}:</strong> {{totalOpinion}}</p>
+    <p><strong>{{ t('discussion','Number of User Registered') }}:</strong> {{authorNames|length}}</p>
+    <p><strong>{{ t('discussion','List of User Registered who all contributed in proposal, visualization, and opinion') }}</strong></p>
+    <div>
+    {% for author in authorNames %}
+      {{author}}<br />
+    {% endfor %}
+    </div>
+  </div>
+</div>
 <script>
   var baseUrl = "{{constant('BASE_URL')}}";
 </script>

@@ -2,129 +2,126 @@
 {% set isHighlighter = checkPermission('can_mark_highlighted') %}
 {% set canShowHideOpinion = checkPermission('can_show_hide_opinion') %}
 {% set isAdmin = checkPermission('admin') %}
-<div class="title-bar">
-  <div class="container">
+<div class="row">
+  <div class="span12">
     <div class="pull-left">
       <h1>
         {{discussionTitle}} 
       </h1>
     </div>
     {% if isAdmin == true %}
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">
-          <button class=" btn-info" >{{ t('discussion', 'Export To CSV') }}</button>
-        </a>
-      </div>
-      <div class="pull-right" style="margin-top: 10px; margin-right:10px;margin-bottom: 10px;">
-        <a href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">
-          <button class=" btn-info" >{{ t('discussion', 'Export To PDF') }}</button>
-        </a>
+      <div class="pull-right btn-toolbar">
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">{{ t('discussion', 'Export To PDF') }}</a>
       </div>
     {% endif %}
   </div>
 </div>
-<div class="container">
-  <table class="table table-bordered zebra-striped" id="sortTable">
-    <thead>
-      <tr class="tablesorter-headerRow">
-        <th>{{ t('discussion','Title') }}</th>
-        <th>{{ t('discussion','Description') }}</th>
-        <th>{{ t('discussion','Author') }}</th>
-        <th>{{ t('discussion','Creation Date') }}</th>
-        <th>{{ t('discussion','Number of Opinions') }}</th>
-        <th>{{ t('discussion','Number of Links') }}</th>
-        <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
-        {% if isAdmin == true %}
-          <th class="sorter-false">{{ t('discussion','Edit') }}</th>
-        {% endif %}
-        {% if (isAdmin == true ) or (canShowHideOpinion == true)%}
-          <th class="sorter-false">{{ t('discussion','View opinions') }}</th>
-        {% endif %}
-        {% if isAdmin == true %}
-          <th class="sorter-false">{{ t('discussion','View links') }}</th>
-          <th class="sorter-false">{{ t('discussion','Status') }}</th>
-          <th>{{ t('discussion', 'Sorting Order') }}</th>
-        {% endif %}
-        {% if isHighlighter == true %}
-          <th>{{ t('discussion','Highlight Proposal') }}</th>
-        {% endif %}
-      </tr>
-    </thead>
-    {% for proposal in allProposals %}
-    <tr>
-      <td><a class="proposalLinks proposal-title" href="{{constant('BASE_URL')}}admin/discussion/{{slug}}/{{proposal.id}}">{{ proposal.title }}</a></td>
-      <td class="proposal-description">{{ proposal.content.description }}</td>
-      {% set authorEmail = '' %}
-      {% if attribute(emails, proposal.author.slug) is not empty %}
-        {% set authorEmail = attribute(emails, proposal.author.slug) %}
-      {% endif %}
-      <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
-      <td>{{ proposal.creation_date }}</td>
-      {% if proposal.totalOpinion != '' %}
-      <td>{{ proposal.totalOpinion }}</td>
-      {%else %}
-      <td>0</td>
-      {%endif%}
-      {% if proposal.totalLinks != '' %}
-      <td>{{ proposal.totalLinks }}</td>
-      {%else %}
-      <td>0</td>
-      {%endif%}
-      <td>
-        {% if proposal.weightmap is iterable %} 
-        <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
-        <g>
-        {% for key,value in proposal.weightmap %}
-        <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
-        <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
-        {% endfor %}
-        </g>
-        </svg> 
-        {% else %}
-        {{proposal.weightmap}}
-        {%endif%}
-      </td>
-      {% if isAdmin == true %}
-        <td class="edit-proposal" proposal-id="{{proposal.id}}" proposal-summary="{{proposal.content.summary}}">
-          <a a href="#formModal" data-toggle="modal">{{t('discussion','Edit')}}</a>
-        </td>
-      {% endif %}
-      {% if (isAdmin == true ) or (canShowHideOpinion == true)%}
-        <td><a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/opinion?id={{proposal.id}}">{{ t('discussion','View opinions')}}</a></td>
-      {% endif %}
-      {% if isAdmin == true %}
-        <td><a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/links?id={{proposal.id}}">{{ t('discussion','View links')}}</a></td>
-        {% if proposal.status == 'active' %}
-          <td>
-            <span proposal-id='{{proposal.id}}' class="proposalStatus">{{t('discussion', 'Hide')}} </span>
-            <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
-          </td>
-          {% else %}
-          <td>
-            <span proposal-id='{{proposal.id}}'  class="proposalStatus">{{t('discussion', 'Show')}}</span>
-            <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
-          </td>
-        {% endif %}
-        <td><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
-      {% endif %}
-      {% if isHighlighter == true %}
-        <td>
-          {% set highlighterText = t('discussion','Highlight') %}
-          {% set highlighterAttribute = 'Highlight' %}
-          {% if proposal.highlight is defined%}
-            {% set highlighterText = t('discussion','UnHighlight') %}
-            {% set highlighterAttribute = 'UnHighlight' %}
+<div class="row">
+  <div class="span12">
+    <table class="table table-bordered table-striped table-condensed" id="sortTable">
+      <thead>
+        <tr class="tablesorter-headerRow">
+          <th>{{ t('discussion','Title') }}</th>
+          <th>{{ t('discussion','Description') }}</th>
+          <th>{{ t('discussion','Author') }}</th>
+          <th>{{ t('discussion','Creation Date') }}</th>
+          <th>{{ t('discussion','Number of Opinions') }}</th>
+          <th>{{ t('discussion','Number of Links') }}</th>
+          <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
+          {% if isAdmin == true %}
+            <th>{{ t('discussion', 'Sorting Order') }}</th>
           {% endif %}
-          <a class="proposalLinks highlighter"
-             href="{{constant('BASE_URL')}}admin/discussion/proposal/highlight/{{slug}}?id={{proposal.id}}" highlight = "{{highlighterAttribute}}">
-            {{ highlighterText }}
-          </a>
+          {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) %}
+            <th class="sorter-false">{{ t('discussion','Ops') }}</th>
+          {% endif %}
+        </tr>
+      </thead>
+      {% for proposal in allProposals %}
+      <tr class="pid-{{proposal.id}}">
+        <td><a class="proposalLinks proposal-title" href="{{constant('BASE_URL')}}admin/discussion/{{slug}}/{{proposal.id}}">{{ proposal.title }}</a></td>
+        <td class="proposal-description">{{ proposal.content.description }}</td>
+        {% set authorEmail = '' %}
+        {% if attribute(emails, proposal.author.slug) is not empty %}
+          {% set authorEmail = attribute(emails, proposal.author.slug) %}
+        {% endif %}
+        <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
+        <td>{{ proposal.creation_date }}</td>
+        {% if proposal.totalOpinion != '' %}
+        <td>{{ proposal.totalOpinion }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        {% if proposal.totalLinks != '' %}
+        <td>{{ proposal.totalLinks }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        <td>
+          {% if proposal.weightmap is iterable %} 
+          <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
+          <g>
+          {% for key,value in proposal.weightmap %}
+          <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
+          <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
+          {% endfor %}
+          </g>
+          </svg> 
+          {% else %}
+          {{proposal.weightmap}}
+          {%endif%}
         </td>
-      {% endif %}
-    </tr>
-    {% endfor %}
-  </table>
-  <br/>
+        {% if isAdmin == true %}
+          <td><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
+        {% endif %}      
+        <td>
+          <div class="dropdown">
+            <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              {% if isAdmin == true %}
+                <li class="edit-proposal" proposal-id="{{proposal.id}}" proposal-summary="{{proposal.content.summary}}">
+                  <a a href="#formModal" data-toggle="modal">{{t('discussion','Edit')}}</a>
+                </li>
+              {% endif %}
+              {% if (isAdmin == true ) or (canShowHideOpinion == true)%}
+                <li>
+                  <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/opinion?id={{proposal.id}}">{{ t('discussion','View opinions')}}</a>
+                </li>
+              {% endif %}
+              {% if isAdmin == true %}
+                <li>
+                  <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/links?id={{proposal.id}}">{{ t('discussion','View links')}}</a>
+                </li>
+                {% if proposal.status == 'active' %}
+                  <li>
+                    <a proposal-id='{{proposal.id}}' class="proposalStatus">{{t('discussion', 'Hide')}} </a>
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
+                  </li>
+                {% else %}
+                  <li>
+                    <a proposal-id='{{proposal.id}}'  class="proposalStatus">{{t('discussion', 'Show')}}</a>
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
+                  </li>
+                {% endif %}
+              {% endif %}
+              {% if isHighlighter == true %}
+                <li>
+                  {% set highlighterText = t('discussion','Highlight') %}
+                  {% set highlighterAttribute = 'Highlight' %}
+                  {% if proposal.highlight is defined%}
+                    {% set highlighterText = t('discussion','UnHighlight') %}
+                    {% set highlighterAttribute = 'UnHighlight' %}
+                  {% endif %}
+                  <a class="proposalLinks highlighter" href="{{constant('BASE_URL')}}admin/discussion/proposal/highlight/{{slug}}?id={{proposal.id}}" highlight = "{{highlighterAttribute}}">{{ highlighterText }}</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 </div>
 <div id="formModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

@@ -9,20 +9,22 @@
   {% if (canPostAnswersOnOpinion == true) and (canShowHideOpinion == false) and 
     (isHighlighter == false) and (isAdmin == false) %}
   {%else%}
-    <ul class="nav nav-tabs">
-      <li><a href="{{constant('BASE_URL')}}">Home</a></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          Admin <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="{{constant('BASE_URL')}}admin/discussion/list">{{ t('discussion', 'Discussion List') }}</a></li>
-          {% if isAdmin == true and App.session is not empty %}
-            <li><a href='{{constant("BASE_URL")}}admin/configuration'>{{ t('discussion', 'Configuration Panel') }}</a></li>
-            <li><a href='{{constant("BASE_URL")}}rbacconnector/user/index'>{{ t('discussion', 'Rbac') }}</a></li>
-          {% endif %}
-        </ul>
-      </li>
-    </ul>
+    <nav class="container">
+      <ul class="nav nav-tabs">
+        <li><a href="{{constant('BASE_URL')}}">Home</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            Admin <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="{{constant('BASE_URL')}}admin/discussion/list">{{ t('discussion', 'Discussion List') }}</a></li>
+            {% if isAdmin == true and App.session is not empty %}
+              <li><a href='{{constant("BASE_URL")}}admin/configuration'>{{ t('discussion', 'Configuration Panel') }}</a></li>
+              <li><a href='{{constant("BASE_URL")}}rbacconnector/user/index'>{{ t('discussion', 'Rbac') }}</a></li>
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+    </nav>
   {%endif%}
 {%endif%}

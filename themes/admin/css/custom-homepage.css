@@ -250,7 +250,7 @@ Carousel
 	font-weight: 100;
 	line-height: 36px;
 	margin-bottom: 20px;
-	padding: 30px 40px 0px 40px;
+	padding: 30px 0px 0px;
 }
 
 .description
@@ -296,7 +296,7 @@ Carousel
 Footer
 ***************/
 
-.conclusion
+.footer
 {
 	background-color: rgb(0,0,0);
 	color: rgb(255,255,255);
@@ -307,9 +307,9 @@ Footer
 }
 
 footer { padding: 5px 0px; }
-footer > p { margin: 0; }
+footer .container p { margin: 0; }
 
-footer > p > a
+footer .container p > a
 {
 	color: rgb(255,255,255);
 	text-decoration: none;
@@ -491,10 +491,6 @@ Landscape tablet
 	float: right;
 }
 
-.admin-discussion-link:hover, .admin-discussion-link:focus, .admin-discussion-link:active {
-  color: #0088CC !important;
-  text-decoration: underline;
-}
 
 #additional-info-form {
   max-width: 300px;
@@ -565,3 +561,18 @@ Landscape tablet
   margin-left: 50px !important;
   margin-bottom: 10px  !important;
 }
+
+/* Admin pages styles */
+
+#discussions-list {
+
+}
+
+#discussions-list thead tr th {
+  vertical-align: middle;
+}
+
+#discussions-list tbody tr td {
+  vertical-align: middle;
+}
+
