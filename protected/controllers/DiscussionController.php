@@ -1319,10 +1319,20 @@ class DiscussionController  extends PageController {
     $heatMap = unserialize(HEATMAP_COLORS);
     $allProposals = $discussion->getProposalForAdmin(true);
     $author = array();
-    foreach($allProposals as $key=>$proposal) {
-      if(array_key_exists('author', $proposal) && !empty($proposal['author'])
-      && array_key_exists('slug', $proposal['author'])
-      && !empty($proposal['author']['slug'])) {
+    $proposalWiseOpinion = array();
+    foreach ($allProposals as $key => $proposal) {
+      //get opinions for each proposals
+      $discussionObj = new Discussion();
+      $opinionsAndLink = $discussionObj->getOpinionsAndLinks($proposal['id']);
+      if (array_key_exists('opinion', $opinionsAndLink) && !empty($opinionsAndLink['opinion'])) {
+        foreach ($opinionsAndLink['opinion'] as $opinion) {
+          if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])) {
+            $author[] = $opinion['author']['slug'];
+            $proposalWiseOpinion[$proposal['id']]['opinions'][$opinion['author']['slug']][] = $opinion;
+          }
+        }
+      }
+      if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
         $author[] = $proposal['author']['slug'];
       }
       if(array_key_exists('content', $proposal) && !empty($proposal['content'])) {
@@ -1335,9 +1345,43 @@ class DiscussionController  extends PageController {
     $userIdentityApi = new UserIdentityAPI();
     $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
     $emails = array();
+    $adminEmails = array();
     if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
       foreach ($userEmail['_items'] as $email) {
         $emails[$email['_id']] = $email['email'];
+        $isAdmin = checkRbacPermission($email['email'], 'is_admin');
+        if ($isAdmin == TRUE) {
+          $adminEmails[$email['_id']] = $email['email'];
+        }
+      }
+    }
+   //update proposal tag - remove opinion count and update triangle index for admin user opinion
+    if (!empty($adminEmails)) {
+      foreach ($allProposals as $key => &$proposal) {
+        if (array_key_exists($proposal['id'], $proposalWiseOpinion) && !empty($proposalWiseOpinion[$proposal['id']]['opinions'])) {
+          foreach ($proposalWiseOpinion[$proposal['id']]['opinions'] as $userId => $adminOpinion) {
+            if (array_key_exists($userId, $adminEmails)) {
+              foreach ($adminOpinion as $opinion) {
+                $proposal['totalOpinion'] -= 1;
+                if (array_key_exists('index', $opinion)) {
+                  foreach ($proposal['tags'] as &$proposalTag) {
+                    if ($proposalTag['scheme'] == TAG_SCHEME &&
+                      $proposalTag['slug'] == $opinion['index'] && $proposalTag['weight'] > 0) {
+                      $proposalTag['weight'] -= 1;
+                      break;
+                    }
+                  }
+                  if (array_key_exists('weightmap', $proposal)) {
+                    if (array_key_exists($opinion['index'], $proposal['weightmap']) &&
+                      $proposal['weightmap'][$opinion['index']] > 0) {
+                      $proposal['weightmap'][$opinion['index']] -= 1;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
     $this->render('reports', array('allProposals' => $allProposals, 'understanding' => $all, 
