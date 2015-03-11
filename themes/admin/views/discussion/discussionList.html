@@ -30,6 +30,7 @@
         <th>{{ t('discussion', 'Sorting Order') }}</th>
       {% endif %}
       <th>{{ t('discussion', 'Proposal Count') }}</th>
+      <th>{{ t('discussion', 'Proposal Count - admin user') }}</th>
       <th>{{ t('discussion', 'Opinion Count') }}</th>
       <th>{{ t('discussion', 'No of user') }}</th>
       {% if isAdmin == true %}
@@ -55,6 +56,7 @@
           <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
         {% endif %}
         <td>{{ info.proposalCount }}</td>
+        <td>{{ info.adminUser.proposalCount }}</td>
         <td>{{ info.opinionCount}}</td>
         <td>{{ info.userCount}}</td>
         {% if isAdmin == true %}

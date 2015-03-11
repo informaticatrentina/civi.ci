@@ -2735,7 +2735,8 @@ class DiscussionController  extends PageController {
             'discussionOrder' => $info['sort_id'],
             'proposalCount' => $discussionContent['proposal_count'],
             'opinionCount' => $discussionContent['opinion_count'],
-            'userCount' => 0
+            'userCount' => 0,
+            'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
           );
           $authorName = array_merge($authorName, $discussionContent['author_name']);
           $authorId = array_merge($authorId, $discussionContent['author']);
@@ -2759,6 +2760,7 @@ class DiscussionController  extends PageController {
         foreach ($proposalAuthorId as $id) {
           if (array_key_exists($id, $user['admin_user'])) {
             $discussion['proposalCount'] -= 1;
+            $discussion['adminUser']['proposalCount'] += 1;
           }
         }
         //remove count for opinion that is submitted by admin user
@@ -2766,6 +2768,7 @@ class DiscussionController  extends PageController {
         foreach ($opinionAuthorId as $id) {
           if (array_key_exists($id, $user['admin_user'])) {
             $discussion['opinionCount'] -= 1;
+            $discussion['adminUser']['opinionCount'] += 1;
           }
         }
       }

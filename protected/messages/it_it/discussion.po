@@ -1532,3 +1532,8 @@ msgstr "Report statistiche"
 msgctxt "discussion"
 msgid "There is no data for showing stats."
 msgstr "Non ci sono dati per la visualizzazione delle statistiche."
+
+msgctxt "discussion"
+msgid "Proposal Count - admin user"
+msgstr "Numero proposte - admin utente"
+
