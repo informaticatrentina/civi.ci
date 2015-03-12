@@ -1,6 +1,6 @@
 <div class="row">
   <div class="span12">
-    <div class="span3">
+    <div class="span10">
       {% if response.success is empty %}
         <div style="background-color:#f5f5f5; margin:25px 0px;">
           <div class="row">
@@ -13,28 +13,17 @@
         </div>
       {% else %}
         {% for key, statistics in satistics_point %}
+        <h4 style="background-color: #f5f5f5; padding: 8px;">{{statistics}}</h4>
           <div class="row">
-            <input style="margin-bottom:10px; padding:5px;margin-right:10px;" class="data-chart-type" type='radio' name="data_chart" value="{{key}}">{{statistics}}<br>
+             <div id="line-chart-{{key}}"></div>
           </div>
         {% endfor %}
       {% endif %}
     </div>
-    <div  class="span8">
-      <div id="line-chart"></div>
-      <div id="statistics-error-block" style="background-color:#f5f5f5; margin:25px 0px; display: none;">
-        <div class="row">
-          <div class="span6">
-            <div style="padding:25px 25px;">    
-              <center><h6><span id="statistics-error-msg"></span> </h6></center>
-            </div>
-          </div>
-        </div>
-      </div>   
-    </div>
   </div>  
 </div>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script> 
-<script type="text/javascript" src="{{constant('THEME_URL')}}js/statistics.js"></script> 
 <script>
-var statistic_page = "{{constant('BASE_URL')}}admin/discussion/statistics/draw";
+  var chartDetails = '{{chart_detail|json_encode|raw}}';
 </script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="{{constant('THEME_URL')}}js/statistics.js"></script>

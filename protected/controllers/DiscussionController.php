@@ -2172,6 +2172,7 @@ class DiscussionController  extends PageController {
     try {
       $response = array('success' => FALSE, 'msg' => '');
       $disucssionId = '';
+      $preparedData = array();
       if (array_key_exists('id', $_GET)) {
         $disucssionId = $_GET['id'];
       }
@@ -2272,6 +2273,9 @@ class DiscussionController  extends PageController {
         foreach ($staticsPoint as $key => $value) {
           if (!in_array($key, $additionalQuestion)) {
             unset($staticsPoint[$key]);
+            if (array_key_exists($key, $preparedData)) {
+              unset($preparedData[$key]);
+            }
           }
         }
       }
@@ -2280,7 +2284,7 @@ class DiscussionController  extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in actionStatistics');
       $response['msg'] = Yii::t('discussion', 'Some technical problem occurred, For more detail check log file');
     }
-    $this->render('statistics', array('satistics_point' => $staticsPoint, 'response' => $response));
+    $this->render('statistics', array('satistics_point' => $staticsPoint, 'response' => $response, 'chart_detail' => $preparedData));
   }
   /**
    * _prepareChartData

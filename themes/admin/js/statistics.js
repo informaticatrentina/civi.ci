@@ -1,54 +1,34 @@
 google.load("visualization", "1", {packages: ["corechart"]});
-$(document).ready(function() {
-  $('.data-chart-type').click(function() {
-    $('#statistics-error-block').hide();
-    $('#line-chart').show();
-    var chartData = $(this).val();
-    if (chartData == '') {
-      $('#statistics-error-block').show();
-      $('#line-chart').hide();
-      $('#statistics-error-msg').html(Yii.t('js','We are getting some error')).addClass('text-error');
-      return false;
-    }   
-    $.ajax({
-      type: 'GET',
-      url: statistic_page,
-      dataType: 'json',
-      data: {
-        chart_data: chartData
-      },  
-      success: function(resp) {
-        if (resp.success) {
-          if(resp.data != '') {
-            drawChart(resp.data);
-          } else {
-            $('#statistics-error-msg').html(Yii.t('js', 'No data to show')).addClass('text-success');
-            $('#statistics-error-block').show();
-            $('#line-chart').hide();
-          }
-        } else {
-          $('#statistics-error-msg').html(Yii.t('js', 'We are getting some error')).addClass('text-error');
-          $('#statistics-error-block').show();
-          $('#line-chart').hide();
-        }   
-      },  
-      error: function(resp) {
-        $('#statistics-error-msg').html(Yii.t('js','We are getting some error')).addClass('text-error');
-        $('#statistics-error-block').show();
-        $('#line-chart').hide();
-      }   
-    }); 
-  }); 
-});
-
-function drawChart(respData) {
-  data = respData.statistic_data;
-  var data = google.visualization.arrayToDataTable(data);
-  var options = { 
-     title: respData.title,
-     is3D: true,
-     pieStartAngle: 100
-  };  
-  var chart = new google.visualization.PieChart(document.getElementById('line-chart'));
-  chart.draw(data, options);
+google.setOnLoadCallback(drawChart);
+function drawChart() {
+  chartDetails = jQuery.parseJSON(chartDetails);
+  for (var chart in chartDetails) {
+    if (chartDetails.hasOwnProperty(chart)) {
+      data = chartDetails[chart]['data'];
+      if (data != '') {
+        var dataArray = $.map(data, function(value, index) {
+          return [index, value];
+        });
+        var finalData = [];
+        finalData[0] = ["", ""];
+        for (var i = 0; i < dataArray.length; i++) {
+          finalData[i + 1] = [dataArray[i], dataArray[i + 1]];
+          ++i;
+        }
+        finalData = finalData.filter(function(item) {
+          return item !== undefined;
+        });
+        var data = google.visualization.arrayToDataTable(finalData);
+        var options = {
+          title: chartDetails[chart]['title'],
+          is3D: true,
+          pieStartAngle: 100
+        };
+        var charting = new google.visualization.PieChart(document.getElementById('line-chart-' + chart));
+        charting.draw(data, options);
+      } else {
+        $('#line-chart-' + chart).html(Yii.t('js', 'No data to show')).addClass('text-error');
+      }
+    }
+  }
 }
