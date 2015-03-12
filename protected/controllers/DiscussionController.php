@@ -2152,7 +2152,7 @@ class DiscussionController  extends PageController {
                 && array_key_exists('name', $opinion['author'])) {
               $response['author'][] = $opinion['author']['slug'];
               $response['author_name'][$opinion['author']['slug']] = $opinion['author']['name'];
-              $response['opinion_author_id'][] = $proposal['author']['slug'];
+              $response['opinion_author_id'][] = $opinion['author']['slug'];
             }
           }
         }
