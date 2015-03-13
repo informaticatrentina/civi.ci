@@ -2401,64 +2401,52 @@ class DiscussionController  extends PageController {
     try {
       $discussion = new Discussion;
       $discussion->slug = $_GET['slug'];
-      $details = $discussion->getDiscussionDetail();
-      $discussion->id = $details['id'];
-      $allProposals = $discussion->getProposalForAdmin(true);
-      $understanding = array();
-      $understanding = unserialize(UNDERSTANDING);
-      $all = array();
-      foreach ($understanding as $key => $understand) {
-        $xcordinates = array();
-        $ycordinates = array();
-        $points = explode(' ', $understand['points']);
-        foreach ($points as $point) {
-          if ($point != '') {
-            $poi = explode(',', $point);
-            $xcordinates[] = $poi[0];
-            $ycordinates[] = $poi[1];
-          }
-        }
-        $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
-        $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
-        $all[$key] = $understand;
+      $detail = $discussion->getDiscussionDetail();
+      if (empty($detail)) {
+        $this->redirect(BASE_URL);
       }
-      $summary = $details['summary'];
-      $title = $details['title'];
-      $aggregatorManager = new AggregatorManager();
-      $author = array();
-      foreach($allProposals as $key => &$proposal) {
+      $allProposal = array();
+      $allEmail = array();
+      $adminEmail = array();
+      $this->discussionId = $detail['id'];
+      $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+      foreach ($detailContent['allProposals'] as &$proposal) {
         $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
         $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
-        $author[] = $proposal['author']['slug'];
-        $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
-        if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
-          if ($opinions[0]['count'] == 0) {
-            array_pop($opinions);
+        if (array_key_exists($proposal['id'], $detailContent['opinions']) &&
+          array_key_exists('opinions', $detailContent['opinions'][$proposal['id']])) {
+          foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $author => $opinions) {
+            foreach ($opinions as $opinion) {
+              $proposal['opinions'][] = $opinion;
+              if (array_key_exists($proposal['id'], $detailContent['links']) &&
+                      array_key_exists('links', $detailContent['links'][$proposal['id']])) {
+                foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
+                  foreach ($links as $link) {
+                    $proposal['links'][] = $link;
+                  }
+                }
+              }
+            }
           }
-        } else {
-          array_pop($opinions);
-          $author[] = $opinions[0]['author']['slug'];
-          $opinions = $discussion->getClassOfOpinion($opinions);
         }
-        $allProposals[$key]['opinions'] = $opinions;
-        $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal['id']), CIVICO);
-        unset($links[count($links) - 1]);
-        $allProposals[$key]['links'] = $links;
+        $allProposal[] = $proposal;
+        $allEmail = array_merge($allEmail, $detailContent['emails']);
+        $adminEmail = array_merge($adminEmail, $detailContent['adminEmails']);
       }
-      $userIdentityApi = new UserIdentityAPI();
-      $discussionController = new UserController('user');
-      $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
+      $triangle = $this->getTriangleLayout();
+      $userAdditionInfo = $this->getUserAdditionalInfo($allEmail);
       $this->layout = 'singleProposal';
       $this->render('allProposal', array(
-        'summary' => $summary,
-        'title' => $title,
-        'allProposals' => $allProposals,
-        'understanding' => $all,
-        'discussionTimestamp' => $details['creationDate'],
+        'summary' => $detail['summary'],
+        'title' => $detail['title'],
+        'allProposals' => $allProposal,
+        'understanding' => $triangle,
+        'discussionTimestamp' => $detail['creationDate'],
         'user' => $userAdditionInfo,
-        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
+        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE),
+        'adminUser' => $adminEmail
       ));
-    } catch(Exception $e) {
+    } catch (Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllProposal method :') . $e->getMessage());
     }
   }
