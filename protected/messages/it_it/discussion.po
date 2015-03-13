@@ -1556,3 +1556,7 @@ msgstr "Elenco discussioni"
 msgctxt "discussion"
 msgid "You can not leave the field blank opinion."
 msgstr "Non puoi lasciare vuoto il campo opinione."
+
+msgctxt "discussion"
+msgid "Make a click on the triangle to indicate your position."
+msgstr "Fai un click su un triangolo per indicare la tua posizione."
