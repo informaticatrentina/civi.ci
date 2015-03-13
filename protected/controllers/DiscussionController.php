@@ -13,6 +13,8 @@
  */
 class DiscussionController  extends PageController {
 
+  public $discussionId;
+
   public function init() {
     if (!defined('SITE_THEME')) {
       p('Site theme is not defined. Please define it in local config file');
@@ -1285,111 +1287,24 @@ class DiscussionController  extends PageController {
     if ($isHighlighter == false && $canShowHideOpinion == false) {
       $this->redirect(BASE_URL);
     }
-    $all = array();
-    $allProposals = array();
-    $discussionTopics = '';
     $discussion = new Discussion();
     $discussion->slug = $_GET['slug'];
     $discussionInfo = $discussion->getDiscussionDetail();
     if (empty($discussionInfo)) {
       $this->redirect(BASE_URL);
     }
-    $discussion->id = $discussionInfo['id'];
-    $discussionTitle = $discussionInfo['title'];
     $discussionTopics = array_filter(explode(',', $discussionInfo['topic']));
-    $understanding = array();
-    $understanding = unserialize(UNDERSTANDING);
-
-    foreach ($understanding as $key => $understand) {
-      $xcordinates = array();
-      $ycordinates = array();
-      $points = explode(' ', $understand['points']);
-      foreach ($points as $point) {
-        if ($point != '') {
-          $poi = explode(',', $point);
-          $xcordinates[] = $poi[0];
-          $ycordinates[] = $poi[1];
-        }
-      }
-      $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
-      $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
-      $all[$key] = $understand;
+    $this->discussionId = $discussionInfo['id'];
+    $discussionDetail = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+    if (!empty($discussionDetail)) {
+      $discussionDetail['discussionTitle'] = $discussionInfo['title'];
+      $discussionDetail['slug'] = $_GET['slug'];
+      $discussionDetail['discussionId'] = $discussionInfo['id'];
+      $discussionDetail['topics'] = $discussionTopics;
+      $discussionDetail['title_char'] = intval(Yii::app()->globaldef->params['max_char_title']);
+      $discussionDetail['intro_char'] = intval(Yii::app()->globaldef->params['max_char_intro']);
     }
-    $heatMap = array();
-    $heatMap = unserialize(HEATMAP_COLORS);
-    $allProposals = $discussion->getProposalForAdmin(true);
-    $author = array();
-    $proposalWiseOpinion = array();
-    foreach ($allProposals as $key => $proposal) {
-      //get opinions for each proposals
-      $discussionObj = new Discussion();
-      $opinionsAndLink = $discussionObj->getOpinionsAndLinks($proposal['id']);
-      if (array_key_exists('opinion', $opinionsAndLink) && !empty($opinionsAndLink['opinion'])) {
-        foreach ($opinionsAndLink['opinion'] as $opinion) {
-          if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])) {
-            $author[] = $opinion['author']['slug'];
-            $proposalWiseOpinion[$proposal['id']]['opinions'][$opinion['author']['slug']][] = $opinion;
-          }
-        }
-      }
-      if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
-        $author[] = $proposal['author']['slug'];
-      }
-      if(array_key_exists('content', $proposal) && !empty($proposal['content'])) {
-        if(array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
-          $allProposals[$key]['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
-        }
-      }
-    }
-    $author = array_unique($author);
-    $userIdentityApi = new UserIdentityAPI();
-    $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
-    $emails = array();
-    $adminEmails = array();
-    if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
-      foreach ($userEmail['_items'] as $email) {
-        $emails[$email['_id']] = $email['email'];
-        $isAdmin = checkRbacPermission($email['email'], 'is_admin');
-        if ($isAdmin == TRUE) {
-          $adminEmails[$email['_id']] = $email['email'];
-        }
-      }
-    }
-   //update proposal tag - remove opinion count and update triangle index for admin user opinion
-    if (!empty($adminEmails)) {
-      foreach ($allProposals as $key => &$proposal) {
-        if (array_key_exists($proposal['id'], $proposalWiseOpinion) && !empty($proposalWiseOpinion[$proposal['id']]['opinions'])) {
-          foreach ($proposalWiseOpinion[$proposal['id']]['opinions'] as $userId => $adminOpinion) {
-            if (array_key_exists($userId, $adminEmails)) {
-              foreach ($adminOpinion as $opinion) {
-                $proposal['totalOpinion'] -= 1;
-                if (array_key_exists('index', $opinion)) {
-                  foreach ($proposal['tags'] as &$proposalTag) {
-                    if ($proposalTag['scheme'] == TAG_SCHEME &&
-                      $proposalTag['slug'] == $opinion['index'] && $proposalTag['weight'] > 0) {
-                      $proposalTag['weight'] -= 1;
-                      break;
-                    }
-                  }
-                  if (array_key_exists('weightmap', $proposal)) {
-                    if (array_key_exists($opinion['index'], $proposal['weightmap']) &&
-                      $proposal['weightmap'][$opinion['index']] > 0) {
-                      $proposal['weightmap'][$opinion['index']] -= 1;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    $this->render('reports', array('allProposals' => $allProposals, 'understanding' => $all, 
-        'heatMap' => $heatMap, 'discussionTitle' => $discussionTitle, 'slug' => $_GET['slug'],
-        'discussionId' => $discussionInfo['id'], 'topics' => $discussionTopics, 
-        'title_char' => intval(Yii::app()->globaldef->params['max_char_title']),
-        'intro_char' => intval(Yii::app()->globaldef->params['max_char_intro']),
-        'emails' => $emails));
+    $this->render('reports', $discussionDetail);
   }
 
   /**
@@ -2423,68 +2338,53 @@ class DiscussionController  extends PageController {
       $this->layout = 'singleProposal';
       $discussion = new Discussion;
       $details = $discussion->getDiscussionDetail();
-      $understanding = array();
-      $understanding = unserialize(UNDERSTANDING);
-      $all = array();
-      foreach ($understanding as $key => $understand) {
-        $xcordinates = array();
-        $ycordinates = array();
-        $points = explode(' ', $understand['points']);
-        foreach ($points as $point) {
-          if ($point != '') {
-            $poi = explode(',', $point);
-            $xcordinates[] = $poi[0];
-            $ycordinates[] = $poi[1];
-          }
-        }
-        $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
-        $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
-        $all[$key] = $understand;
-      }
-      $proposals = array();
       $discussionDetails = array();
-      $counter = 0;
-      $author = array();
-      foreach ($details as $disKey=>$detail) {
-        $discussionDetails[$disKey]['summary'] = $detail['summary'];
-        $discussionDetails[$disKey]['title'] = $detail['title'];
-        $discussion->id = $detail['id'];
-        $allProposals = $discussion->getProposalForAdmin(true);
-        $aggregatorManager = new AggregatorManager();
-        foreach($allProposals as $key => &$proposal) {
-        $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
-        $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
-          $author[] = $proposal['author']['slug'];
-          $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags,creation_date', '', '', trim('proposal,' . $proposal['id']), CIVICO);
-          if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
-            if ($opinions[0]['count'] == 0) {
-              array_pop($opinions);
+      $allEmail = array();
+      $adminEmail = array();
+      foreach ($details as $detail) {
+        $allProposal = array();
+        $this->discussionId = $detail['id'];
+        $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+        foreach ($detailContent['allProposals'] as &$proposal) {
+          $proposal['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+          $proposal['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
+          if (array_key_exists($proposal['id'], $detailContent['opinions']) &&
+            array_key_exists('opinions', $detailContent['opinions'][$proposal['id']])) {
+            foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $author => $opinions) {
+              foreach ($opinions as $opinion) {
+                $proposal['opinions'][] = $opinion;
+                if (array_key_exists($proposal['id'], $detailContent['links']) &&
+                  array_key_exists('links', $detailContent['links'][$proposal['id']])) {
+                  foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
+                    foreach ($links as $link) {
+                      $proposal['links'][] = $link;
+                    }
+                  }
+                }
+              }
             }
-          } else {
-            array_pop($opinions);
-            $opinions = $discussion->getClassOfOpinion($opinions);
           }
-          foreach ($opinions as $opinion) {
-            $author[] = $opinion['author']['slug'];
-          }
-          $allProposals[$key]['opinions'] = $opinions;
-          $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $proposal['id']), CIVICO);
-          unset($links[count($links) - 1]);
-          $allProposals[$key]['links'] = $links;
-          $proposals = $allProposals;
+          $allProposal[] = $proposal;
+          $allEmail = array_merge($allEmail, $detailContent['emails']);
+          $adminEmail = array_merge($adminEmail, $detailContent['adminEmails']);
         }
-        $discussionDetails[$disKey]['proposal'] = $proposals;
-        $discussionDetails[$disKey]['discussionTimestamp'] = $detail['creationDate'];
+        $discussionDetails[] = array(
+            'title' => $detail['title'],
+            'summary' => $detail['summary'],
+            'discussionTimestamp' => $detail['creationDate'],
+            'proposal' => $allProposal
+        );
       }
-      $discussionController = new UserController('user');
-      $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
+      $all = $this->getTriangleLayout();
+      $userAdditionInfo = $this->getUserAdditionalInfo($allEmail);
       $this->render('allDiscussion', array(
-        'understanding' => $all,
-        'discussionDetails' => $discussionDetails,
-        'user' => $userAdditionInfo,
-        'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
+          'understanding' => $all,
+          'discussionDetails' => $discussionDetails,
+          'user' => $userAdditionInfo,
+          'question' => json_decode(ADDITIONAL_INFORMATION, TRUE),
+          'adminUser' => $adminEmail
       ));
-    } catch(Exception $e) {
+    } catch (Exception $e) {
       Yii::log('', ERROR, Yii::t('discussion', 'Error in actionAllDiscussion method :') . $e->getMessage());
     }
   }
@@ -2834,6 +2734,214 @@ class DiscussionController  extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in _getDiscussionProposalOpinionLinks');
     }
     return $resp;
+  }
+
+  /**
+   * getDiscussionProposalOpininonLinksForNonAdminUser
+   * 1. Get all proposal, opinion and links of discussion
+   * 2. Update proposal tag - remove admin user submitted opinion from proposal tag
+   * 3. Get all admin and non admin user
+   * 4. Get all admin and non admin opinions and link count
+   * @return array $response - all proposal, opinions, links, admina and non admin user emails
+   * @TODO - Move it to user controller
+   */
+  public function getDiscussionProposalOpininonLinksForNonAdminUser() {
+    $response = array('allProposals' => array(), 'understanding' => array(),
+        'heatMap' => array(), 'emails' => array(), 'opinions' => array(),
+        'links' => array(), 'adminEmails' => array());
+    try {
+      $all = $this->getTriangleLayout();
+      $author = array();
+      $proposalWiseOpinion = array();
+      $proposalWiseLink = array();
+      $emails = array();
+      $adminEmails = array();
+      $discussion = new Discussion();
+      $discussion->id = $this->discussionId;
+      $heatMap = unserialize(HEATMAP_COLORS);
+      $allProposals = $discussion->getProposalForAdmin(true);
+      foreach ($allProposals as $key => $proposal) {
+        //get opinions for each proposals
+        $discussionObj = new Discussion();
+        $opinionsAndLink = $discussionObj->getOpinionsAndLinks($proposal['id']);
+        if (array_key_exists('opinion', $opinionsAndLink) && !empty($opinionsAndLink['opinion'])) {
+          foreach ($opinionsAndLink['opinion'] as $opinion) {
+            if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])) {
+              $author[] = $opinion['author']['slug'];
+              $proposalWiseOpinion[$proposal['id']]['opinions'][$opinion['author']['slug']][] = $opinion;
+            }
+          }
+        }
+        if (array_key_exists('link', $opinionsAndLink) && !empty($opinionsAndLink['link'])) {
+          foreach ($opinionsAndLink['link'] as $link) {
+            if (array_key_exists('author', $link) && array_key_exists('slug', $link['author'])) {
+              $author[] = $link['author']['slug'];
+              $proposalWiseLink[$proposal['id']]['links'][$link['author']['slug']][] = $link;
+            }
+          }
+        }
+        if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
+          $author[] = $proposal['author']['slug'];
+        }
+        if (array_key_exists('content', $proposal) && !empty($proposal['content'])) {
+          if (array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
+            $allProposals[$key]['content']['description'] = htmlspecialchars_decode($proposal['content']['description']);
+          }
+        }
+      }
+      $author = array_unique($author);
+      $userIdentityApi = new UserIdentityAPI();
+      $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
+        foreach ($userEmail['_items'] as $email) {
+          $emails[$email['_id']] = $email['email'];
+          $isAdmin = checkRbacPermission($email['email'], 'is_admin');
+          if ($isAdmin == TRUE) {
+            $adminEmails[$email['_id']] = $email['email'];
+          }
+        }
+      }
+      //update proposal tag - remove opinion count and update triangle index for admin user opinion
+      if (!empty($adminEmails)) {
+        foreach ($allProposals as $key => &$proposal) {
+          if (array_key_exists($proposal['id'], $proposalWiseOpinion) && !empty($proposalWiseOpinion[$proposal['id']]['opinions'])) {
+            foreach ($proposalWiseOpinion[$proposal['id']]['opinions'] as $userId => $adminOpinion) {
+              if (array_key_exists($userId, $adminEmails)) {
+                foreach ($adminOpinion as $opinion) {
+                  $proposal['totalOpinion'] -= 1;
+                  if (array_key_exists('index', $opinion)) {
+                    foreach ($proposal['tags'] as &$proposalTag) {
+                      if ($proposalTag['scheme'] == TAG_SCHEME &&
+                              $proposalTag['slug'] == $opinion['index'] && $proposalTag['weight'] > 0) {
+                        $proposalTag['weight'] -= 1;
+                        break;
+                      }
+                    }
+                    if (array_key_exists('weightmap', $proposal)) {
+                      if (array_key_exists($opinion['index'], $proposal['weightmap']) &&
+                              $proposal['weightmap'][$opinion['index']] > 0) {
+                        $proposal['weightmap'][$opinion['index']] -= 1;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getDiscussionProposalOpininonLinksForNonAdminUser');
+    }
+    return array('allProposals' => $allProposals, 'understanding' => $all,
+      'heatMap' => $heatMap, 'emails' => $emails, 'opinions' => $proposalWiseOpinion,
+      'links' => $proposalWiseLink, 'adminEmails' => $adminEmails);
+  }
+
+  /**
+   * getTriangleLayout
+   * function is used for triagle layout (background color)
+   * @return array $triangle - triange color, message & cordinate
+   */
+  public function getTriangleLayout() {
+    $triangle = array();
+    $understanding = unserialize(UNDERSTANDING);
+    foreach ($understanding as $key => $understand) {
+      $xcordinates = array();
+      $ycordinates = array();
+      $points = explode(' ', $understand['points']);
+      foreach ($points as $point) {
+        if ($point != '') {
+          $poi = explode(',', $point);
+          $xcordinates[] = $poi[0];
+          $ycordinates[] = $poi[1];
+        }
+      }
+      $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
+      $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
+      $triangle[$key] = $understand;
+    }
+    return $triangle;
+  }
+
+  /**
+   * getUserAdditionalInfo
+   * function is used for get additional user detail on the basis of user email id
+   * @param array $email  - user email
+   * @return array $users - user additional information
+   * @TODO - need to move it in User controller
+   */
+  public function getUserAdditionalInfo($emails) {
+    try {
+      $users = array();
+      if (isModuleExist('backendconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
+      if (is_array($emails)) {
+        $emails = array_unique($emails);
+      }
+      $userIdentityApi = new UserIdentityAPI();
+      $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      if (!empty($emails)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+        if (array_key_exists('_items', $userInfo)) {
+          foreach ($userInfo['_items'] as $user) {
+            if (array_key_exists('age', $user)) {
+              $users[$user['_id']]['age'] = $user['age'];
+            }
+            if (array_key_exists('age_range', $user)) {
+              $users[$user['_id']]['age_range'] = $user['age_range'];
+            }
+            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
+            && array_key_exists($user['sex'][0], $question['sex']['value'])) {
+              $users[$user['_id']]['sex'] = $question['sex']['value'][$user['sex'][0]];
+            }
+            if (array_key_exists('citizenship', $user)
+            && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+              $users[$user['_id']]['citizenship'] = $question['citizenship']['value'][$user['citizenship']];
+            }
+            if (array_key_exists('education-level', $user) &&
+            array_key_exists($user['education-level'], $question['education_level']['value'])) {
+              $users[$user['_id']]['education_level'] = $question['education_level']['value'][$user['education-level']];
+            }
+            if (array_key_exists('work', $user)
+            && array_key_exists($user['work'], $question['work']['value'])) {
+              $users[$user['_id']]['work'] = $question['work']['value'][$user['work']];
+            }
+            if (array_key_exists('public_authority', $user)
+            && array_key_exists('name', $user['public_authority'])) {
+              if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
+                $users[$user['_id']]['public_authority'] = $question['public_authority']['value'][$user['public_authority']['name']];
+              }
+            }
+            if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
+              if (array_key_exists('profession', $user['profile-info']) &&
+                array_key_exists('value', $question['profession']) &&
+                array_key_exists($user['profile-info']['profession'], $question['profession']['value'])) {
+                $users[$user['_id']]['profession'] =  $question['profession']['value'][$user['profile-info']['profession']];
+              }
+              if (array_key_exists('residence', $user['profile-info']) &&
+                array_key_exists('value', $question['residence']) &&
+                array_key_exists($user['profile-info']['residence'], $question['residence']['value'])) {
+                $users[$user['_id']]['residence'] = $question['residence']['value'][$user['profile-info']['residence']];
+              }
+              if (array_key_exists('association', $user['profile-info']) &&
+                array_key_exists('value', $question['association']) &&
+                array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+                $users[$user['_id']]['association'] = $question['association']['value'][$user['profile-info']['association']];
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getUserAdditionalInfo');
+    }
+    return $users;
   }
 }
 

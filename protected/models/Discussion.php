@@ -830,7 +830,7 @@ class Discussion {
     if (is_array($hasUserSubmitted)) {
       $returnData['hasUserSubmitted'] = $hasUserSubmitted;
     }
-    $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content', '', '', trim('proposal,' . $id), CIVICO);
+    $links = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . LINK_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '-creation_date', 'status,author,id,content,related', '', '', trim('proposal,' . $id), CIVICO);
     if (array_key_exists(0, $opinions) && array_key_exists('count', $opinions[0])) {
       if ($opinions[0]['count'] == 0) {
         $returnData['opinion'] = 0;
