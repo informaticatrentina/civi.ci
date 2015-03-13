@@ -1140,7 +1140,8 @@ class DiscussionController  extends PageController {
     $discussion->getDiscussionDetail();
     $aggregatorManager = new AggregatorManager();
     $proposal = $aggregatorManager->getEntry('', '', $_GET['id'], '', '', '', '', '', '', '', '', '', array(), '', 'title,status,author,id,content,related,tags', '', '', '', '', '');
-    $all = array();
+    $allUser = array();
+    $adminUser = array();
     if (array_key_exists('tags', $proposal[0])) {
       foreach ($proposal[0]['tags'] as $tag) {
         if ($tag['scheme'] == TAG_SCHEME) {
@@ -1148,22 +1149,7 @@ class DiscussionController  extends PageController {
         }
       }
     }
-    $understanding = unserialize(UNDERSTANDING);
-    foreach ($understanding as $key => $understand) {
-      $xcordinates = array();
-      $ycordinates = array();
-      $points = explode(' ', $understand['points']);
-      foreach ($points as $point) {
-        if ($point != '') {
-          $poi = explode(',', $point);
-          $xcordinates[] = $poi[0];
-          $ycordinates[] = $poi[1];
-        }
-      }
-      $understand['x'] = ($xcordinates[0] + $xcordinates[1] + $xcordinates[2]) / 3 - 4;
-      $understand['y'] = ($ycordinates[0] + $ycordinates[1] + $ycordinates[2]) / 3 + 8;
-      $all[$key] = $understand;
-    }
+    $all = $this->getTriangleLayout();
     $author = array();
     $proposal[0]['content']['description'] = htmlspecialchars_decode($proposal[0]['content']['description']);
     $proposal[0]['content']['summary'] = htmlspecialchars_decode($proposal[0]['content']['summary']);
@@ -1191,6 +1177,49 @@ class DiscussionController  extends PageController {
     $proposal[0]['links'] = $links;
     $discussionController = new UserController('user');
     $userAdditionInfo = $discussionController->getUserAdditionalInfo($author);
+    $identityManager = new UserIdentityAPI();
+    $authorsEmails = $identityManager->getUserDetail(IDM_USER_ENTITY, array('id' => $author), true, false);
+    if (array_key_exists('_items', $authorsEmails) && !empty($authorsEmails['_items'])) {
+      if (isModuleExist('rbacconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('rbacconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
+      }
+      foreach ($authorsEmails['_items'] as $user) {
+        $allUser[$user['_id']] = $user['email'];
+        $isAdmin = User::checkPermission($user['email'], 'is_admin');
+        if ($isAdmin) {
+          $adminUser[$user['_id']] = $user['email'];
+        }
+      }
+    }
+    //update proposal tag for removing admin opinion (on triangle)
+    if (!empty($adminUser)) {
+      if (array_key_exists('tags', $proposal[0]) && !empty($proposal[0]['opinions'])) {
+        foreach ($proposal[0]['opinions'] as $opinion) {
+          if (!array_key_exists($opinion['author']['slug'], $adminUser)) {
+            continue;
+          }
+          if (array_key_exists('index', $opinion)) {
+            foreach ($proposal[0]['tags'] as &$proposalTag) {
+              if ($proposalTag['scheme'] == TAG_SCHEME &&
+                $proposalTag['slug'] == $opinion['index'] && $proposalTag['weight'] > 0) {
+                $proposalTag['weight'] -= 1;
+                break;
+              }
+            }
+            if (array_key_exists('weightmap', $proposal[0])) {
+              if (array_key_exists($opinion['index'], $proposal[0]['weightmap']) &&
+                $proposal[0]['weightmap'][$opinion['index']] > 0) {
+                $proposal[0]['weightmap'][$opinion['index']] -= 1;
+              }
+            }
+          }
+        }
+      }
+    }
     $this->layout = 'singleProposal';
     $this->render('singleProposal', array(
       'summary' => $summary,
@@ -1198,7 +1227,8 @@ class DiscussionController  extends PageController {
       'proposal' => $proposal,
       'understanding' => $all,
       'user' => $userAdditionInfo,
-      'question' => json_decode(ADDITIONAL_INFORMATION, TRUE)
+      'question' => json_decode(ADDITIONAL_INFORMATION, TRUE),
+      'adminUser' => $adminUser
     ));
   }
 
