@@ -1461,6 +1461,15 @@ msgctxt "discussion"
 msgid "Opinions"
 msgstr "Opinioni"
 
+msgctxt "discussion"
+msgid "Users Proposal Count"
+msgstr "Proposte utenti"
+
+msgctxt "discussion"
+msgid "Admin Proposal Count"
+msgstr "Proposte admin"
+
+
 msgctxt "discussion" 
 msgid "Please enter same email"
 msgstr "Inserisci lo stesso indirizzo email"
@@ -1507,7 +1516,7 @@ msgstr "Proposte"
 
 msgctxt "discussion"
 msgid "Number of Visualization + Opinions"
-msgstr "Voti + opinioni"
+msgstr "Valutazioni + opinioni"
 
 msgctxt "discussion"
 msgid "Number of User Registered"
