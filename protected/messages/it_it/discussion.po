@@ -1552,3 +1552,7 @@ msgstr "Numero proposte - admin utente"
 msgctxt "discussion"
 msgid "Discussions List"
 msgstr "Elenco discussioni"
+
+msgctxt "discussion"
+msgid "You can not leave the field blank opinion."
+msgstr "Non puoi lasciare vuoto il campo opinione."

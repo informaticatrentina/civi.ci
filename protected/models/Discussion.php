@@ -374,6 +374,9 @@ class Discussion {
         if (array_key_exists('opiniontext', $_POST) && (!empty($_POST['opiniontext']))) {
           $aggregatorManager->summary = $_POST['opiniontext'];
           $opinionDescription = $_POST['opiniontext'];
+          if (!array_key_exists('index', $_POST) || empty($_POST['index'])) {
+            throw new Exception(Yii::t('discussion', 'You can not leave the field blank opinion.'));
+          }
         }
         if (array_key_exists('index', $_POST) && (!empty($_POST['index']))) {
           $aggregatorManager->index = $_POST['index'];

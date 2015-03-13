@@ -506,3 +506,8 @@ msgstr "Sono dati da visualizzare."
 msgctxt "discussion"
 msgid "We are getting some error"
 msgstr "Stiamo ottenendo alcuni errori."
+
+msgctxt "discussion"
+msgid "You can not leave the field blank opinion."
+msgstr "Non puoi lasciare vuoto il campo opinione."
+
