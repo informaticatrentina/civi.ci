@@ -2070,7 +2070,8 @@ class DiscussionController  extends PageController {
   private function _getDiscussionProposalOpinionAndAuthor($discussionId) {
     try {
       $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array(),
-         'author_name' => array(), 'proposal_author_id' => array(), 'opinion_author_id' => array());
+         'author_name' => array(), 'proposal_author_id' => array(), 'opinion_author_id' => array(),
+          'opinion_voting' => 0);
       $aggregatorManager = new AggregatorManager();
       $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
       '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
@@ -2087,11 +2088,20 @@ class DiscussionController  extends PageController {
         }
         if (array_key_exists('id', $proposal)) {
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '',
-          '', '1', '', '', '', '', array(), '', 'id, author', '', '', trim('proposal,' .
+          '', '1', '', '', '', '', array(), '', 'id,content,author,tags', '', '', trim('proposal,' .
           $proposal['id']), CIVICO);
           foreach ($opinions as $opinion) {
-            if (array_key_exists('count', $opinion)) {
-              $response['opinion_count'] += $opinion['count'];
+            //opinion count - only for which description is added
+            if (array_key_exists('content', $opinion) && array_key_exists('description', $opinion['content'])
+              && !empty($opinion['content']['description'])) {
+              $response['opinion_count'] += 1;
+            }
+            if (array_key_exists('tags', $opinion) && !empty($opinion['tags'])) {
+              foreach ($opinion['tags'] as $tag) {
+                if ($tag['scheme'] == INDEX_TAG_SCHEME) {
+                  $response['opinion_voting'] += 1;
+                }
+              }
             }
             if (array_key_exists('author', $opinion) && array_key_exists('slug', $opinion['author'])
                 && array_key_exists('name', $opinion['author'])) {
@@ -2701,6 +2711,7 @@ class DiscussionController  extends PageController {
             'discussionOrder' => $info['sort_id'],
             'proposalCount' => $discussionContent['proposal_count'],
             'opinionCount' => $discussionContent['opinion_count'],
+            'opinionVoting' => $discussionContent['opinion_voting'],
             'userCount' => 0,
             'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
           );
@@ -2725,7 +2736,9 @@ class DiscussionController  extends PageController {
         $proposalAuthorId = $discussionWiseProposalAuthor[$discussion['discussionId']];
         foreach ($proposalAuthorId as $id) {
           if (array_key_exists($id, $user['admin_user'])) {
-            $discussion['proposalCount'] -= 1;
+            if ($discussion['proposalCount'] > 0) {
+              $discussion['proposalCount'] -= 1;
+            }
             $discussion['adminUser']['proposalCount'] += 1;
           }
         }
@@ -2733,7 +2746,12 @@ class DiscussionController  extends PageController {
         $opinionAuthorId = $discussionWiseOpinionAuthor[$discussion['discussionId']];
         foreach ($opinionAuthorId as $id) {
           if (array_key_exists($id, $user['admin_user'])) {
-            $discussion['opinionCount'] -= 1;
+            if ($discussion['opinionCount'] > 0) {
+              $discussion['opinionCount'] -= 1;
+            }
+            if ($discussion['opinionVoting'] > 0) {
+              $discussion['opinionVoting'] -= 1;
+            }
             $discussion['adminUser']['opinionCount'] += 1;
           }
         }

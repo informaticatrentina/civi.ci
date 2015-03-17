@@ -22,6 +22,7 @@
           <th>{{ t('discussion', 'Users Proposal Count') }}</th>
           <th>{{ t('discussion', 'Admin Proposal Count') }}</th>
           <th>{{ t('discussion', 'Opinion Count') }}</th>
+          <th>{{ t('discussion', 'Vote on triangle') }}</th>
           <th>{{ t('discussion', 'Users Count') }}</th>
           {% if isAdmin == true %}
             <th>{{ t('discussion', 'Sorting Order') }}</th>
@@ -44,6 +45,7 @@
           <td>{{ info.proposalCount }}</td>
           <td>{{ info.adminUser.proposalCount }}</td>
           <td>{{ info.opinionCount}}</td>
+          <td>{{ info.opinionVoting}}</td>
           <td>{{ info.userCount}}</td>
           <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
           <td>
