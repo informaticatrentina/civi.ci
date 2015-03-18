@@ -1360,6 +1360,9 @@ class DiscussionController  extends PageController {
     foreach ($discussions as $discusion) {
       $discussionDetail[$discusion['id']] = $discusion;
     }
+    if ($_GET['type'] == 'csv') {
+      $this->_downloadProposalCsv($discussionDetail);
+    }
     $allProposals = $discussion->getProposalForAdmin(true, $getProposalForAllDiscussion);
     $headings = array(
       Yii::t('discussion', 'Discussion Title'),
@@ -1372,8 +1375,6 @@ class DiscussionController  extends PageController {
       Yii::t('discussion', 'Status'));
     if ($_GET['type'] == 'excel') {
       goto Excel;
-    } else if ($_GET['type'] == 'csv') {
-      $this->_downloadProposalCsv($allProposals, $discussionDetail);
     } else if ($_GET['type'] == 'pdf') {
       $adminController = new AdminController('admin');
       $adminController->actionPdfGenerate($allProposals, $discussionDetail, $headings);
@@ -2528,7 +2529,7 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
-  public function _downloadProposalCsv($proposals, $discussionDetail) {
+  public function _downloadProposalCsv($discussionDetail) {
     $header = array(
       'discussion' => Yii::t('discussion', 'Discussion Title'),
       'title' => Yii::t('discussion', 'Proposal Title'),
@@ -2537,32 +2538,102 @@ class DiscussionController  extends PageController {
       'creation_date' => Yii::t('discussion', 'Creation Date'),
       'total_opinion' => Yii::t('discussion', 'Number of Opinions'),
       'total_links' => Yii::t('discussion', 'Number of Links'),
-      'status' => Yii::t('discussion', 'Status')
+      'status' => Yii::t('discussion', 'Status'),
+      'admin_proposal_count' => Yii::t('discussion', 'Proposal Count - admin user'),
+      'user_proposal_count' => Yii::t('discussion', 'Proposal Count'),
+      'text_opinion_count' => Yii::t('discussion', 'Opinion Count'),
+      'opinion_voting_count' => Yii::t('discussion', 'Vote on triangle'),
+      'user_count' => Yii::t('discussion', 'Users Count')
     );
-    $row = array();
-    foreach ($proposals as $proposal) {
-      $discussionTitle = '';
-      if (array_key_exists('related', $proposal) && array_key_exists('id', $proposal['related'])
-         && array_key_exists($proposal['related']['id'], $discussionDetail)) {
-        $discussionTitle = $discussionDetail[$proposal['related']['id']]['title'];
-      }
-      $row[] = array(
-        'discussion' => $discussionTitle,
-        'title' => htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title']))),
-        'description' => htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description']))),
-        'author' => $proposal['author']['name'],
-        'creation_date' => $proposal['creation_date'],
-        'total_opinion' => $proposal['totalOpinion'],
-        'total_links' => $proposal['totalLinks'],
-        'status' => $proposal['status']
+    $rows = array();
+    foreach ($discussionDetail as $discussion) {
+      $this->discussionId = $discussion['id'];
+      $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+      $discussionAdditionalInfo = array(
+        'proposal' => array(), 'admin_proposal_count' => 0, 'user_proposal_count' => 0, 'opinion_voting_count' => 0,
+        'text_opinion_count' => 0, 'user_count' => count(array_diff($detailContent['emails'], $detailContent['adminEmails'])),
+        'discussion_title' => $discussion['title']
       );
+      foreach ($detailContent['allProposals'] as &$proposal) {
+        //exclude inactive proposal
+        if ($proposal['status'] == 'inactive') {
+          continue;
+        }
+        if (array_key_exists($proposal['author']['slug'], $detailContent['adminEmails'])) {
+          $discussionAdditionalInfo['admin_proposal_count'] += 1;
+        } else {
+          $discussionAdditionalInfo['user_proposal_count'] += 1;
+        }
+        $proposal['content']['description'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description'])));
+        $proposal['content']['title'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title'])));
+        if (array_key_exists($proposal['id'], $detailContent['opinions']) &&
+          array_key_exists('opinions', $detailContent['opinions'][$proposal['id']])) {
+          foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $opinions) {
+            foreach ($opinions as $opinion) {
+              //exclude inactive proposal
+              if ($opinion['status'] == 'inactive') {
+                continue;
+              }
+              if (!empty($opinion['content']['description']) && !array_key_exists($opinion['author']['slug'], $detailContent['adminEmails'])) {
+                $discussionAdditionalInfo['text_opinion_count'] += 1;
+              }
+              foreach ($opinion['tags'] as $tag) {
+                if ($tag['scheme'] == INDEX_TAG_SCHEME) {
+                  if (!array_key_exists($opinion['author']['slug'], $detailContent['adminEmails'])) {
+                    $discussionAdditionalInfo['opinion_voting_count'] += 1;
+                  }
+                  break;
+                }
+              }
+            }
+          }
+        }
+        $discussionAdditionalInfo['proposal'][] = $proposal;
+      }
+      $rows[] = $discussionAdditionalInfo;
     }
     header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
-    foreach ($row as $order) {
-      @fputcsv($filePath, $order);
+    foreach ($rows as &$row) {
+      $order = array(
+        'discussion' => $row['discussion_title'],
+        'title' => '',
+        'description' => '',
+        'author' => '',
+        'creation_date' => '',
+        'total_opinion' => '',
+        'total_links' => '',
+        'status' => '',
+        'admin_proposal_count' => $row['admin_proposal_count'],
+        'user_proposal_count' => $row['user_proposal_count'],
+        'text_opinion_count' => $row['text_opinion_count'],
+        'opinion_voting_count' => $row['opinion_voting_count'],
+        'user_count' => $row['user_count']
+      );
+      if (!empty($row['proposal'])) {
+        foreach ($row['proposal'] as $key => $proposal) {
+          $order['title'] = $proposal['title'];
+          $order['description'] = $proposal['content']['description'];
+          $order['author'] = $proposal['author']['name'];
+          $order['creation_date'] = $proposal['creation_date'];
+          $order['total_opinion'] = $proposal['totalOpinion'];
+          $order['total_links'] = $proposal['totalLinks'];
+          $order['status'] = $proposal['status'];
+          if ($key != 0) {
+            $order['discussion_title'] = '';
+            $order['admin_proposal_count'] = '';
+            $order['user_proposal_count'] = '';
+            $order['text_opinion_count'] = '';
+            $order['opinion_voting_count'] = '';
+            $order['user_count'] = '';
+          }
+          @fputcsv($filePath, $order);
+        }
+      } else {
+        @fputcsv($filePath, $order);
+      }
     }
     exit;
   }
