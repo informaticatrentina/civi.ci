@@ -2622,7 +2622,7 @@ class DiscussionController  extends PageController {
           $order['total_links'] = $proposal['totalLinks'];
           $order['status'] = $proposal['status'];
           if ($key != 0) {
-            $order['discussion_title'] = '';
+            $order['discussion'] = '';
             $order['admin_proposal_count'] = '';
             $order['user_proposal_count'] = '';
             $order['text_opinion_count'] = '';
