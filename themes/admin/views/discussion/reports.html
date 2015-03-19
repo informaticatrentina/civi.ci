@@ -26,6 +26,7 @@
           <th>{{ t('discussion','Description') }}</th>
           <th>{{ t('discussion','Author') }}</th>
           <th>{{ t('discussion','Creation Date') }}</th>
+          <th>{{ t('discussion','Status') }}</th>
           <th>{{ t('discussion','Number of Opinions') }}</th>
           <th>{{ t('discussion','Number of Links') }}</th>
           <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
@@ -47,6 +48,7 @@
         {% endif %}
         <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
         <td>{{ proposal.creation_date }}</td>
+        <td>{{ proposal.status }}</td>
         {% if proposal.totalOpinion != '' %}
         <td>{{ proposal.totalOpinion }}</td>
         {%else %}
