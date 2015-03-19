@@ -1360,6 +1360,9 @@ class DiscussionController  extends PageController {
     foreach ($discussions as $discusion) {
       $discussionDetail[$discusion['id']] = $discusion;
     }
+    if (!empty($discussionDetail)) {
+      $discussionDetail = array_pop($discussionDetail);
+    }
     if ($_GET['type'] == 'csv') {
       $this->_downloadProposalCsv($discussionDetail);
     }
