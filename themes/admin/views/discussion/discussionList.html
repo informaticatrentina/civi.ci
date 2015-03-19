@@ -65,7 +65,7 @@
           </td>
         </tr>
         {% set totalProposal = totalProposal + info.proposalCount %}
-        {% set totalOpinion = totalOpinion + info.opinionCount %}
+        {% set totalOpinion = totalOpinion + info.opinionCount + info.opinionVoting %}
         {% endfor %}
       </tbody>
     </table>
