@@ -1573,3 +1573,8 @@ msgstr "Fai un click su un triangolo per indicare la tua posizione."
 msgctxt "discussion"
 msgid "Vote on triangle"
 msgstr "Valutazioni"
+
+msgctxt "discussion"
+msgid "Admin user Proposal Count"
+msgstr "Numero proposte - admin utente"
+
