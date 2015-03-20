@@ -15,14 +15,15 @@
   <tbody>
     {% for proposal in allProposals %}
       <tr>
-        <td>{{discussionDetail.title}}</td>
+        <td>{{proposal.discussion_title}}</td>
         <td>{{proposal.title}}</td>
-        <td colspan="2">{{proposal.content.description}}</td>
-        <td>{{proposal.author.name}}</td>
+        <td colspan="2">{{proposal.description}}</td>
+        <td>{{proposal.author}}</td>
         <td>{{proposal.creation_date}}</td>
-        <td>{{proposal.totalOpinion}}</td>
-        <td>{{proposal.totalLinks}}</td>
         <td>{{proposal.status}}</td>
+        <td>{{proposal.opinion_voting_count}}</td>
+        <td>{{proposal.text_opinion_count}}</td>
+        <td>{{proposal.total_links}}</td>
       </tr>
     {% endfor %}
   </tbody>

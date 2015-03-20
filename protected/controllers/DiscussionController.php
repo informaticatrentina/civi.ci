@@ -1369,7 +1369,6 @@ class DiscussionController  extends PageController {
     if (!empty($discussionDetail)) {
       $discussionDetail = array_pop($discussionDetail);
     }
-    $allProposals = $discussion->getProposalForAdmin(true, $getProposalForAllDiscussion);
     $headings = array(
       Yii::t('discussion', 'Discussion Title'),
       Yii::t('discussion', 'Proposal Title'),
@@ -1382,12 +1381,15 @@ class DiscussionController  extends PageController {
     if ($_GET['type'] == 'excel') {
       goto Excel;
     } else if ($_GET['type'] == 'pdf') {
+      $this->discussionId = $_GET['id'];
+      $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
       $adminController = new AdminController('admin');
-      $adminController->actionPdfGenerate($allProposals, $discussionDetail, $headings);
+      $adminController->actionPdfGenerate($detailContent, $discussionDetail);
     } else {
       $this->redirect(BASE_URL . 'admin/discussion/list');
     }
     Excel:
+    $allProposals = $discussion->getProposalForAdmin(true, $getProposalForAllDiscussion);
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator(CIVICO);
     $rowCnt = count($allProposals) + 1;
@@ -2552,50 +2554,17 @@ class DiscussionController  extends PageController {
     foreach ($discussionDetail as $discussion) {
       $this->discussionId = $discussion['id'];
       $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
-      foreach ($detailContent['allProposals'] as $proposal) {
-        $singleProposal = array('discussion_title' => '', 'title' => '', 'description' => '', 'author' => '',
-          'creation_date' => '', 'status' => '', 'opinion_voting_count' => 0, 'text_opinion_count' => 0, 'total_links' => 0);
-        $singleProposal['discussion_title'] = $discussion['title'];
-        $singleProposal['title'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title'])));
-        $singleProposal['description'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description'])));
-        $singleProposal['author'] = $proposal['author']['name'];
-        $singleProposal['creation_date'] = $proposal['creation_date'];
-        $singleProposal['status'] = $proposal['status'];
-        if (array_key_exists($proposal['id'], $detailContent['opinions']) &&
-          array_key_exists('opinions', $detailContent['opinions'][$proposal['id']])) {
-          foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $opinions) {
-            foreach ($opinions as $opinion) {
-              if (!empty($opinion['content']['description']) && !array_key_exists($opinion['author']['slug'], $detailContent['adminEmails'])) {
-                $singleProposal['text_opinion_count'] += 1;
-              }
-              foreach ($opinion['tags'] as $tag) {
-                if ($tag['scheme'] == INDEX_TAG_SCHEME) {
-                  if (!array_key_exists($opinion['author']['slug'], $detailContent['adminEmails'])) {
-                    $singleProposal['opinion_voting_count'] += 1;
-                  }
-                  break;
-                }
-              }
-              if (array_key_exists($proposal['id'], $detailContent['links']) &&
-                array_key_exists('links', $detailContent['links'][$proposal['id']])) {
-                foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
-                  if (!array_key_exists($author, $detailContent['adminEmails'])) {
-                    $singleProposal['total_links'] += count($links);
-                  }
-                }
-              }
-            }
-          }
-        }
-        $allproposals[] = $singleProposal;
-      }
+      $admin = new AdminController('admin');
+      $allproposals[] = $admin->createDataForExport($detailContent, $discussion);
     }
     header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
     foreach ($allproposals as $proposal) {
-      @fputcsv($filePath, $proposal);
+      foreach($proposal as $proposalContent) {
+        @fputcsv($filePath, $proposalContent);
+      }
     }
     exit;
   }
