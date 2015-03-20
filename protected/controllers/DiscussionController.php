@@ -2078,7 +2078,7 @@ class DiscussionController  extends PageController {
     try {
       $response = array('proposal_count' => 0, 'opinion_count' => 0, 'author' => array(),
          'author_name' => array(), 'proposal_author_id' => array(), 'opinion_author_id' => array(),
-          'opinion_voting' => 0);
+          'opinion_voting' => 0, 'opinion' => array());
       $aggregatorManager = new AggregatorManager();
       $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
       '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
@@ -2097,6 +2097,7 @@ class DiscussionController  extends PageController {
           $opinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '',
           '', '1', '', '', '', '', array(), '', 'id,content,author,tags', '', '', trim('proposal,' .
           $proposal['id']), CIVICO);
+          $response['opinion'][$proposal['id']] = $opinions;
           foreach ($opinions as $opinion) {
             //opinion count - only for which description is added
             if (array_key_exists('content', $opinion) && array_key_exists('description', $opinion['content'])
@@ -2744,6 +2745,7 @@ class DiscussionController  extends PageController {
             'proposalCount' => $discussionContent['proposal_count'],
             'opinionCount' => $discussionContent['opinion_count'],
             'opinionVoting' => $discussionContent['opinion_voting'],
+            'opinions' => $discussionContent['opinion'],
             'userCount' => 0,
             'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
           );
@@ -2774,17 +2776,18 @@ class DiscussionController  extends PageController {
             $discussion['adminUser']['proposalCount'] += 1;
           }
         }
-        //remove count for opinion that is submitted by admin user
-        $opinionAuthorId = $discussionWiseOpinionAuthor[$discussion['discussionId']];
-        foreach ($opinionAuthorId as $id) {
-          if (array_key_exists($id, $user['admin_user'])) {
-            if ($discussion['opinionCount'] > 0) {
-              $discussion['opinionCount'] -= 1;
+        //remove count for opinion that is submitted by admin user  and content is not empty
+        foreach ($discussion['opinions'] as $opinions) {
+          foreach ($opinions as $opinion) {
+            if (array_key_exists('author', $opinion) && array_key_exists($opinion['author']['slug'], $user['admin_user'])) {
+              if (!empty($opinion['content']['description']) && $discussion['opinionCount'] > 0) {
+                $discussion['opinionCount'] -= 1;
+              }
+              if ($discussion['opinionVoting'] > 0) {
+                $discussion['opinionVoting'] -= 1;
+              }
+              $discussion['adminUser']['opinionCount'] += 1;
             }
-            if ($discussion['opinionVoting'] > 0) {
-              $discussion['opinionVoting'] -= 1;
-            }
-            $discussion['adminUser']['opinionCount'] += 1;
           }
         }
       }
