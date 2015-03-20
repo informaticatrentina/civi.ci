@@ -2872,11 +2872,12 @@ class DiscussionController  extends PageController {
       //update proposal tag - remove opinion count and update triangle index for admin user opinion
       if (!empty($adminEmails)) {
         foreach ($allProposals as $key => &$proposal) {
+          //set it 0. We count only those opinion for which description is not empty and not submitted by admin user.
+          $proposal['totalOpinion'] = 0;
           if (array_key_exists($proposal['id'], $proposalWiseOpinion) && !empty($proposalWiseOpinion[$proposal['id']]['opinions'])) {
             foreach ($proposalWiseOpinion[$proposal['id']]['opinions'] as $userId => $adminOpinion) {
               if (array_key_exists($userId, $adminEmails)) {
                 foreach ($adminOpinion as $opinion) {
-                  $proposal['totalOpinion'] -= 1;
                   if (array_key_exists('index', $opinion)) {
                     foreach ($proposal['tags'] as &$proposalTag) {
                       if ($proposalTag['scheme'] == TAG_SCHEME &&
@@ -2891,6 +2892,12 @@ class DiscussionController  extends PageController {
                         $proposal['weightmap'][$opinion['index']] -= 1;
                       }
                     }
+                  }
+                }
+              } else {
+                foreach ($adminOpinion as $opinion) {
+                  if (!empty($opinion['content']['description'])) {
+                    $proposal['totalOpinion'] += 1;
                   }
                 }
               }
