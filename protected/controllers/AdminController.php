@@ -45,7 +45,7 @@ class AdminController extends PageController {
    * @param array $discussionDetail
    * @param array $headings
    */
-  public function actionPdfGenerate($allProposals, $discussionDetail, $headings) {
+  public function actionPdfGenerate($allProposals, $discussionDetail) {
     try {
       $pdf = Yii::createComponent('application.extensions.tcpdf.tcpdf',
         'P', 'mm', 'A4', true, 'UTF-8', false);
@@ -67,16 +67,25 @@ class AdminController extends PageController {
       $pdf->SetFont('helvetica', '', 10, '', true);
       $pdf->AddPage();
 
-      foreach ($allProposals as &$proposal) {
-        htmlspecialchars_decode(strip_tags($proposal['title']));
-        htmlspecialchars_decode(strip_tags($proposal['content']['description']));
-      }
+      $headings = array(
+        Yii::t('discussion', 'Discussion Title'),
+        Yii::t('discussion', 'Proposal Title'),
+        Yii::t('discussion', 'Description'),
+        Yii::t('discussion', 'Author'),
+        Yii::t('discussion', 'Creation Date'),
+        Yii::t('discussion', 'Status'),
+        Yii::t('discussion', 'Vote on triangle'),
+        Yii::t('discussion', 'Number of Opinions'),
+        Yii::t('discussion', 'Number of Links')
+      );
+
+      $allProposalsForSingleDiscussion = $this->createDataForExport($allProposals,
+        $discussionDetail);
       $html = $this->renderPartial('//admin/pdfReport',
-        array(
-          'allProposals' => $allProposals,
-          'discussionDetail' => $discussionDetail,
-          'headings' => $headings
-        ), true);
+      array(
+        'allProposals' => $allProposalsForSingleDiscussion,
+        'headings' => $headings
+      ), true);
       $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
       ob_get_clean();
       $pdf->Output('report_' . date("Ymd") . '.pdf', 'D');
@@ -85,6 +94,58 @@ class AdminController extends PageController {
       Yii::log('Error in PDF Generation.', ERROR, $exception->getMessage());
     }
   }
+
+  /**
+   * createDataForExport
+   * This function is used to create data for csv and pdf for exporting all
+   * proposals for a single discussion.
+   *
+   * @param array $allProposals
+   * @param array $discussion
+   * @return array
+   */
+  public function createDataForExport($allProposals, $discussion) {
+    $allProposalsForSingleDiscussion = array();
+    foreach ($allProposals['allProposals'] as $proposal) {
+      $singleProposal = array('discussion_title' => '', 'title' => '', 'description' => '', 'author' => '',
+        'creation_date' => '', 'status' => '', 'opinion_voting_count' => 0, 'text_opinion_count' => 0, 'total_links' => 0);
+      $singleProposal['discussion_title'] = $discussion['title'];
+      $singleProposal['title'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title'])));
+      $singleProposal['description'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description'])));
+      $singleProposal['author'] = $proposal['author']['name'];
+      $singleProposal['creation_date'] = $proposal['creation_date'];
+      $singleProposal['status'] = $proposal['status'];
+      if (array_key_exists($proposal['id'], $allProposals['opinions']) &&
+        array_key_exists('opinions', $allProposals['opinions'][$proposal['id']])) {
+        foreach ($allProposals['opinions'][$proposal['id']]['opinions'] as $opinions) {
+          foreach ($opinions as $opinion) {
+            if (!empty($opinion['content']['description']) && !array_key_exists($opinion['author']['slug'], $allProposals['adminEmails'])) {
+              $singleProposal['text_opinion_count'] += 1;
+            }
+            foreach ($opinion['tags'] as $tag) {
+              if ($tag['scheme'] == INDEX_TAG_SCHEME) {
+                if (!array_key_exists($opinion['author']['slug'], $allProposals['adminEmails'])) {
+                  $singleProposal['opinion_voting_count'] += 1;
+                }
+                break;
+              }
+            }
+            if (array_key_exists($proposal['id'], $allProposals['links']) &&
+              array_key_exists('links', $allProposals['links'][$proposal['id']])) {
+              foreach ($allProposals['links'][$proposal['id']]['links'] as $author => $links) {
+                if (!array_key_exists($author, $allProposals['adminEmails'])) {
+                  $singleProposal['total_links'] += count($links);
+                }
+              }
+            }
+          }
+        }
+      }
+      $allProposalsForSingleDiscussion[] = $singleProposal;
+    }
+    return $allProposalsForSingleDiscussion;
+  }
+
 }
 
 ?> 
