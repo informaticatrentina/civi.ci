@@ -2783,8 +2783,11 @@ class DiscussionController  extends PageController {
               if (!empty($opinion['content']['description']) && $discussion['opinionCount'] > 0) {
                 $discussion['opinionCount'] -= 1;
               }
-              if ($discussion['opinionVoting'] > 0) {
-                $discussion['opinionVoting'] -= 1;
+              foreach ($opinion['tags'] as $tag) {
+                if ($tag['scheme'] == INDEX_TAG_SCHEME && $discussion['opinionVoting'] > 0) {
+                  $discussion['opinionVoting'] -= 1;
+                  break;
+                }
               }
               $discussion['adminUser']['opinionCount'] += 1;
             }
