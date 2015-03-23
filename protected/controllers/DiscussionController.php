@@ -9,7 +9,7 @@
  * Author: Sankalp Mishra <sankalp@incaendo.com>
  * This file is part of <Civico>.
  * This file can not be copied and/or distributed without the express permission of
-  <ahref Foundation.
+ * <ahref Foundation.
  */
 class DiscussionController  extends PageController {
 
@@ -1372,6 +1372,7 @@ class DiscussionController  extends PageController {
     $headings = array(
       Yii::t('discussion', 'Discussion Title'),
       Yii::t('discussion', 'Proposal Title'),
+      Yii::t('discussion', 'Proposal Summary'),
       Yii::t('discussion', 'Description'),
       Yii::t('discussion', 'Author'),
       Yii::t('discussion', 'Creation Date'),
@@ -2550,6 +2551,7 @@ class DiscussionController  extends PageController {
     $header = array(
       'discussion_title' => Yii::t('discussion', 'Discussion Title'),
       'title' => Yii::t('discussion', 'Proposal Title'),
+      'summary' => Yii::t('discussion', 'Proposal Summary'),
       'description' => Yii::t('discussion', 'Description'),
       'author' => Yii::t('discussion', 'Author'),
       'creation_date' => Yii::t('discussion', 'Creation Date'),
@@ -2833,6 +2835,11 @@ class DiscussionController  extends PageController {
         }
         if (array_key_exists('author', $proposal) && array_key_exists('slug', $proposal['author'])) {
           $author[] = $proposal['author']['slug'];
+        }
+        if (array_key_exists('content', $proposal) && !empty($proposal['content'])) {
+          if (array_key_exists('summary', $proposal['content']) && !empty($proposal['content']['summary'])) {
+            $allProposals[$key]['content']['summary'] = htmlspecialchars_decode($proposal['content']['summary']);
+          }
         }
         if (array_key_exists('content', $proposal) && !empty($proposal['content'])) {
           if (array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {

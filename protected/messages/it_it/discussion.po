@@ -238,6 +238,10 @@ msgid "Proposal Title"
 msgstr "Titolo della proposta"
 
 msgctxt "discussion"
+msgid "Proposal Summary"
+msgstr "Introduzione"
+
+msgctxt "discussion"
 msgid "Proposal abstract"
 msgstr "Sommario della proposta"
 

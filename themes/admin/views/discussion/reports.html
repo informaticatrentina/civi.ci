@@ -23,6 +23,7 @@
       <thead>
         <tr class="tablesorter-headerRow">
           <th>{{ t('discussion','Title') }}</th>
+          <th>{{ t('discussion','Summary') }}</th>
           <th>{{ t('discussion','Description') }}</th>
           <th>{{ t('discussion','Author') }}</th>
           <th>{{ t('discussion','Creation Date') }}</th>
@@ -41,6 +42,7 @@
       {% for proposal in allProposals %}
       <tr class="pid-{{proposal.id}}">
         <td><a class="proposalLinks proposal-title" href="{{constant('BASE_URL')}}admin/discussion/{{slug}}/{{proposal.id}}">{{ proposal.title }}</a></td>
+        <td class="proposal-summary">{{ proposal.content.summary }}</td>
         <td class="proposal-description">{{ proposal.content.description }}</td>
         {% set authorEmail = '' %}
         {% if attribute(emails, proposal.author.slug) is not empty %}

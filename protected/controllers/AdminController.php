@@ -10,7 +10,7 @@
  * Author: Pradeep Kumar<pradeep@incaendo.com>
  * This file is part of <Civico>.
  * This file can not be copied and/or distributed without the express permission of
-  <ahref Foundation.
+ * <ahref Foundation.
  */
 ob_start();
 class AdminController extends PageController {
@@ -70,6 +70,7 @@ class AdminController extends PageController {
       $headings = array(
         Yii::t('discussion', 'Discussion Title'),
         Yii::t('discussion', 'Proposal Title'),
+        Yii::t('discussion', 'Proposal Summary'),
         Yii::t('discussion', 'Description'),
         Yii::t('discussion', 'Author'),
         Yii::t('discussion', 'Creation Date'),
@@ -107,10 +108,11 @@ class AdminController extends PageController {
   public function createDataForExport($allProposals, $discussion) {
     $allProposalsForSingleDiscussion = array();
     foreach ($allProposals['allProposals'] as $proposal) {
-      $singleProposal = array('discussion_title' => '', 'title' => '', 'description' => '', 'author' => '',
+      $singleProposal = array('discussion_title' => '', 'title' => '', 'summary' => '', 'description' => '', 'author' => '',
         'creation_date' => '', 'status' => '', 'opinion_voting_count' => 0, 'text_opinion_count' => 0, 'total_links' => 0);
       $singleProposal['discussion_title'] = $discussion['title'];
       $singleProposal['title'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title'])));
+      $singleProposal['summary'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['summary'])));
       $singleProposal['description'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description'])));
       $singleProposal['author'] = $proposal['author']['name'];
       $singleProposal['creation_date'] = $proposal['creation_date'];

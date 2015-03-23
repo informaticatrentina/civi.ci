@@ -2,7 +2,7 @@
   <thead>
     <tr>
       {% for key, heading in headings %}
-        {% if key == 2 %}
+        {% if key == 3 %}
           <th colspan="2">
         {% else %}
           <th>
@@ -17,6 +17,7 @@
       <tr>
         <td>{{proposal.discussion_title}}</td>
         <td>{{proposal.title}}</td>
+        <td>{{proposal.summary}}</td>
         <td colspan="2">{{proposal.description}}</td>
         <td>{{proposal.author}}</td>
         <td>{{proposal.creation_date}}</td>
