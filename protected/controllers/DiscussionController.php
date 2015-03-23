@@ -2141,6 +2141,9 @@ class DiscussionController  extends PageController {
       if (array_key_exists('id', $_GET)) {
         $disucssionId = $_GET['id'];
       }
+      $discussion = new Discussion;
+      $discussion->id = $disucssionId;
+      $discussionInfo = $discussion->getDiscussionDetail();
       $staticsPoint = array();
       $graphData = array('age' => array(), 'age_range' => array(), 'sex' => array(),
           'education_level' => array(), 'citizenship' => array(), 'work' => array(),
@@ -2249,7 +2252,12 @@ class DiscussionController  extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in actionStatistics');
       $response['msg'] = Yii::t('discussion', 'Some technical problem occurred, For more detail check log file');
     }
-    $this->render('statistics', array('satistics_point' => $staticsPoint, 'response' => $response, 'chart_detail' => $preparedData));
+    $this->render('statistics', array('satistics_point' => $staticsPoint,
+                                      'response' => $response,
+                                      'chart_detail' => $preparedData,
+                                      'discussionTitle' => $discussionInfo['title']
+                                      )
+                  );
   }
   /**
    * _prepareChartData
