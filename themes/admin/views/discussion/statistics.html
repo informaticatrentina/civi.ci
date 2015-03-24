@@ -14,9 +14,9 @@
         </div>
       {% else %}
         {% for key, statistics in satistics_point %}
-        <h4 style="background-color: #f5f5f5; padding: 8px;">{{statistics}}</h4>
           <div class="row">
-             <div id="line-chart-{{key}}"></div>
+             <h4 style="background-color: #f5f5f5; padding: 8px;">{{statistics}}</h4>
+             <div class="chart-box" id="line-chart-{{key}}"></div>
           </div>
         {% endfor %}
       {% endif %}

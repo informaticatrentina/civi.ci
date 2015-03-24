@@ -576,3 +576,9 @@ Landscape tablet
   vertical-align: middle;
 }
 
+/* Google Charts Styles */
+
+div.chart-box {
+  height: 400px;
+  margin-bottom: 20px;
+}
