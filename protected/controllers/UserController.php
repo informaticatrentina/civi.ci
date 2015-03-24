@@ -801,22 +801,17 @@ class UserController extends PageController {
             && array_key_exists($user['work'], $question['work']['value'])) {
               $users[$user['_id']]['work'] = $question['work']['value'][$user['work']];
             }
-            if (array_key_exists('public_authority', $user)
-            && array_key_exists('name', $user['public_authority'])) {
-              if (!array_key_exists($user['public_authority']['name'], $question['public_authority']['value'])) {
-                $users[$user['_id']]['public_authority'] = $question['public_authority']['value'][$user['public_authority']['name']];
+            if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
+              if (array_key_exists($user['public-authority']['name'], $question['public_authority']['value'])) {
+                $users[$user['_id']]['public_authority'] = $question['public_authority']['value'][$user['public-authority']['name']];
               }
             }
             if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
-              if (array_key_exists('profession', $user['profile-info']) &&
-                array_key_exists('value', $question['profession']) &&
-                array_key_exists($user['profile-info']['profession'], $question['profession']['value'])) {
-                $users[$user['_id']]['profession'] =  $question['profession']['value'][$user['profile-info']['profession']];
+              if (array_key_exists('profession', $user['profile-info'])) {
+                $users[$user['_id']]['profession'] =  $user['profile-info']['profession'];
               }
-              if (array_key_exists('residence', $user['profile-info']) &&
-                array_key_exists('value', $question['residence']) &&
-                array_key_exists($user['profile-info']['residence'], $question['residence']['value'])) {
-                $users[$user['_id']]['residence'] = $question['residence']['value'][$user['profile-info']['residence']];
+              if (array_key_exists('residence', $user['profile-info'])) {
+                $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
               }
               if (array_key_exists('association', $user['profile-info']) &&
                 array_key_exists('value', $question['association']) &&
