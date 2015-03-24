@@ -2578,6 +2578,7 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL);
     }
     $chartDetail = array();
+    $discussionTitle = array();
     $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
     $staticsPoint = array();
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
@@ -2671,12 +2672,14 @@ class DiscussionController  extends PageController {
         }
       }
       $chartDetail[$discussion['discussionSlug']] = $preparedData;
+      $discussionTitle[$discussion['discussionSlug']] = $discussion['discussionTitle'];
     }
     $this->render('reportStatistics', array(
         'discussionInfo' => $discussions['discussion'],
         'emails' => $discussions['emails'],
         'authorNames' => $discussions['author_name'],
-        'chartDetails' => $chartDetail
+        'chartDetails' => $chartDetail,
+        'discussionTitle' => $discussionTitle
     ));
   }
   
