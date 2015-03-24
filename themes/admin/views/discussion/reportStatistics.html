@@ -57,10 +57,7 @@
     {% for chartDetailKey, chartDetailValue in chartDetails %}
     <div style="width:100%;float:left;">
       <div>
-        {% set discussionTitles = chartDetailKey|split('_') %}
-        {% set discussionTitle = discussionTitles|join(' ') %}
-        {% set discussionTitle = discussionTitle|capitalize %}
-        <h3>{{discussionTitle}}</h3>
+        <h3>{{discussionTitle[chartDetailKey]}}</h3>
       </div>
       {% if chartDetailValue is empty %}
         <div class="alert-success text-center">{{t('discussion', 'There is no data for showing stats.')}}</div>
