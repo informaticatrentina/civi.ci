@@ -212,10 +212,12 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL);
     }
     $discussion = $this->_getDiscussionProposalOpinionLinks();
+    $authorNames = $discussion['author_name'];
+    asort($authorNames);
     $this->render('discussionList', array(
         'discussionInfo' => $discussion['discussion'],
         'emails' => $discussion['emails'],
-        'authorNames' => $discussion['author_name']
+        'authorNames' => $authorNames
     ));
   }
 
@@ -2682,10 +2684,12 @@ class DiscussionController  extends PageController {
       }
       $chartDetail[$discussion['discussionSlug']] = $preparedData;
     }
+    $authorNames = $discussions['author_name'];
+    asort($authorNames);
     $this->render('reportStatistics', array(
         'discussionInfo' => $discussions['discussion'],
         'emails' => $discussions['emails'],
-        'authorNames' => $discussions['author_name'],
+        'authorNames' => $authorNames,
         'chartDetails' => $chartDetail
     ));
   }
