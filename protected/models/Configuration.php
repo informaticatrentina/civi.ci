@@ -41,12 +41,19 @@ class Configuration {
   public function save() {
     try {
       $connection = Yii::app()->db;
-      $sql = "UPDATE configuration SET value =:value WHERE name_key = :key AND 
-        config_key = :configKey";
+      $lastmodified = time();
+      $editorEmail = '';
+      if (isset(Yii::app()->session['user']['email'])) {
+        $editorEmail = Yii::app()->session['user']['email'];
+      }
+      $sql = "UPDATE configuration SET value =:value, last_modified = :last_modified,
+        editor_email = :editor_email WHERE name_key = :key AND config_key = :configKey";
       $query = $connection->createCommand($sql);
       $query->bindParam(':value', $this->value);
       $query->bindParam(":key", $this->key);
       $query->bindParam(":configKey", $this->type);
+      $query->bindParam(":last_modified", $lastmodified);
+      $query->bindParam(":editor_email", $editorEmail);
       $response = $query->execute();
     } catch (Exception $e) {
       Yii::log('save', ERROR, 'Exception while updating : ' . $e->getMessage());
