@@ -325,7 +325,7 @@ class DiscussionController  extends PageController {
       foreach ($discussionInfo as $info) {
         $entries = array();
         $discussionDetail[$i]['discussionTitle'] = $info['title'];
-        $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
+        $discussionDetail[$i]['discussionSummary'] = mb_substr($info['summary'], 0, 20, "UTF-8");;
         $discussionDetail[$i]['discussionSlug'] = $info['slug'];
         $discussionDetail[$i]['discussionAuthor'] = $info['author'];
         $discussion->discussionSlug = $info['slug'];
@@ -364,14 +364,14 @@ class DiscussionController  extends PageController {
         if (array_key_exists('title', $postData) && empty($postData['title'])) {
           throw new Exception(Yii::t('discussion', 'Title can not be empty'));
         } else {
-          $_POST['title'] = substr(trim($_POST['title']), 0, intval(Yii::app()->globaldef->params['max_char_title']));
+          $_POST['title'] = mb_substr(trim($_POST['title']), 0, intval(Yii::app()->globaldef->params['max_char_title']), "UTF-8");
         }
         if (array_key_exists('summary', $postData) && empty($postData['summary'])) {
           throw new Exception(Yii::t('discussion', 'Introduction can not be empty'));
         } else {
           //check for the allowed character limit before purification.
           $_POST['summary'] = nl2br(trim($_POST['summary']));
-          $_POST['summary'] = substr($_POST['summary'], 0, intval(Yii::app()->globaldef->params['max_char_intro']));
+          $_POST['summary'] = mb_substr($_POST['summary'], 0, intval(Yii::app()->globaldef->params['max_char_intro']), "UTF-8");
         }
         if (array_key_exists('body', $postData) && empty($postData['body'])) {
           throw new Exception(Yii::t('discussion', 'Body can not be empty'));
@@ -529,7 +529,7 @@ class DiscussionController  extends PageController {
         }
         //check for the allowed character limit before purification.
         if (array_key_exists('opiniontext', $_POST) && (!empty($_POST['opiniontext']))) {
-          $_POST['opiniontext'] = substr($_POST['opiniontext'], 0, intval(Yii::app()->globaldef->params['max_char_opinion']));
+          $_POST['opiniontext'] = mb_substr($_POST['opiniontext'], 0, intval(Yii::app()->globaldef->params['max_char_opinion']), "UTF-8");
         }
         $_POST = array_map('userInputPurifier', $_POST);
         $response = $discussion->saveOpinion();
@@ -947,7 +947,7 @@ class DiscussionController  extends PageController {
         }
         if (array_key_exists('content', $proposal) && !empty($proposal['content'])) {
           if (array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
-            $proposl['description'] = substr($proposal['content']['description'], 0, 1000);
+            $proposl['description'] = mb_substr($proposal['content']['description'], 0, 1000, "UTF-8");
           }
         }
         if (array_key_exists('author', $proposal) && !empty($proposal['author'])) {
@@ -2709,7 +2709,7 @@ class DiscussionController  extends PageController {
           $discussionDetail[] = array(
             'discussionId' => $info['id'],
             'discussionTitle' => $info['title'],
-            'discussionSummary' => substr($info['summary'], 0, 20),
+            'discussionSummary' => mb_substr($info['summary'], 0, 20, "UTF-8"),
             'discussionSlug' => $info['slug'],
             'discussionAuthor' => $info['author'],
             'discussionAuthorSlug' => $info['author_id'],
