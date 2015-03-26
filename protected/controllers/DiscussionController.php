@@ -24,6 +24,7 @@ class DiscussionController  extends PageController {
       $data = $config->get();
       foreach ($data as $configration) {
         Yii::app()->globaldef->params[$configration['name_key']] = htmlspecialchars_decode($configration['value']);
+        Yii::app()->globaldef->params['last_modified'][$configration['name_key']] = $configration['last_modified'];
       }
       Yii::app()->theme = SITE_THEME;
     }
@@ -130,13 +131,21 @@ class DiscussionController  extends PageController {
             }
           }
           $userIdentityApi = new UserIdentityAPI();
+          $userController = new UserController('user');
           $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($userDetail['email'])), false, false);
-          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && !array_key_exists('last-login', $userInfo['_items'][0])) {
+          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
             if (array_key_exists('additional_information_status', Yii::app()->globaldef->params)
               && Yii::app()->globaldef->params['additional_information_status'] == 1) {
-              $showQuestionModal = TRUE;
+              if (array_key_exists('site-last-login', $userInfo['_items'][0]) &&
+                array_key_exists(CIVICO, $userInfo['_items'][0]['site-last-login'])) {
+                $showQuestionModal = $userController->showQuestionForm($userInfo['_items'][0]['site-last-login'][CIVICO]);
+              } else {
+                $showQuestionModal = TRUE;
+              }
             }
           }
+          //update user last login time
+          $userController->updateLastLoginTime($userInfo);
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
           $_SESSION['user']['admin'] = $isAdmin;

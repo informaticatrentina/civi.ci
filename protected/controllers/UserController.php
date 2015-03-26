@@ -27,6 +27,7 @@ class UserController extends PageController {
       $data = $config->get();
       foreach ($data as $configration) {
         Yii::app()->globaldef->params[$configration['name_key']] = htmlspecialchars_decode($configration['value']);
+        Yii::app()->globaldef->params['last_modified'][$configration['name_key']] = $configration['last_modified'];
       }
       Yii::app()->theme = SITE_THEME;
     }
@@ -866,6 +867,44 @@ class UserController extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in getAuthorEmail ');
     }
     return $userEmail;
+  }
+
+  /**
+   * showQuestionForm
+   * function is used for check wether question form is shown or not
+   * @param int $lastLoginTimestamp
+   * @return boolean - TRUE if question form is to be shown
+   */
+  public function showQuestionForm($lastLoginTimestamp) {
+    $showAdditionalQuestion = FALSE;
+    if (isset(Yii::app()->globaldef->params['last_modified']['user_additional_info_question']) &&
+      $lastLoginTimestamp < Yii::app()->globaldef->params['last_modified']['user_additional_info_question']) {
+      $showAdditionalQuestion = TRUE;
+    }
+    return $showAdditionalQuestion;
+  }
+
+  /**
+   * updateLastLoginTime
+   * function is used for updating last login time of user in identity manager
+   * @param array $userInfo
+   * @return void
+   */
+  public function updateLastLoginTime($userInfo) {
+    $im = new UserIdentityAPI();
+    $param = array(
+      'id' => Yii::app()->session['user']['id'],
+      'site-last-login' => array(CIVICO => time())
+    );
+    if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])
+      && array_key_exists('site-last-login', $userInfo['_items'][0])) {
+      $param['site-last-login'] = $userInfo['_items'][0]['site-last-login'];
+      $param['site-last-login'][CIVICO] = time();
+    }
+    $updateUser = $im->curlPut(IDM_USER_ENTITY, $param);
+    if (!array_key_exists('_status', $updateUser) || $updateUser['_status'] != 'OK') {
+      Yii::log('Last login time is not updated.', ERROR, 'Error in action updateLastLoginTime');
+    }
   }
 
 }
