@@ -511,3 +511,6 @@ msgctxt "discussion"
 msgid "You can not leave the field blank opinion."
 msgstr "Non puoi lasciare vuoto il campo opinione."
 
+msgctxt "discussion"
+msgid "You have to choose a position on the triangle!"
+msgstr "Devi prima esprimere una valutazione sul triangolo!"
