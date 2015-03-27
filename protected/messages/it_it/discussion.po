@@ -1131,7 +1131,19 @@ msgstr "Provincia"
 
 msgctxt "discussion"
 msgid "Public authority"
-msgstr "ente di appartenenza"
+msgstr "Ente di appartenenza"
+
+msgctxt "discussion"
+msgid "Residence"
+msgstr "Residenza"
+
+msgctxt "discussion"
+msgid "Profession"
+msgstr "Professione"
+
+msgctxt "discussion"
+msgid "Association"
+msgstr "Ordine"
 
 msgctxt "discussion"
 msgid "Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions."
