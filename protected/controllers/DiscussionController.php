@@ -2712,6 +2712,7 @@ class DiscussionController  extends PageController {
       $discussionWiseAuthor = array();
       $discussionWiseProposalAuthor = array();
       $discussionWiseOpinionAuthor = array();
+      $discussionAuthorId = array();
       if (!empty($discussionInfo)) {
         foreach ($discussionInfo as $info) {
           $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
@@ -2730,6 +2731,7 @@ class DiscussionController  extends PageController {
             'userCount' => 0,
             'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
           );
+          $discussionAuthorId[] = $info['author_id'];
           $authorName = array_merge($authorName, $discussionContent['author_name']);
           $authorId = array_merge($authorId, $discussionContent['author']);
           $discussionWiseAuthor[$info['id']] = $discussionContent['author'];
@@ -2782,6 +2784,9 @@ class DiscussionController  extends PageController {
           $resp['author_name'][$authorId] = $author;
         }
       }
+      //get discussion author's email id
+      $discussionAuthorEmail  = $userController->getAuthorEmail($discussionAuthorId, TRUE);
+      $user['admin_user'] = array_merge($user['admin_user'], $discussionAuthorEmail['admin_user']);
       $resp['emails'] = array_merge($user['user'], $user['admin_user']);
       $resp['user'] = $user;
       $resp['discussion_author'] = $discussionWiseAuthor;
