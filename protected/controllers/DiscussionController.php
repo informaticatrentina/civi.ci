@@ -24,6 +24,7 @@ class DiscussionController  extends PageController {
       $data = $config->get();
       foreach ($data as $configration) {
         Yii::app()->globaldef->params[$configration['name_key']] = htmlspecialchars_decode($configration['value']);
+        Yii::app()->globaldef->params['last_modified'][$configration['name_key']] = $configration['last_modified'];
       }
       Yii::app()->theme = SITE_THEME;
     }
@@ -130,13 +131,21 @@ class DiscussionController  extends PageController {
             }
           }
           $userIdentityApi = new UserIdentityAPI();
+          $userController = new UserController('user');
           $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($userDetail['email'])), false, false);
-          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && !array_key_exists('last-login', $userInfo['_items'][0])) {
+          if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])) {
             if (array_key_exists('additional_information_status', Yii::app()->globaldef->params)
               && Yii::app()->globaldef->params['additional_information_status'] == 1) {
-              $showQuestionModal = TRUE;
+              if (array_key_exists('site-last-login', $userInfo['_items'][0]) &&
+                array_key_exists(CIVICO, $userInfo['_items'][0]['site-last-login'])) {
+                $showQuestionModal = $userController->showQuestionForm($userInfo['_items'][0]['site-last-login'][CIVICO]);
+              } else {
+                $showQuestionModal = TRUE;
+              }
             }
           }
+          //update user last login time
+          $userController->updateLastLoginTime($userInfo);
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
           $_SESSION['user']['admin'] = $isAdmin;
@@ -327,7 +336,7 @@ class DiscussionController  extends PageController {
       foreach ($discussionInfo as $info) {
         $entries = array();
         $discussionDetail[$i]['discussionTitle'] = $info['title'];
-        $discussionDetail[$i]['discussionSummary'] = substr($info['summary'], 0, 20);
+        $discussionDetail[$i]['discussionSummary'] = mb_substr($info['summary'], 0, 20, "UTF-8");;
         $discussionDetail[$i]['discussionSlug'] = $info['slug'];
         $discussionDetail[$i]['discussionAuthor'] = $info['author'];
         $discussion->discussionSlug = $info['slug'];
@@ -366,14 +375,14 @@ class DiscussionController  extends PageController {
         if (array_key_exists('title', $postData) && empty($postData['title'])) {
           throw new Exception(Yii::t('discussion', 'Title can not be empty'));
         } else {
-          $_POST['title'] = substr(trim($_POST['title']), 0, intval(Yii::app()->globaldef->params['max_char_title']));
+          $_POST['title'] = mb_substr(trim($_POST['title']), 0, intval(Yii::app()->globaldef->params['max_char_title']), "UTF-8");
         }
         if (array_key_exists('summary', $postData) && empty($postData['summary'])) {
           throw new Exception(Yii::t('discussion', 'Introduction can not be empty'));
         } else {
           //check for the allowed character limit before purification.
           $_POST['summary'] = nl2br(trim($_POST['summary']));
-          $_POST['summary'] = substr($_POST['summary'], 0, intval(Yii::app()->globaldef->params['max_char_intro']));
+          $_POST['summary'] = mb_substr($_POST['summary'], 0, intval(Yii::app()->globaldef->params['max_char_intro']), "UTF-8");
         }
         if (array_key_exists('body', $postData) && empty($postData['body'])) {
           throw new Exception(Yii::t('discussion', 'Body can not be empty'));
@@ -531,7 +540,7 @@ class DiscussionController  extends PageController {
         }
         //check for the allowed character limit before purification.
         if (array_key_exists('opiniontext', $_POST) && (!empty($_POST['opiniontext']))) {
-          $_POST['opiniontext'] = substr($_POST['opiniontext'], 0, intval(Yii::app()->globaldef->params['max_char_opinion']));
+          $_POST['opiniontext'] = mb_substr($_POST['opiniontext'], 0, intval(Yii::app()->globaldef->params['max_char_opinion']), "UTF-8");
         }
         $_POST = array_map('userInputPurifier', $_POST);
         $response = $discussion->saveOpinion();
@@ -949,7 +958,7 @@ class DiscussionController  extends PageController {
         }
         if (array_key_exists('content', $proposal) && !empty($proposal['content'])) {
           if (array_key_exists('description', $proposal['content']) && !empty($proposal['content']['description'])) {
-            $proposl['description'] = substr($proposal['content']['description'], 0, 1000);
+            $proposl['description'] = mb_substr($proposal['content']['description'], 0, 1000, "UTF-8");
           }
         }
         if (array_key_exists('author', $proposal) && !empty($proposal['author'])) {
@@ -2717,13 +2726,14 @@ class DiscussionController  extends PageController {
       $discussionWiseAuthor = array();
       $discussionWiseProposalAuthor = array();
       $discussionWiseOpinionAuthor = array();
+      $discussionAuthorId = array();
       if (!empty($discussionInfo)) {
         foreach ($discussionInfo as $info) {
           $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
           $discussionDetail[] = array(
             'discussionId' => $info['id'],
             'discussionTitle' => $info['title'],
-            'discussionSummary' => substr($info['summary'], 0, 20),
+            'discussionSummary' => mb_substr($info['summary'], 0, 20, "UTF-8"),
             'discussionSlug' => $info['slug'],
             'discussionAuthor' => $info['author'],
             'discussionAuthorSlug' => $info['author_id'],
@@ -2735,6 +2745,7 @@ class DiscussionController  extends PageController {
             'userCount' => 0,
             'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
           );
+          $discussionAuthorId[] = $info['author_id'];
           $authorName = array_merge($authorName, $discussionContent['author_name']);
           $authorId = array_merge($authorId, $discussionContent['author']);
           $discussionWiseAuthor[$info['id']] = $discussionContent['author'];
@@ -2787,6 +2798,9 @@ class DiscussionController  extends PageController {
           $resp['author_name'][$authorId] = $author;
         }
       }
+      //get discussion author's email id
+      $discussionAuthorEmail  = $userController->getAuthorEmail($discussionAuthorId, TRUE);
+      $user['admin_user'] = array_merge($user['admin_user'], $discussionAuthorEmail['admin_user']);
       $resp['emails'] = array_merge($user['user'], $user['admin_user']);
       $resp['user'] = $user;
       $resp['discussion_author'] = $discussionWiseAuthor;
