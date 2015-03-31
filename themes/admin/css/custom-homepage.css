@@ -581,4 +581,31 @@ Landscape tablet
 div.chart-box {
   height: 400px;
   margin-bottom: 20px;
+  page-break-inside: avoid;
 }
+
+.chart-box svg {
+    page-break-inside: avoid;
+    overflow: visible !important;
+}
+
+@media print {
+   .header {display: none;}
+   ul.nav {display: none;}
+   div.row {overflow-y: visible;}
+   div.span12 {overflow-y: visible;}
+   div.chart-row {page-break-after: always;overflow-y: visible;}
+   div.users-list {page-break-after: always;}
+   .chart-box svg {
+    page-break-inside: avoid;
+    overflow: visible !important;
+  }
+  .chart-box {
+    page-break-inside: avoid;
+  }
+  div h3 {page-break-before: always;}
+  .footer {display: none;}
+  .container {margin-left: 0;}
+  a[href]:after {content: none !important;}
+}
+

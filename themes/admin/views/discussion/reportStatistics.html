@@ -1,5 +1,6 @@
 <div class="row">
   <div class="span12">
+    <h1 class="title">{{ t('discussion','Statistics') }}</h1>
     {% set isAdmin = checkPermission('admin') %}
     <table class="table table-bordered table-condensed table-striped">
       <thead>
@@ -55,15 +56,13 @@
 <div class="row">
   <div class="span12">
     {% for chartDetailKey, chartDetailValue in chartDetails %}
-    <div style="width:100%;float:left;">
-      <div>
+    <div class="discussion-charts" style="width:100%;float:left;">
         <h3>{{discussionTitle[chartDetailKey]}}</h3>
-      </div>
       {% if chartDetailValue is empty %}
         <div class="alert-success text-center">{{t('discussion', 'There is no data for showing stats.')}}</div>
       {% else %}
         {% for chartKey, chartValue in chartDetailValue %}
-        <div  class="span8">
+        <div class="span8">
           <div class="chart-box" id="line_chart_{{chartDetailKey}}_{{chartKey}}"></div>
         </div>
       {%endfor%}
