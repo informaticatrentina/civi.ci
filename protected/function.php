@@ -536,3 +536,20 @@ function setThemeForUrl() {
     define('SITE_THEME', SITE_THEMES);
   }
 }
+
+/**
+ * checkAdditionalFormFilled
+ * Function used to check that logged in user has submitted additional information form.
+ * If form not filled than redirected to additional question filling page.
+ */
+function checkAdditionalFormFilled() {
+  if(Yii::app()->controller->action->id !== 'logout') {
+    if(isset(Yii::app()->session['user']) &&
+      array_key_exists('show_question_page', Yii::app()->session['user']) &&
+      Yii::app()->session['user']['show_question_page'] == TRUE) {
+      $additionalInfoUrl = BASE_URL . 'user/question';
+      $discussion = new DiscussionController('discussion');
+      $discussion->redirect($additionalInfoUrl);
+    }
+  }
+}

@@ -16,6 +16,18 @@ ob_start();
 class AdminController extends PageController {
   
   /**
+   * beforeAction
+   *
+   * @param $action
+   * @return boolean
+   */
+  public function beforeAction($action) {
+    new JsTrans('js', SITE_LANGUAGE);
+    checkAdditionalFormFilled();
+    return true;
+  }
+
+  /**
    * Function sessionExistence
    * 
    * Function is used for check whether session exists or not.
