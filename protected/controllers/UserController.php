@@ -497,6 +497,9 @@ class UserController extends PageController {
         $userInfo['id'] = Yii::app()->session['user']['id'];
         $userInfo['last-login'] = time();
         $updateUser = $im->curlPut(IDM_USER_ENTITY, $userInfo);
+        $userIdentityApi = new UserIdentityAPI();
+        $userDetails = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim(Yii::app()->session['user']['email'])), false, false);
+        $this->updateLastLoginTime($userDetails);
         if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
           unset($_SESSION['user']['show_question_page']);
           $redirectUrl = BASE_URL;

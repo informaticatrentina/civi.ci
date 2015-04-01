@@ -32,6 +32,7 @@ class DiscussionController  extends PageController {
 
   public function beforeAction($action) {
     new JsTrans('js', SITE_LANGUAGE);
+    checkAdditionalFormFilled();
     return true;
   }
 
@@ -145,7 +146,9 @@ class DiscussionController  extends PageController {
             }
           }
           //update user last login time
-          $userController->updateLastLoginTime($userInfo);
+          if(!$showQuestionModal) {
+            $userController->updateLastLoginTime($userInfo);
+          }
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
           $_SESSION['user']['admin'] = $isAdmin;
