@@ -1,7 +1,6 @@
 <div class="row">
   <div class="span12">
     <h2 class="title">{{discussionTitle}}</h2>
-    <div class="span10">
       {% if response.success is empty %}
         <div style="background-color:#f5f5f5; margin:25px 0px;">
           <div class="row">
@@ -14,13 +13,12 @@
         </div>
       {% else %}
         {% for key, statistics in satistics_point %}
-          <div class="row">
+          <div class="span10">
              <h4 style="background-color: #f5f5f5; padding: 8px;">{{statistics}}</h4>
              <div class="chart-box" id="line-chart-{{key}}"></div>
           </div>
         {% endfor %}
       {% endif %}
-    </div>
   </div>  
 </div>
 <script>

@@ -10,7 +10,7 @@
       </h1>
     </div>
     {% if isAdmin == true %}
-      <div class="pull-right btn-toolbar">
+      <div class="pull-right btn-toolbar hidden-print">
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">{{ t('discussion', 'Export To PDF') }}</a>
       </div>
@@ -32,10 +32,10 @@
           <th>{{ t('discussion','Number of Links') }}</th>
           <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
           {% if isAdmin == true %}
-            <th>{{ t('discussion', 'Sorting Order') }}</th>
+            <th class="hidden-print">{{ t('discussion', 'Sorting Order') }}</th>
           {% endif %}
           {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) %}
-            <th class="sorter-false">{{ t('discussion','Ops') }}</th>
+            <th class="sorter-false hidden-print">{{ t('discussion','Ops') }}</th>
           {% endif %}
         </tr>
       </thead>
@@ -76,9 +76,9 @@
           {%endif%}
         </td>
         {% if isAdmin == true %}
-          <td><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
+          <td class="hidden-print"><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
         {% endif %}      
-        <td>
+        <td class="hidden-print">
           <div class="dropdown">
             <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
             <ul class="dropdown-menu">

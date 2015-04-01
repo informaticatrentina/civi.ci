@@ -23,7 +23,7 @@ function drawChart() {
           title: chartDetails[chart]['title'],
           is3D: false,
           pieStartAngle: 100,
-          legend: {position: 'top', alignment: 'start',  maxLines: 5, textStyle: {fontSize: 10}},
+          legend: {position: 'top',  maxLines: 5, textStyle: {fontSize: 10}},
           chartArea: { width: '90%', height: '80%', top: '20%'}
         };
         var charting = new google.visualization.PieChart(document.getElementById('line-chart-' + chart));
