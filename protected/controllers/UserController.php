@@ -56,6 +56,9 @@ class UserController extends PageController {
         if (empty($user['lastname'])) {
           throw new Exception(Yii::t('discussion', 'Please enter last name'));
         }
+        if (empty($user['nickname'])) {
+          throw new Exception(Yii::t('discussion', 'Please enter nickname'));
+        }
         if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
           throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
         }
@@ -83,6 +86,7 @@ class UserController extends PageController {
         $userDetail = array(
           'firstname' => $user['firstname'],
           'lastname' => $user['lastname'],
+          'nickname' => $user['nickname'],
           'email' => $user['email'],
           'password' => $user['password'],
           'status' => 0,
@@ -112,8 +116,6 @@ class UserController extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in actionRegister method');
     }
     $this->layout = 'userManager';
-    $js = Yii::app()->getClientScript();
-    $js->registerScriptFile(THEME_URL . 'js/userRegistration.js', CClientScript::POS_END);
     $this->render('registration', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
   }
 
@@ -910,5 +912,42 @@ class UserController extends PageController {
     }
   }
 
+  /**
+   * actionCheckNickname
+   * Method used to check whether the nick name is already present or not.
+   *
+   * @author Harsh <harsh@incaendo.com>
+   * @return Array Response is returned with a message and a success status
+   * @throws Exception
+   */
+  public function actionCheckNickname() {
+    $response = array(
+      'msg' => Yii::t('discussion', 'Nickname already in use. Choose Another') ,
+      'success' => TRUE
+    );
+    try {
+      if (array_key_exists('nickname', $_GET) && !empty($_GET['nickname'])) {
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $user = new UserIdentityAPI();
+        $userDetail = array(
+          'nickname' => $_GET['nickname']
+        );
+        $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userDetail, false, false, true);
+        if (array_key_exists('_items', $userStatus) && empty($userStatus['_items'])) {
+          $response['success'] = FALSE;
+          $response['msg'] = Yii::t('discussion', 'Nickname available');
+        }
+      }
+    } catch (Exception $exception) {
+      $response['success'] = TRUE;
+      $response['msg'] = Yii::t('discussion', 'Some error occured. Please try again.');
+      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname');
+    }
+    echo CJSON::encode($response);
+    exit;
+  }
 }
-?>
+

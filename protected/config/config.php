@@ -249,6 +249,7 @@ return array(
                 'user/question' => 'user/saveAdditionalInfo',
                 'user/forgot-password' => 'user/forgotPassword',
                 'user/change-password' => 'user/changePassword',
+                'user/checknickname' => 'user/checkNickname',
                 'question/save' => 'user/saveAdditinalInformationQuestion',
                 'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
                 'admin/config/homepage' => 'discussion/homepageConfig',
