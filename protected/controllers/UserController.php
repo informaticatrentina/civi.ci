@@ -989,7 +989,8 @@ class UserController extends PageController {
                   $tempUserInfo = array('never-add-nickname' => 1);
                   $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
                 } else {
-                  $tempSiteUserInfo['site-user-info'][CIVICO] = array('never-add-nickname' => 1);
+                  $tempSiteUserInfo[CIVICO] = array('never-add-nickname' => 1);
+                  $tempSiteUserInfo['site-user-info'] = $tempSiteUserInfo;
                 }
                 $response = $this->saveUserNickname($userDetail['id'], false, $tempSiteUserInfo);
               } else {
@@ -1109,7 +1110,8 @@ class UserController extends PageController {
                 $tempUserInfo = $tagToBeInserted;
                 $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
               } else {
-                $tempSiteUserInfo['site-user-info'][CIVICO] = $tagToBeInserted;
+                $tempSiteUserInfo[CIVICO] = $tagToBeInserted;
+                $tempSiteUserInfo['site-user-info'] = $tempSiteUserInfo;
               }
               $response = $this->saveUserNickname($userInfo['id'], false, $tempSiteUserInfo);
             } else {
