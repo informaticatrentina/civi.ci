@@ -69,11 +69,48 @@ class DiscussionController  extends PageController {
       $chunkSize = $configuration['layout'];
     }
     $discussions = array_chunk($stripedContent, $chunkSize);
+    $showNicknamePopUp = FALSE;
+    $sessionArr = Yii::app()->session['user'];
+    if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
+      if ($sessionArr['show-add-nickname-popup'] == FALSE) {
+        $showNicknamePopUp = TRUE;
+      }
+    }
+    $showUseNickname = INACTIVE;
+    if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
+      Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
+      if (is_array($sessionArr)) {
+        if (array_key_exists('never-display-nickname', $sessionArr) &&
+          isset($sessionArr['never-display-nickname']) &&
+          $sessionArr['never-display-nickname'] == ACTIVE) {
+          $showUseNickname = INACTIVE;
+        } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+          isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+            $showUseNickname = INACTIVE;
+        } else {
+          if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+            if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+              if ($sessionArr['use-nickname'] == ACTIVE) {
+                $showUseNickname = INACTIVE;
+              } else {
+                $showUseNickname = ACTIVE;
+              }
+            } else {
+              $showUseNickname = ACTIVE;
+            }
+          }
+        }
+      }
+      if ($showUseNickname == ACTIVE) {
+        $sessionArr['show-use-nickname'] = ACTIVE;
+      }
+    }
+    Yii::app()->session['user'] = $sessionArr;
     if (defined('DIV_COLORS')) {
       $color = unserialize(DIV_COLORS);
-      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
+      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration, 'shownNicknamePopUp' => $showNicknamePopUp, 'showUseNickname' => $showUseNickname));
     } else {
-      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
+      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration, 'shownNicknamePopUp' => $showNicknamePopUp, 'showUseNickname' => $showUseNickname));
     }
   }
 
@@ -148,6 +185,36 @@ class DiscussionController  extends PageController {
           //update user last login time
           if(!$showQuestionModal) {
             $userController->updateLastLoginTime($userInfo);
+          }
+          if (array_key_exists('_items', $response) && !empty($response['_items'])
+            && array_key_exists('0', $response['_items']) && !empty($response['_items']['0'])
+            && array_key_exists('site-user-info', $response['_items']['0'])
+            && !empty($response['_items']['0']['site-user-info']) &&
+            array_key_exists(CIVICO, $response['_items']['0']['site-user-info'])
+            && !empty($response['_items']['0']['site-user-info'][CIVICO])) {
+            $siteUserInfo = $response['_items']['0']['site-user-info'][CIVICO];
+            if (array_key_exists('nickname', $response['_items']['0'])) {
+              $temp['has-nickname'] = ACTIVE;
+            } else {
+              $temp['has-nickname'] = INACTIVE;
+            }
+            if (array_key_exists('never-add-nickname', $siteUserInfo)) {
+              $temp['never-add-nickname'] = $siteUserInfo['never-add-nickname'];
+            }
+            if (array_key_exists('use-nickname', $siteUserInfo)) {
+              $temp['use-nickname'] = $siteUserInfo['use-nickname'];
+              $temp['firstname'] = $response['_items']['0']['nickname'];
+              $temp['lastname'] = '';
+            }
+            if (array_key_exists('never-display-nickname', $siteUserInfo)) {
+              $temp['never-display-nickname'] = $siteUserInfo['never-display-nickname'];
+            }
+            if (array_key_exists('never-add-nickname', $siteUserInfo)
+              && array_key_exists('nickname', $siteUserInfo)) {
+              $temp['show-add-nickname-popup'] = INACTIVE;
+            } else {
+              $temp['show-add-nickname-popup'] = ACTIVE;
+            }
           }
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
@@ -224,10 +291,46 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL);
     }
     $discussion = $this->_getDiscussionProposalOpinionLinks();
+    $showNicknamePopUp = FALSE;
+    $sessionArr = Yii::app()->session['user'];
+    if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
+      if ($sessionArr['show-add-nickname-popup'] == FALSE) {
+        $showNicknamePopUp = TRUE;
+      }
+    }
+    $showUseNickname = INACTIVE;
+    if (is_array($sessionArr)) {
+      if (array_key_exists('never-display-nickname', $sessionArr) &&
+        isset($sessionArr['never-display-nickname']) &&
+        $sessionArr['never-display-nickname'] == ACTIVE) {
+        $showUseNickname = INACTIVE;
+      } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+        isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+          $showUseNickname = INACTIVE;
+      } else {
+        if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+          if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+            if ($sessionArr['use-nickname'] == ACTIVE) {
+              $showUseNickname = INACTIVE;
+            } else {
+              $showUseNickname = ACTIVE;
+            }
+          } else {
+            $showUseNickname = ACTIVE;
+          }
+        }
+      }
+    }
+    if ($showUseNickname == ACTIVE) {
+      $sessionArr['show-use-nickname'] = ACTIVE;
+    }
+    Yii::app()->session['user'] = $sessionArr;
     $this->render('discussionList', array(
         'discussionInfo' => $discussion['discussion'],
         'emails' => $discussion['emails'],
-        'authorNames' => $discussion['author_name']
+        'authorNames' => $discussion['author_name'],
+        'shownNicknamePopUp' => $showNicknamePopUp,
+        'showUseNickname' => $showUseNickname
     ));
   }
 

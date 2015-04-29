@@ -250,6 +250,8 @@ return array(
                 'user/forgot-password' => 'user/forgotPassword',
                 'user/change-password' => 'user/changePassword',
                 'user/checknickname' => 'user/checkNickname',
+                'user/savenickname' => 'user/saveNickname',
+                'user/displaynickname' => 'user/displayNickname',
                 'question/save' => 'user/saveAdditinalInformationQuestion',
                 'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
                 'admin/config/homepage' => 'discussion/homepageConfig',

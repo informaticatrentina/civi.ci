@@ -90,6 +90,7 @@ class UserController extends PageController {
           'email' => $user['email'],
           'password' => $user['password'],
           'status' => 0,
+          'type' => 'user',
           'source' => CIVICO
         );
         if (!empty($_GET['back'])) {
@@ -528,7 +529,7 @@ class UserController extends PageController {
           }
           if (array_key_exists('education-level', $userInfo)) {
             $postData['education_level'] = $userInfo['education-level'];
-	          if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+                 if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
               $postData['education_level'] =  'other';
               $postData['education_level_description'] = $userInfo['education-level'];
             }
@@ -917,7 +918,7 @@ class UserController extends PageController {
    * Method used to check whether the nick name is already present or not.
    *
    * @author Harsh <harsh@incaendo.com>
-   * @return Array Response is returned with a message and a success status
+   * @return JSON Response is returned with a message and a success status
    * @throws Exception
    */
   public function actionCheckNickname() {
@@ -949,5 +950,192 @@ class UserController extends PageController {
     echo CJSON::encode($response);
     exit;
   }
+
+  /**
+   * actionSaveNickname
+   * Method used to save nickname
+   *
+   * @author Harsh <harsh@incaendo.com>
+   * @return JSON Response message and success status are returned.
+   * @throws Exception
+   */
+  public function actionSaveNickname() {
+    $response = array(
+        'msg' => '',
+        'success' => FALSE
+    );
+    try {
+      if ((array_key_exists('nickname', $_GET) && array_key_exists('neverAddNickname', $_GET)) && ($_GET['nickname'] != '' || $_GET['neverAddNickname'] == ACTIVE)) {
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $user = new UserIdentityAPI();
+        $userDetail = array();
+        $sessionArr = Yii::app()->session['user'];
+        if (!empty($sessionArr) && array_key_exists('id', $sessionArr) &&
+                isset($sessionArr['id'])) {
+          $userDetail['id'] = $sessionArr['id'];
+          $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userDetail, false, false, false);
+          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
+            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+                    !empty($userStatus['_items']['0']['site-user-info']) &&
+                    is_array($userStatus['_items']['0']['site-user-info'])) {
+              $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
+              if ($_GET['neverAddNickname'] == 1) {
+                if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
+                  $tempSiteInfo = $tempSiteUserInfo[CIVICO];
+                  $tempUserInfo = array('never-add-nickname' => 1);
+                  $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
+                } else {
+                  $tempSiteUserInfo['site-user-info'][CIVICO] = array('never-add-nickname' => 1);
+                }
+                $response = $this->saveUserNickname($userDetail['id'], false, $tempSiteUserInfo);
+              } else {
+                $nickname = $_GET['nickname'];
+                $response = $this->saveUserNickname($userDetail['id'], $nickname, $tempSiteUserInfo);
+              }
+            } else {
+              $userSiteInfo = array();
+              if ($_GET['neverAddNickname'] == 1) {
+                $userSiteInfo['site-user-info'][CIVICO] = array('never-add-nickname' => 1);
+                $response = $this->saveUserNickname($userDetail['id'], false, $userSiteInfo);
+              } else {
+                $userSiteInfo['site-user-info'] = array();
+                $response = $this->saveUserNickname($userDetail['id'], $nickname, $userSiteInfo);
+              }
+            }
+          } else {
+            throw new Exception('Some error occured in getting user detail');
+          }
+        }
+      } else {
+        $response['msg'] = Yii::t('discussion', 'Nickname cannot be empty');
+      }
+    } catch (Exception $exception) {
+      $response['msg'] = Yii::t('discussion', 'Some error occured. Please try again.');
+      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname');
+    }
+    echo CJSON::encode($response);
+    exit;
+  }
+
+  /**
+   * saveUserNickname
+   * Method used to add user nickname in its details.
+   *
+   * @param INT $userId
+   * @param STRING $nickname
+   * @param ARRAY $userSiteInfo
+   * @return ARRAY Response with a message and a success status are returned
+   */
+  public function saveUserNickname($userId, $nickname = false, $userSiteInfo) {
+    $response = array(
+        'msg' => '',
+        'success' => FALSE
+    );
+    $user = new UserIdentityAPI();
+    $userInfo['id'] = $userId;
+    if ($nickname != false) {
+      $userInfo['nickname'] = $nickname;
+    }
+    $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
+    $updateUser = $user->curlPut(IDM_USER_ENTITY, $userInfo);
+    if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+      $response['id'] = $updateUser['_id'];
+      $response['msg'] = Yii::t('discussion', 'Nickname is successfully added to your account');
+      if ($nickname == false) {
+        $response['msg'] = Yii::t('discussion', 'You will never be asked from now');
+      }
+      $response['success'] = true;
+    } else {
+      $message = Yii::t('discussion', 'Some error occured please try again');
+      if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'ERR') {
+        if (array_key_exists('nickname', $updateUser['_issues'])) {
+          $message = $updateUser['_issues']['nickname'];
+        }
+        if (strpos($message, "is not unique") !== false) {
+          if (array_key_exists('nickname', $updateUser['_issues'])) {
+            $message = Yii::t('discussion', 'Nickname already in use, Choose another');
+          }
+        } else {
+          $message = Yii::t('discussion', 'Some technical problem occurred, contact administrator');
+        }
+      }
+      $response['msg'] = $message;
+    }
+    return $response;
+  }
+
+  /**
+   * Method used to save tags for :
+   * using nickname in place of author names,
+   * never displaying this pop up again.
+   * @author Harsh <harsh@incaendo.com>
+   * @throws Exception
+   */
+  public function actionDisplayNickname() {
+    try {
+      if (!empty($_POST)) {
+        $postData = $_POST;
+        $sessionArr = Yii::app()->session['user'];
+        if (array_key_exists('id', $sessionArr) && !empty($sessionArr['id'])) {
+          $tagToBeInserted = array();
+          if (array_key_exists('btn_use_nickname', $postData)) {
+            $tagToBeInserted = array('use-nickname' => 1);
+          } else if (array_key_exists('btn_never_display_nickname', $postData)) {
+            if (array_key_exists('never_display_nickname', $postData) &&
+                    $postData['never_display_nickname'] = 'on') {
+              $tagToBeInserted = array('never-display-nickname' => 1);
+            }
+          }
+          $userInfo = array();
+          $userInfo['id'] = $sessionArr['id'];
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module)) {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+          $user = new UserIdentityAPI();
+          $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userInfo, false, false, false);
+          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
+            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+                    !empty($userStatus['_items']['0']['site-user-info']) &&
+                    is_array($userStatus['_items']['0']['site-user-info'])) {
+              $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
+              if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
+                $tempSiteInfo = $tempSiteUserInfo[CIVICO];
+                $tempUserInfo = $tagToBeInserted;
+                $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
+              } else {
+                $tempSiteUserInfo['site-user-info'][CIVICO] = $tagToBeInserted;
+              }
+              $response = $this->saveUserNickname($userInfo['id'], false, $tempSiteUserInfo);
+            } else {
+              $userSiteInfo['site-user-info'][CIVICO] = $tagToBeInserted;
+              $response = $this->saveUserNickname($userInfo['id'], false, $userSiteInfo);
+            }
+            if (!array_key_exists('success', $response) || !$response['success']) {
+              throw new Exception('Not got success while saving use nickname tags');
+            }
+            if (array_key_exists('success', $response) && $response['success'] &&
+              array_key_exists('use-nickname', $tagToBeInserted) &&
+              array_key_exists('nickname', $sessionArr)) {
+              $sessionArr['firstname'] = $sessionArr['nickname'];
+              $sessionArr['lastname'] = '';
+              Yii::app()->session['user'] = $sessionArr;
+            }
+          } else {
+            throw new Exception('User detail is returned empty.');
+          }
+        }
+      }
+    } catch (Exception $exception) {
+      Yii::log('Error in actionDisplayNickname method', ERROR, $exception->getMessage());
+    }
+    $this->redirect(Yii::app()->request->urlReferrer);
+  }
+
 }
 

@@ -1,3 +1,74 @@
+{% if shownNicknamePopUp is defined %}
+  {% if shownNicknamePopUp == 1 %}
+    <button id="btns" class="hide" data-toggle="modal" data-target="#myModal"></button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Choose your nickname') }}</h4>
+          </div>
+          <div class="modal-body">
+            <div class="display_message_nickname"></div>
+              <div class="form-group">
+                <label for="nickname" class="control-label">{{ t('discussion', 'Nickname') }}:</label>
+                <input type="text" class="form-control" id="nickname">
+                <a href="#" id="check_availability">{{ t('discussion', 'Check Availability ?') }}</a>
+                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" id="never_add_nickname" name="never_add_nickname" />
+                {{ t('discussion', 'Never show this again ?') }}
+                <br><br>
+                <p class="hide alert-danger" id="never_add_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
+            <button type="button" class="btn btn-primary" id="save_nickname">{{ t('discussion', 'Save changes') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+{% if showUseNickname is defined %}
+  {% if showUseNickname == 1 %}
+    <button id="btn-show-use-nickname" class="hide" data-toggle="modal" data-target="#show-use-nickname-modal"></button>
+
+    <div class="modal fade" id="show-use-nickname-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Use your nickname everywhere') }}</h4>
+          </div>
+          <form action="{{constant('BASE_URL')}}user/displaynickname" method="post">
+            <div class="modal-body">
+              <div class="display_message_nickname"></div>
+              <div class="form-group">
+                <label class="control-label">{{ t('discussion', 'Use your nickname on this site. On all posts you posted') }}</label>
+                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" id="never_display_nickname" name="never_display_nickname" />
+                {{ t('discussion', 'Never show this again ?') }}
+                <br><br>
+                <p class="hide alert-danger" id="never_display_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
+              <button type="submit" class="btn btn-primary" name="btn_use_nickname" value="1" id="use_nickname">{{ t('discussion', 'Yes use my nickname') }}</button>
+              <button type="submit" class="btn btn-primary hide" name="btn_never_display_nickname" value="1" id="btn_never_display_nickname">{{ t('discussion', 'Save Changes') }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
 <div class="row">
   <div class="span12">
     <h1 class="title">{{ t('discussion','Discussions List') }}</h1>
