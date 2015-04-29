@@ -2,9 +2,9 @@
 
 /**
  * Discussion
- * 
+ *
  * Discussion class is used  for get contest entry,  create contest.
- * 
+ *
  * Copyright (c) 2013 <ahref Foundation -- All rights reserved.
  * Author: Sankalp Mishra<sankalp@incaendo.com>
  * This file is part of <Civico>.
@@ -22,7 +22,7 @@ class Discussion {
 
   /**
    * createDiscussion
-   * 
+   *
    * function is used for create discussion
    * @return (array) $response
    */
@@ -95,7 +95,7 @@ class Discussion {
 
   /**
    * getDiacussionDetail
-   * 
+   *
    * This function is used for get discussion and manipulate it
    */
   public function getDiscussionDetail() {
@@ -116,7 +116,7 @@ class Discussion {
 
   /**
    * updateDiscussion
-   * 
+   *
    * function is used for update discussion
    * @return (array) $response
    */
@@ -180,7 +180,7 @@ class Discussion {
 
   /**
    * submitProposal
-   * 
+   *
    * This function is used for submit a proposal
    * @return (array) $response
    */
@@ -294,7 +294,7 @@ class Discussion {
 
   /**
    * getProposals
-   * 
+   *
    * This function is used to get the proposals of a discussion.
    * @return (array) $response
    */
@@ -362,7 +362,7 @@ class Discussion {
 
   /**
    * saveOpinion
-   * 
+   *
    * This function is used to save an opinion on proposal
    */
   public function saveOpinion($savePositionOnly = false) {
@@ -472,8 +472,8 @@ class Discussion {
 
   /**
    * hasUserSubmittedProposal
-   * 
-   * $opinion array 
+   *
+   * $opinion array
    * $slug type string
    * @return boolean or Array
    */
@@ -537,7 +537,7 @@ class Discussion {
 
   /**
    * saveLink
-   * 
+   *
    * This function is used to save an link of proposal
    */
   public function saveLink() {
@@ -700,7 +700,7 @@ class Discussion {
 
   /**
    * updateProposalHeatMapTag
-   * 
+   *
    * This function updates the weight of heat map tag.
    * In case opinion update, opinion count will not be increase on proposal.
    * @param int $index - triangle position index
@@ -743,7 +743,7 @@ class Discussion {
   }
 
   /**
-   * This function returns an array for ploting Heat Map 
+   * This function returns an array for ploting Heat Map
    */
   public function getHeatMap($id) {
     $maxWeight = 1;
@@ -792,7 +792,7 @@ class Discussion {
 
   /**
    * userSubmittedProposal
-   * 
+   *
    * get no of proposal submitted by a user
    * @param $id  - discussion id
    * @return $count  -no of proposal submitted
@@ -814,7 +814,7 @@ class Discussion {
 
   /**
    * getOpinionsAndLinks
-   * 
+   *
    * This function returns all the opinions an links of a proposal
    * @param $id - proposal id
    * @return array Collection of links and opinions
@@ -850,7 +850,7 @@ class Discussion {
     }
     $answersOnOpinionArray = array();
     if (array_key_exists('opinion', $returnData) && !empty($returnData['opinion']) && $returnData['opinion'] != 0) {
-      foreach($returnData['opinion'] as $opinion) {        
+      foreach($returnData['opinion'] as $opinion) {
         $answersOnOpinion = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'answer{' . ANSWER_TAG_SCHEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,tags', '', '', trim('opinion,' . $opinion['id']), CIVICO);
         if(array_key_exists(0, $answersOnOpinion) && array_key_exists('count', $answersOnOpinion[0])) {
           if ($answersOnOpinion[0]['count'] == 0) {
@@ -868,7 +868,7 @@ class Discussion {
 
   /**
    * getOnlyProposals
-   * 
+   *
    * This function returns all the  proposal
    * @return array Collection of proposals
    */
@@ -965,7 +965,7 @@ class Discussion {
     }
     return array_merge($highlightProposal, $unhighlightedProposal);
   }
-  
+
   /**
    * getProposalTags
    * This function is used to get all tags for a proposal.
@@ -976,11 +976,11 @@ class Discussion {
     $proposalTags = array();
     $aggregatorManager = new AggregatorManager();
     if (isset($this->id)) {
-      $proposalTags = $aggregatorManager->getEntry(ALL_ENTRY, '', $this->id, 'active', '', '', '', '', '', '', '', '', array(), '', 'tags', '', '', '', CIVICO);        
-    }   
+      $proposalTags = $aggregatorManager->getEntry(ALL_ENTRY, '', $this->id, 'active', '', '', '', '', '', '', '', '', array(), '', 'tags', '', '', '', CIVICO);
+    }
     return $proposalTags;
   }
-  
+
   /**
    * prepareMailBodyForProposal
    * This funtion is used to create email body for proposal
@@ -1003,7 +1003,7 @@ class Discussion {
     $html = str_replace("{{admin_link_text}}", Yii::t('discussion', 'Click here to access Admin Page'), $html);
     $adminPageUrl = '';
     if (array_key_exists('slug', $_GET) && !empty($_GET['slug'])) {
-      $adminPageUrl = BASE_URL . 'discussion/proposal/list/' . $_GET['slug'];
+      $adminPageUrl = BASE_URL . 'admin/discussion/proposal/list/' . $_GET['slug'];
     }
     $html = str_replace("{{admin_page_url}}", $adminPageUrl, $html);
     return $html;
