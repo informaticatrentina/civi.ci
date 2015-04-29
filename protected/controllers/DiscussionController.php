@@ -70,42 +70,44 @@ class DiscussionController  extends PageController {
     }
     $discussions = array_chunk($stripedContent, $chunkSize);
     $showNicknamePopUp = FALSE;
-    $sessionArr = Yii::app()->session['user'];
-    if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
-      if ($sessionArr['show-add-nickname-popup'] == FALSE) {
-        $showNicknamePopUp = TRUE;
-      }
-    }
     $showUseNickname = INACTIVE;
-    if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
-      Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
-      if (is_array($sessionArr)) {
-        if (array_key_exists('never-display-nickname', $sessionArr) &&
-          isset($sessionArr['never-display-nickname']) &&
-          $sessionArr['never-display-nickname'] == ACTIVE) {
-          $showUseNickname = INACTIVE;
-        } else if (array_key_exists('show-use-nickname', $sessionArr) &&
-          isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+    if (!empty(Yii::app()->session['user'])) {
+      $sessionArr = Yii::app()->session['user'];
+      if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
+        if ($sessionArr['show-add-nickname-popup'] == FALSE) {
+          $showNicknamePopUp = TRUE;
+        }
+      }
+      if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
+        Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
+        if (is_array($sessionArr)) {
+          if (array_key_exists('never-display-nickname', $sessionArr) &&
+            isset($sessionArr['never-display-nickname']) &&
+            $sessionArr['never-display-nickname'] == ACTIVE) {
             $showUseNickname = INACTIVE;
-        } else {
-          if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
-            if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
-              if ($sessionArr['use-nickname'] == ACTIVE) {
-                $showUseNickname = INACTIVE;
+          } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+            isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+              $showUseNickname = INACTIVE;
+          } else {
+            if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+              if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+                if ($sessionArr['use-nickname'] == ACTIVE) {
+                  $showUseNickname = INACTIVE;
+                } else {
+                  $showUseNickname = ACTIVE;
+                }
               } else {
                 $showUseNickname = ACTIVE;
               }
-            } else {
-              $showUseNickname = ACTIVE;
             }
           }
         }
+        if ($showUseNickname == ACTIVE) {
+          $sessionArr['show-use-nickname'] = ACTIVE;
+        }
       }
-      if ($showUseNickname == ACTIVE) {
-        $sessionArr['show-use-nickname'] = ACTIVE;
-      }
+      Yii::app()->session['user'] = $sessionArr;
     }
-    Yii::app()->session['user'] = $sessionArr;
     if (defined('DIV_COLORS')) {
       $color = unserialize(DIV_COLORS);
       $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration, 'shownNicknamePopUp' => $showNicknamePopUp, 'showUseNickname' => $showUseNickname));
