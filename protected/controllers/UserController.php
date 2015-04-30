@@ -50,66 +50,75 @@ class UserController extends PageController {
       $backUrl = BASE_URL;
       $user = array_map('trim', $_POST);
       if (!empty($user)) {
-        if (empty($user['firstname'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter first name'));
-        }
-        if (empty($user['lastname'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter last name'));
-        }
-        if (empty($user['nickname'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter nickname'));
-        }
-        if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
-          throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
-        }
-        if (empty($user['cemail'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter same email'));
-        }
-        if ($user['email'] != $user['cemail']) {
-          throw new Exception(Yii::t('discussion', 'Please enter same email'));
-        }
-        if (empty($user['password'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter password'));
-        }       
-        if (empty($user['confirm_password'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
-        }
-        if ($user['password'] !== $user['confirm_password']) {
-          throw new Exception(Yii::t('discussion', 'Password does not match'));
-        }
-        if (!array_key_exists('terms_and_condition', $user)) {
-          throw new Exception(Yii::t('discussion', 'Please check term and condition checkbox'));
-        }
-        if (!array_key_exists('privacy_policy', $user)) {
-          throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
-        }
-        $userDetail = array(
-          'firstname' => $user['firstname'],
-          'lastname' => $user['lastname'],
-          'nickname' => $user['nickname'],
-          'email' => $user['email'],
-          'password' => $user['password'],
-          'status' => 0,
-          'type' => 'user',
-          'source' => CIVICO
-        );
-        if (!empty($_GET['back'])) {
-          $back = substr($_GET['back'], 1);
-          if (!empty($back)) {
-            $backUrl = BASE_URL . substr($_GET['back'], 1);
+        if (!empty($user['registration-type'])) {
+          if (empty($user['firstname'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter first name'));
           }
-        }
-        $module = Yii::app()->getModule('backendconnector');
-        if (empty($module)) {
-          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
-        }
-        $userIdentityMgr = new UserIdentityManager();
-        $saveUser = $userIdentityMgr->createUser($userDetail);
-        if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
-          $this->_sendActivationMail($user);
-          $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
+          if ($user['registration-type'] == 'user') {
+            if (empty($user['lastname'])) {
+              throw new Exception(Yii::t('discussion', 'Please enter last name'));
+            }
+            if (empty($user['nickname'])) {
+              throw new Exception(Yii::t('discussion', 'Please enter nickname'));
+            }
+          } else if ($user['registration-type'] == 'org') {
+            $user['lastname'] = ' ';
+            $user['nickname'] = ' ';
+          }
+          if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
+          }
+          if (empty($user['cemail'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter same email'));
+          }
+          if ($user['email'] != $user['cemail']) {
+            throw new Exception(Yii::t('discussion', 'Please enter same email'));
+          }
+          if (empty($user['password'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter password'));
+          }
+          if (empty($user['confirm_password'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
+          }
+          if ($user['password'] !== $user['confirm_password']) {
+            throw new Exception(Yii::t('discussion', 'Password does not match'));
+          }
+          if (!array_key_exists('terms_and_condition', $user)) {
+            throw new Exception(Yii::t('discussion', 'Please check term and condition checkbox'));
+          }
+          if (!array_key_exists('privacy_policy', $user)) {
+            throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
+          }
+          $userDetail = array(
+            'firstname' => $user['firstname'],
+            'lastname' => $user['lastname'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'status' => 0,
+            'type' => $user['registration-type'],
+            'source' => CIVICO
+          );
+          if (!empty($_GET['back'])) {
+            $back = substr($_GET['back'], 1);
+            if (!empty($back)) {
+              $backUrl = BASE_URL . substr($_GET['back'], 1);
+            }
+          }
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module)) {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+          $userIdentityMgr = new UserIdentityManager();
+          $saveUser = $userIdentityMgr->createUser($userDetail);
+          if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
+            $this->_sendActivationMail($user);
+            $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
+          } else {
+            $saveUser['msg'] = Yii::t('discussion', $saveUser['msg']);
+          }
         } else {
-          $saveUser['msg'] = Yii::t('discussion', $saveUser['msg']);
+          throw new Exception(Yii::t('discussion', 'Please select a valid registration type'));
         }
       }
     } catch (Exception $e) {
@@ -970,6 +979,7 @@ class UserController extends PageController {
         if (empty($module)) {
           throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
         }
+        $nickname = $_GET['nickname'];
         $user = new UserIdentityAPI();
         $userDetail = array();
         $sessionArr = Yii::app()->session['user'];
@@ -994,7 +1004,6 @@ class UserController extends PageController {
                 }
                 $response = $this->saveUserNickname($userDetail['id'], false, $tempSiteUserInfo);
               } else {
-                $nickname = $_GET['nickname'];
                 $response = $this->saveUserNickname($userDetail['id'], $nickname, $tempSiteUserInfo);
               }
             } else {
@@ -1041,11 +1050,16 @@ class UserController extends PageController {
     if ($nickname != false) {
       $userInfo['nickname'] = $nickname;
     }
-    $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
+    if (array_key_exists('site-user-info', $userSiteInfo) &&
+      !empty($userSiteInfo['site-user-info'])) {
+      $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
+    }
     $updateUser = $user->curlPut(IDM_USER_ENTITY, $userInfo);
     if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
       $response['id'] = $updateUser['_id'];
       $response['msg'] = Yii::t('discussion', 'Nickname is successfully added to your account');
+      $sessionArr = Yii::app()->session['user'];
+      $sessionArr['show-add-nickname-popup'] = 0;
       if ($nickname == false) {
         $response['msg'] = Yii::t('discussion', 'You will never be asked from now');
       }
