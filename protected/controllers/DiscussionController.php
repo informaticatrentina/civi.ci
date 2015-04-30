@@ -319,30 +319,33 @@ class DiscussionController  extends PageController {
       }
     }
     $showUseNickname = INACTIVE;
-    if (is_array($sessionArr)) {
-      if (array_key_exists('never-display-nickname', $sessionArr) &&
-        isset($sessionArr['never-display-nickname']) &&
-        $sessionArr['never-display-nickname'] == ACTIVE) {
-        $showUseNickname = INACTIVE;
-      } else if (array_key_exists('show-use-nickname', $sessionArr) &&
-        isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+    if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
+        Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
+      if (is_array($sessionArr)) {
+        if (array_key_exists('never-display-nickname', $sessionArr) &&
+          isset($sessionArr['never-display-nickname']) &&
+          $sessionArr['never-display-nickname'] == ACTIVE) {
           $showUseNickname = INACTIVE;
-      } else {
-        if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
-          if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
-            if ($sessionArr['use-nickname'] == ACTIVE) {
-              $showUseNickname = INACTIVE;
+        } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+          isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+            $showUseNickname = INACTIVE;
+        } else {
+          if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+            if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+              if ($sessionArr['use-nickname'] == ACTIVE) {
+                $showUseNickname = INACTIVE;
+              } else {
+                $showUseNickname = ACTIVE;
+              }
             } else {
               $showUseNickname = ACTIVE;
             }
-          } else {
-            $showUseNickname = ACTIVE;
           }
         }
       }
-    }
-    if ($showUseNickname == ACTIVE) {
-      $sessionArr['show-use-nickname'] = ACTIVE;
+      if ($showUseNickname == ACTIVE) {
+        $sessionArr['show-use-nickname'] = ACTIVE;
+      }
     }
     Yii::app()->session['user'] = $sessionArr;
     $this->render('discussionList', array(
