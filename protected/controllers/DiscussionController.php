@@ -213,7 +213,7 @@ class DiscussionController  extends PageController {
               $temp['never-display-nickname'] = $siteUserInfo['never-display-nickname'];
             }
             if (array_key_exists('never-add-nickname', $siteUserInfo)
-              || array_key_exists('nickname', $siteUserInfo)) {
+              || array_key_exists('nickname', $response['_items']['0'])) {
               $temp['show-add-nickname-popup'] = INACTIVE;
             } else {
               $temp['show-add-nickname-popup'] = ACTIVE;
