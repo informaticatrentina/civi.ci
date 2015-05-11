@@ -63,7 +63,6 @@ class UserController extends PageController {
             }
           } else if ($user['registration-type'] == 'org') {
             $user['lastname'] = ' ';
-            $user['nickname'] = ' ';
           }
           if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
             throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
@@ -92,13 +91,15 @@ class UserController extends PageController {
           $userDetail = array(
             'firstname' => $user['firstname'],
             'lastname' => $user['lastname'],
-            'nickname' => $user['nickname'],
             'email' => $user['email'],
             'password' => $user['password'],
             'status' => 0,
             'type' => $user['registration-type'],
             'source' => CIVICO
           );
+          if ($user['registration-type'] == 'user') {
+            $userDetail['nickname'] = $user['nickname'];
+          }
           if (!empty($_GET['back'])) {
             $back = substr($_GET['back'], 1);
             if (!empty($back)) {
