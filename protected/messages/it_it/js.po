@@ -19,241 +19,241 @@ msgstr ""
 "Plural-Forms: nplurals = 2; plural = n != 1;\n"
 
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter First Name"
 msgstr "Inserisci il tuo nome"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Last Name"
 msgstr "Inserisci il tuo cognome"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Password"
 msgstr "Inserisci la password"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter email id"
 msgstr "Inserisci la tua email"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter valid email id"
 msgstr "Inserisci una email valida"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Please select atleast one topic."
 msgstr "Seleziona almeno un argomento."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Proposal can not be empty"
 msgstr "La proposta non può essere vuota"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Proposal introduction can not be empty"
 msgstr "Devi scrivere un'introduzione alla tua proposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Proposal title can not be empty"
 msgstr "Devi inserire un titolo per la tua proposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Click on one of the triangles below to register your opinion on this proposal."
 msgstr "Scegli uno dei triangoli per esprimere il tuo parere su questa proposta."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Link can not be empty"
 msgstr "Devi inserire un link"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Non puoi lasciare vuoto il campo opinione"
 msgstr "Non puoi lasciare vuoto il campo opinione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Opinion has been saved successfully"
 msgstr "La tua opinione è stata salvata con successo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please accept terms and condition"
 msgstr "Si prega di accettare termini e condizioni"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Discussion Summary"
 msgstr "Inserisci il sommario della discussione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Discussion Title"
 msgstr "Inserisci il titolo della discussione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Discussion Topic(s)"
 msgstr "Inserisci gli argomenti della discussione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter valid link url"
 msgstr "Inserisci un URL valido"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Si prega di indicare la tua posizione su questa proposta facendo clic sul triangolo"
 msgstr "Si prega di indicare la tua posizione su questa proposta facendo clic sul triangolo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Are you sure you want to delete this Contest ?"
 msgstr "Sicuro di eliminare questo contest?"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Entry description should not be empty"
 msgstr "La descrizione non puà essere vuota"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Entry title should not be empty"
 msgstr "Il titolo non può essere vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Hide the enclosed link"
 msgstr "Hide the enclosed link"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "It has not been added to any link, you can be the first."
 msgstr "Non è ancora stato inserito alcun link, puoi essere il primo."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "No reviews yet"
 msgstr "Nessuna opinione presente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Opinion field can not be blank"
 msgstr "Non puoi lasciare vuoto il campo opinione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please check atleast one checkBox"
 msgstr "Seleziona almeno un’opzione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Content Description"
 msgstr "Descrizione del contest"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Contest rule"
 msgstr "Regolamento del contest"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter a valid date"
 msgstr "Data"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter end date"
 msgstr "Data di fine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter minor name"
 msgstr "Nome del minore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter start date"
 msgstr "Data di inizio"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please indicate your position on this proposal by clicking on the triangle"
 msgstr "Si prega di indicare la vostra posizione su questa proposta facendo clic sul triangolo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "See the enclosed link"
 msgstr "Visualizza i link allegati"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 <<<<<<< Updated upstream
 msgid "Please enter proper text in opinion"
 msgstr "Inserisci il testo vero e proprio a parere"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Opinion has been saved successfully. You can edit your opinion at any time."
 msgstr "Il tuo parere è stato salvato con successo. È possibile modificare la tua opinione in qualsiasi momento."
 
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "First give us your position on the proposal."
 msgstr "Prima devi scegliere la tua valutazione sulla proposta."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Submit Opinion"
 msgstr "Pubblica la tua opinione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Thank you for giving us your position on the proposal."
 msgstr "Grazie per averci dato la tua valutazione sulla proposta."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Update Opinion"
 msgstr "aggiornare Opinione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Please select atleast one topic"
 msgstr "Inserire un topic"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Proposal description can not be empty"
 msgstr "La descrizione della proposta non può essere vuota"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Proposal summary can not be empty"
 msgstr "Il sommario della proposta non può essere vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Opinion text should be atmost 500 characters"
 msgstr "Il testo dell’opinione può essere al massimo di 500 caratteri"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal Introduction should be atmost 500 characters"
 msgstr "Il testo dell’introduzione può essere al massimo di 500 caratteri<"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal Introduction should be atmost 500 characters."
 msgstr "Il testo dell’introduzione può essere al massimo di 500 caratteri"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Title should be atmost 50 characters"
 msgstr "Il titolo della discusione può essere al massimo di 50 caratteri"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Title should be atmost 50 characters."
 msgstr "Il titolo dovrebbe essere atmost 50 caratteri."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Current Opinion"
 msgstr "Posizione Corrente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter proper text in opinion"
 msgstr "Inserisci il testo vero e proprio a parere"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "An error occured"
 msgstr "Si è verificato un errore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "An error occurred"
 msgstr "Si è verificato un errore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Reply"
 msgstr "Rispondere"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Reply can not be empty"
 msgstr "Risposta non può essere vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Your Reply"
 msgstr "La tua risposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "processing"
 msgstr "elaborazione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "submit"
 msgstr "Presentare"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid " Please enter valid youtube or vimeo video url"
 msgstr "Inserisci URL valido del video su youtube o vimeo"
 
@@ -273,129 +273,129 @@ msgctxt "discussion"
 msgid "Proposal Video"
 msgstr "Video per la proposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "An error occured. Please try again"
 msgstr "Verificato un errore. Riprova"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Unable to save sorting order. Please try again"
 msgstr "Impossibile salvare ordinamento. Riprova"
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Only numbers are allowed"
 msgstr "Solo i numeri sono consentiti"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Sorting order is already exist. Please add another sorting order"
 msgstr "Ordinamento già esiste. Si prega di aggiungere un altro ordinamento"
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Add a comment"
 msgstr "Aggiungi un commento"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Are you sure you want to activate this Story ?"
 msgstr "Sei sicuro di voler attivare questa storia?"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Are you sure you want to delete this Story ?"
 msgstr "Sei sicuro di voler eliminare questo Articolo?"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Are you sure you want to delete this post ?"
 msgstr "Sei sicuro di voler eliminare questo post?"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Are you sure you want to inactive this Story ?"
 msgstr "Sei sicuro di voler inattivo questo Articolo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "By"
 msgstr "da"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Click here to go back"
 msgstr "Clicca qui per tornare indietro"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Comment description can not be empty"
 msgstr "Did you mean: Comment description cannot be empty Descrizione commento non può essere vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Comments"
 msgstr "Commenti"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Delete Post"
 msgstr "Cancella Post"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Invitation is already sent to this email id."
 msgstr "Invito già inviato a questo indirizzo id."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Paste or type a link"
 msgstr "Incollare o digitare un collegamento"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please Upload Story Image"
 msgstr "Si prega di Upload Story Immagine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please Upload Story Logo"
 msgstr "Si prega di caricare il logo della storia"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Story Description"
 msgstr "Inserisci la descrizione della storia"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Story Title"
 msgstr "Inserisci il titolo della storia"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter Story Type"
 msgstr "Inserisci il tipo di storia"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter projects"
 msgstr "Inserisci progetti"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please login to add a comment"
 msgstr "Effettua il login per aggiungere un commento"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Post Description should not be empty."
 msgstr "Descrizione dell'immagine non dovrebbe essere vuoto."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Si prega di indicare la vostra posizione su questa proposta facendo clic sul triangolo"
 msgstr ""
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Some error occured in getting comment"
 msgstr "Qualche errore si è verificato a ottenere commento"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Some error occured in getting information."
 msgstr "Qualche errore si è verificato per ottenere informazioni."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Some error occurred in sending email. Please contact administrator"
 msgstr "Si è verificato un errore nell'invio email. Si prega di contattare l'amministratore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Submit Comment"
 msgstr "Invia il tuo commento"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "There is no comment on this post"
 msgstr "Non vi sono commenti su questo post"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "This post is deleted and no longer available."
 msgstr "Questo post viene cancellato e non è più disponibile."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Update Post"
 msgstr "aggiornamento post"
 
@@ -411,7 +411,7 @@ msgctxt "discussion"
 msgid "Unable to get user email address"
 msgstr "Impossibile ottenere l'indirizzo email dell'utente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Unable to get user email address "
 msgstr "Impossibile ottenere l'indirizzo email dell'utente"
 
@@ -471,31 +471,31 @@ msgctxt "discussion"
 msgid "Please select age range"
 msgstr "Seleziona la fascia di età"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please select association"
 msgstr "Seleziona l'ordine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please select profession"
 msgstr "Seleziona la professione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please select residence"
 msgstr "Seleziona il luogo di residenza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter valid layout columns."
 msgstr "Inseriscu un numero valido di colonne"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter same email id"
 msgstr "Inserisci lo stesso indirizzo email"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Press Cancel to stay on page. Press Ok to redirect to home page."
 msgstr "Premi ANNULLA per rimanere su questa pagina. Premi OK per tornare alla home page."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Your session has expired."
 msgstr "La tua sessione è scaduta."
 
@@ -511,3 +511,22 @@ msgctxt "discussion"
 msgid "You can not leave the field blank opinion."
 msgstr "Non puoi lasciare vuoto il campo opinione."
 
+msgctxt "discussion"
+msgid "First Name"
+msgstr "Nome"
+
+msgctxt "discussion"
+msgid "Organization Name"
+msgstr "Nome organizzazione"
+
+msgctxt "discussion"
+msgid "Nickname available"
+msgstr "Nickname disponibile"
+
+msgctxt "discussion"
+msgid "Nickname already in use. Choose Another"
+msgstr "Nickname già in uso. Scegline un altro"
+
+msgctxt "discussion"
+msgid "This cannot be changed again proceed with a thoughtful mind !!"
+msgstr "Non potrà essere cambiato di nuovo. Scegli con attenzione!"
