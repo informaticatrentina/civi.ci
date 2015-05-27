@@ -1,11 +1,3 @@
-$(document).ready(function() {
-  $('#saveProposal').click(function() {
-    var msg = Yii.t('js', 'Your session has expired.');
-    msg += " " + Yii.t('js', 'Press Cancel to stay on page. Press Ok to redirect to home page.');
-    checkSession(msg);
-  });
-});
-
 function checkSession(msg) {
   $('#confirm-alert').modal('hide');
   $.ajax({
