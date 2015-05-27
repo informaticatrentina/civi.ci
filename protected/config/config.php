@@ -234,6 +234,7 @@ return array(
                 'feeds/opinion' => 'feed/opinion',
                 'admin/configuration' => 'discussion/configuration',
                 'admin/discussion/proposal/list/<slug:[\w-]+>' => 'discussion/reports',
+                'admin/export/opinions/<id:[\w-]+>/<type:[\w-]+>' => 'admin/exportOpinions',
                 'admin/export/<id:[\w-]+>/<type:[\w-]+>' => 'discussion/export',
                 'discussion/proposal/edit/<slug:[\w-]+>' => 'discussion/editProposal',
                 'admin/discussion/proposal/highlight/<slug:[\w-]+>' => 'discussion/highlightProposal',

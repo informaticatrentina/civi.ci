@@ -159,6 +159,108 @@ class AdminController extends PageController {
     return $allProposalsForSingleDiscussion;
   }
 
+  /**
+   * actionExportOpinions
+   * This method is used for exporting csv for opinions of a proposal.
+   * Current csv mode is download.
+   */
+  public function actionExportOpinions() {
+    try {
+      if(array_key_exists('id', $_GET) && !empty($_GET['id'])) {
+        $opinions = array();
+        $activeOpinions = array();
+        $proposalOpinions = array();
+        $inactiveOpinions = array();
+        $title = '';
+        $aggregatorManager = new AggregatorManager();
+        $proposalTitle = $aggregatorManager->getEntry(1, 0, $_GET['id'],
+          'active', '', '', '', 0, '', '', 1, '', array(), '', 'title', '', '', '', CIVICO, '');
+        if (array_key_exists('0', $proposalTitle) && !empty($proposalTitle[0])) {
+          if (array_key_exists('title', $proposalTitle[0]) && !empty($proposalTitle[0]['title'])) {
+            $title = $proposalTitle[0]['title'];
+          }
+          $activeOpinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'active', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,related,tags,creation_date', '', '', trim('proposal,' . $_GET['id']), CIVICO);
+          $inactiveOpinions = $aggregatorManager->getEntry(ALL_ENTRY, '', '', 'inactive', 'link{' . OPINION_TAG_SCEME . '}', '', '', 1, '', '', '', '', array(), '', 'status,author,id,content,related,tags,creation_date', '', '', trim('proposal,' . $_GET['id']), CIVICO);
+        }
+        $opinions = array_merge($activeOpinions, $inactiveOpinions);
+        $author = array();
+        foreach ($opinions as $opinion) {
+          $proposalOpinion = array();
+          if (array_key_exists('count', $opinion)) {
+            array_pop($opinions);
+            continue;
+          }
+          if (array_key_exists('related', $opinion) && !empty($opinion['related'])) {
+            if (array_key_exists('id', $opinion['related']) && !empty($opinion['related']['id'])) {
+              $proposalOpinion['proposal_id'] = $opinion['related']['id'];
+            }
+          }
+          $proposalOpinion['proposal_title'] = $title;
+          if (array_key_exists('content', $opinion) && !empty($opinion['content'])) {
+            $proposalOpinion['description'] = $opinion['content']['description'];
+          }
+          if (array_key_exists('creation_date', $opinion) && !empty($opinion['creation_date'])) {
+            $proposalOpinion['creation_date'] = $opinion['creation_date'];
+          }
+          if (array_key_exists('author', $opinion) && !empty($opinion['author'])) {
+            $proposalOpinion['author_name'] = $opinion['author']['name'];
+            $proposalOpinion['author_id'] = $opinion['author']['slug'];
+            $author[] = $opinion['author']['slug'];
+          }
+          $proposalOpinions[] = $proposalOpinion;
+        }
+        $author = array_unique($author);
+        $userIdentityApi = new UserIdentityAPI();
+        $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
+        $emails = array();
+        if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
+          foreach ($userEmail['_items'] as $email) {
+            $emails[$email['_id']] = $email['email'];
+          }
+        }
+        foreach ($proposalOpinions as &$proposalOpinion) {
+          $proposalOpinion['author_email'] = '';
+          if (array_key_exists($proposalOpinion['author_id'], $emails)) {
+            $proposalOpinion['author_email'] = $emails[$proposalOpinion['author_id']];
+          }
+          unset($proposalOpinion['author_id']);
+        }
+      }
+      $this->_downloadOpinionCsv($proposalOpinions);
+    } catch(Exception $e) {
+      Yii::log('Error in actionExportOpinions.', ERROR, $e->getMessage());
+    }
+  }
+
+  /**
+   * _downloadOpinionCsv
+   * This method is used to download csv for opinions.
+   * Csv is currently in download mode.
+   *
+   * @param array $proposalOpinions
+   */
+  public function _downloadOpinionCsv($proposalOpinions) {
+    try {
+      $header = array(
+        'proposal_id' => Yii::t('discussion', 'Proposal Id'),
+        'proposal_title' => Yii::t('discussion', 'Proposal Title'),
+        'description' => Yii::t('discussion', 'Description'),
+        'creation_date' => Yii::t('discussion', 'Creation Date'),
+        'author_name' => Yii::t('discussion', 'Author'),
+        'author_email' => Yii::t('discussion', 'Author Email')
+      );
+      header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
+      header("Content-Type: text/csv");
+      $filePath = fopen("php://output", 'w');
+      @fputcsv($filePath, $header);
+      foreach ($proposalOpinions as $opinion) {
+        @fputcsv($filePath, $opinion);
+      }
+      exit;
+    } catch(Exception $e) {
+      Yii::log('Error in CSV Generation for opinions.', ERROR, $e->getMessage());
+    }
+  }
 }
 
 ?> 

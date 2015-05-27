@@ -2,6 +2,12 @@
   <div class="span12">
     <h1>{{ t('discussion', "Opinions") }} - {{ title }}</h1>
   </div>
+  {% set isAdmin = checkPermission('admin') %}
+  {% if isAdmin == true %}
+      <div class="pull-right btn-toolbar">
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/{{proposalId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+      </div>
+  {% endif %}
 </div>
 <div class="row">
   <div class="span12">

@@ -775,8 +775,10 @@ class DiscussionController  extends PageController {
     $proposalOpinions = array();
     $inactiveOpinions = array();
     $title = '';
+    $proposalId = '';
     $aggregatorManager = new AggregatorManager();
     if (array_key_exists('id', $_GET) && !empty($_GET['id'])) {
+      $proposalId = $_GET['id'];
       $proposalTitle = array();
       $proposalTitle = $aggregatorManager->getEntry(1, 0, $_GET['id'], 'active', '', '', '', 0, '', '', 1, '', array(), '', 'title', '', '', '', CIVICO, '');
       if (array_key_exists('0', $proposalTitle) && !empty($proposalTitle[0])) {
@@ -840,7 +842,8 @@ class DiscussionController  extends PageController {
       'opinions' => $proposalOpinions,
       'title' => $title,
       'slug' => $discussionSlug,
-      'emails' => $emails
+      'emails' => $emails,
+      'proposalId' => $proposalId
     ));
   }
 
