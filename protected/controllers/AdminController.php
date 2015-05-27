@@ -122,6 +122,7 @@ class AdminController extends PageController {
       $singleProposal = array('discussion_title' => '', 'title' => '', 'description' => '', 'author' => '',
         'creation_date' => '', 'status' => '', 'opinion_voting_count' => 0, 'text_opinion_count' => 0, 'total_links' => 0);
       $singleProposal['discussion_title'] = $discussion['title'];
+      $singleProposal['proposal_id'] = $proposal['id'];
       $singleProposal['title'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['title'])));
       $singleProposal['description'] = htmlspecialchars_decode(strip_tags(html_entity_decode($proposal['content']['description'])));
       $singleProposal['author'] = $proposal['author']['name'];
