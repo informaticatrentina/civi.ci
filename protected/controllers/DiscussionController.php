@@ -540,11 +540,6 @@ class DiscussionController  extends PageController {
             throw new Exception(Yii::t('discussion', 'Only png and jpg/jpeg image allowed'));
           }
         }
-        if (array_key_exists('hasTopics', $postData) && $postData['hasTopics'] == true) {
-          if (!array_key_exists('topics', $postData)) {
-            throw new Exception(Yii::t('discussion', 'One topic should be selected'));
-          }
-        }
         $_POST = array_map('userInputPurifier', $_POST);
         $entrySubmissionResponse = $discussion->submitProposal($discussionInfo['id'], $_GET['slug']);
         if (array_key_exists('success', $entrySubmissionResponse) &&
