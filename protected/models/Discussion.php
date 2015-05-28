@@ -221,7 +221,7 @@ class Discussion {
         }
         if (array_key_exists('topics', $_POST) && (!empty($_POST['topics']))) {
           foreach ($_POST['topics'] as $topic) {
-            $aggregatorManager->tags[] = array('name' => $topic, 'scheme' => TOPIC_TAG_SCHEME . $slug . '/topics', 'slug' => $topic);
+            $aggregatorManager->tags[] = array('name' => $topic, 'scheme' => TOPIC_TAG_SCHEME . $slug . '/topics', 'slug' => sanitization(trim($topic), TRUE));
           }
         }
         if (array_key_exists('body', $_POST) && (!empty($_POST['body']))) {
