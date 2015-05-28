@@ -2686,29 +2686,35 @@ class DiscussionController  extends PageController {
       'text_opinion_count' => Yii::t('discussion', 'Opinion Count'),
       'total_links' => Yii::t('discussion', 'Number of Links'),
       'proposal_id' => Yii::t('discussion', 'Proposal Id'),
-      'additional_info' => Yii::t('discussion', 'Additional Info')
     );
+    $additionalInfo = json_decode(ADDITIONAL_INFORMATION, TRUE);
+    ksort($additionalInfo);
+    foreach ($additionalInfo as $infoKey => $info) {
+      $header[$infoKey] = $info['text'];
+    }
     $allproposals = array();
     foreach ($discussionDetail as $discussion) {
       $this->discussionId = $discussion['id'];
       $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
       $userEmails = $detailContent['emails'];
-      $userAdditionalInfo = $this->getUserAdditionalInfo($userEmails);
-      $additionalInfo = json_decode(ADDITIONAL_INFORMATION, TRUE);
-      $addInfo = array();
-      foreach ($userAdditionalInfo as $infoKey => $info) {
-        $userInfo = array();
-        foreach ($info as $key => $value) {
-          if (array_key_exists($key, $additionalInfo)) {
-            $userInfo[] = $additionalInfo[$key]['text'] . ': ' . $value;
-          }
-        }
-        $addInfo[$infoKey] = implode(', ', $userInfo);
-      }
+      $addInfo = $this->getUserAdditionalInfo($userEmails);
       $userInfos = array();
       foreach ($detailContent['allProposals'] as $user) {
         if(array_key_exists($user['author']['slug'], $addInfo)) {
           $userInfos[$user['id']] = $addInfo[$user['author']['slug']];
+        }
+      }
+      foreach ($additionalInfo as $key => $value) {
+        foreach($userInfos as &$info) {
+          if(!array_key_exists($key, $info)) {
+            $info[$key] = '';
+          }
+          foreach ($info as $keys => &$values) {
+            if (!array_key_exists($keys, $additionalInfo)) {
+              unset($info[$keys]);
+            }
+          }
+          ksort($info);
         }
       }
       $admin = new AdminController('admin');
@@ -2718,10 +2724,10 @@ class DiscussionController  extends PageController {
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
-    foreach ($allproposals as $proposal) {
-      foreach($proposal as $proposalContent) {
+    foreach ($allproposals as &$proposal) {
+      foreach($proposal as &$proposalContent) {
         if(array_key_exists($proposalContent['proposal_id'], $userInfos)) {
-          $proposalContent['additional_info'] = $userInfos[$proposalContent['proposal_id']];
+          $proposalContent = array_merge($proposalContent, $userInfos[$proposalContent['proposal_id']]);
         }
         @fputcsv($filePath, $proposalContent);
       }
