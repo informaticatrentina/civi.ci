@@ -1641,3 +1641,11 @@ msgstr "Informazioni Addizionali"
 msgctxt "discussion" 
 msgid "Proposal Id"
 msgstr "Proposta Id"
+
+msgctxt "discussion"
+msgid "Export Opinion To CSV"
+msgstr "Opinioni Esporta in CSV"
+
+msgctxt "discussion"
+msgid "Author Email"
+msgstr "Autore email"

@@ -5,7 +5,7 @@
   {% set isAdmin = checkPermission('admin') %}
   {% if isAdmin == true %}
       <div class="pull-right btn-toolbar">
-        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/{{proposalId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/proposal/{{proposalId}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
       </div>
   {% endif %}
 </div>

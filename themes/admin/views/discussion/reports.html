@@ -12,6 +12,7 @@
     {% if isAdmin == true %}
       <div class="pull-right btn-toolbar">
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{discussionId}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">{{ t('discussion', 'Export To PDF') }}</a>
       </div>
     {% endif %}
@@ -115,6 +116,11 @@
                     {% set highlighterAttribute = 'UnHighlight' %}
                   {% endif %}
                   <a class="proposalLinks highlighter" href="{{constant('BASE_URL')}}admin/discussion/proposal/highlight/{{slug}}?id={{proposal.id}}" highlight = "{{highlighterAttribute}}">{{ highlighterText }}</a>
+                </li>
+              {% endif %}
+              {% if isAdmin == true %}
+                <li>
+                  <a href="{{constant('BASE_URL')}}admin/export/opinions/proposal/{{proposal.id}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
                 </li>
               {% endif %}
             </ul>
