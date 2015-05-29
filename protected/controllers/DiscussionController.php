@@ -2693,12 +2693,12 @@ class DiscussionController  extends PageController {
       $header[$infoKey] = $info['text'];
     }
     $allproposals = array();
+    $userInfos = array();
     foreach ($discussionDetail as $discussion) {
       $this->discussionId = $discussion['id'];
       $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
       $userEmails = $detailContent['emails'];
       $addInfo = $this->getUserAdditionalInfo($userEmails);
-      $userInfos = array();
       foreach ($detailContent['allProposals'] as $user) {
         if(array_key_exists($user['author']['slug'], $addInfo)) {
           $userInfos[$user['id']] = $addInfo[$user['author']['slug']];
