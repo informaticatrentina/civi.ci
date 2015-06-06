@@ -275,11 +275,23 @@ class AdminController extends PageController {
           $emails[$email['_id']] = $email['email'];
         }
       }
+      $userController = New UserController('user');
+      $userAdditionalInfo = $userController->getUserAdditionalInfo($author);
+      $additionalInfo = defined('ADDITIONAL_INFORMATION') ? json_decode(ADDITIONAL_INFORMATION, TRUE) : array();
+      ksort($additionalInfo);
       if (!empty($proposalOpinions)) {
         foreach ($proposalOpinions as &$proposalOpinion) {
           $proposalOpinion['author_email'] = '';
           if (array_key_exists($proposalOpinion['author_id'], $emails)) {
             $proposalOpinion['author_email'] = $emails[$proposalOpinion['author_id']];
+          }
+          //add user additional info header
+          $authorInfo = array();
+          if (array_key_exists($proposalOpinion['author_id'], $userAdditionalInfo)) {
+            $authorInfo = $userAdditionalInfo[$proposalOpinion['author_id']];
+          }
+          foreach ($additionalInfo as $infoKey => $info) {
+            $proposalOpinion[$infoKey] = isset($authorInfo[$infoKey])? $authorInfo[$infoKey] : '';
           }
           unset($proposalOpinion['author_id']);
         }
@@ -307,6 +319,12 @@ class AdminController extends PageController {
         'author_name' => Yii::t('discussion', 'Author'),
         'author_email' => Yii::t('discussion', 'Author Email')
       );
+      //add user additional info header
+      $additionalInfo = defined('ADDITIONAL_INFORMATION') ? json_decode(ADDITIONAL_INFORMATION, TRUE) : array();
+      ksort($additionalInfo);
+      foreach ($additionalInfo as $infoKey => $info) {
+        $header[$infoKey] = $info['text'];
+      }
       header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
       header("Content-Type: text/csv");
       $filePath = fopen("php://output", 'w');
