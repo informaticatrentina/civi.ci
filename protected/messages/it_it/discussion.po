@@ -1634,17 +1634,17 @@ msgctxt "discussion"
 msgid "This cannot be changed again proceed with a thoughtful mind !!"
 msgstr "Non potrà essere cambiato di nuovo. Scegli con attenzione!"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Additional Info"
 msgstr "Informazioni Addizionali"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal Id"
 msgstr "Proposta Id"
 
 msgctxt "discussion"
 msgid "Export Opinion To CSV"
-msgstr "Opinioni Esporta in CSV"
+msgstr "Esporta Opinioni in CSV"
 
 msgctxt "discussion"
 msgid "Author Email"
