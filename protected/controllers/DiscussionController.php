@@ -2426,16 +2426,16 @@ class DiscussionController  extends PageController {
             foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $author => $opinions) {
               foreach ($opinions as $opinion) {
                 $proposal['opinions'][] = $opinion;
-                if (array_key_exists($proposal['id'], $detailContent['links']) &&
-                  array_key_exists('links', $detailContent['links'][$proposal['id']])) {
-                  foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
-                    foreach ($links as $link) {
-                      $proposal['links'][] = $link;
-                    }
-                  }
-                }
               }
             }
+          if (array_key_exists($proposal['id'], $detailContent['links']) &&
+            array_key_exists('links', $detailContent['links'][$proposal['id']])) {
+            foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
+              foreach ($links as $link) {
+                $proposal['links'][] = $link;
+              }
+            }
+          }
           }
           $allProposal[] = $proposal;
           $allEmail = array_merge($allEmail, $detailContent['emails']);
@@ -2491,15 +2491,15 @@ class DiscussionController  extends PageController {
           foreach ($detailContent['opinions'][$proposal['id']]['opinions'] as $author => $opinions) {
             foreach ($opinions as $opinion) {
               $proposal['opinions'][] = $opinion;
-              if (array_key_exists($proposal['id'], $detailContent['links']) &&
-                      array_key_exists('links', $detailContent['links'][$proposal['id']])) {
-                foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
-                  foreach ($links as $link) {
-                    $proposal['links'][] = $link;
-                  }
-                }
-              }
             }
+          }
+        if (array_key_exists($proposal['id'], $detailContent['links']) &&
+          array_key_exists('links', $detailContent['links'][$proposal['id']])) {
+          foreach ($detailContent['links'][$proposal['id']]['links'] as $author => $links) {
+            foreach ($links as $link) {
+              $proposal['links'][] = $link;
+            }
+          }
           }
         }
         $allProposal[] = $proposal;
