@@ -2,7 +2,7 @@
 
 /**
  * UserController
- * 
+ *
  * UserController class inherit pageController for including header .
  * Actions are defined in UserController.
  * User controller is used for user related functionality - registration,
@@ -10,7 +10,7 @@
  * Author: Pradeep Kumar<pradeep@incaendo.com>
  * This file is part of <Civico>.
  * This file can not be copied and/or distributed without the express permission of
-  <ahref Foundation.
+ * <ahref Foundation.
  */
 class UserController extends PageController {
 
@@ -40,7 +40,7 @@ class UserController extends PageController {
 
   /**
    * actionRegister
-   * this function is used for register new user 
+   * this function is used for register new user
    * this function also set the user information in session and redirect to user
    * on same page from where he made a request for registration
    */
@@ -256,7 +256,7 @@ class UserController extends PageController {
     }
     return $userEmail;
   }
-  
+
   /**
    * _sendActivationMail
    * function is used for sending activation email in background
@@ -312,7 +312,7 @@ class UserController extends PageController {
     $html = str_replace("{{regards}}", $userInfo['regards'], $html);
     return $html;
   }
-  
+
   /**
    * actionActivateUser
    * function is used for activate by using activation link
@@ -360,7 +360,7 @@ class UserController extends PageController {
             throw new Exception('Failed to update status as active for email ' . $email);
           }
         }
-      } else { 
+      } else {
         $message = Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing.");
       }
     } catch (Exception $e) {
@@ -933,7 +933,7 @@ class UserController extends PageController {
    */
   public function actionCheckNickname() {
     $response = array(
-      'msg' => Yii::t('discussion', 'Nickname already in use. Choose Another') ,
+      'msg' => Yii::t('discussion', 'Nickname already in use. Choose another!') ,
       'success' => TRUE
     );
     try {
@@ -1026,7 +1026,7 @@ class UserController extends PageController {
       }
     } catch (Exception $exception) {
       $response['msg'] = Yii::t('discussion', 'Some error occured. Please try again.');
-      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname');
+      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname!');
     }
     echo CJSON::encode($response);
     exit;
@@ -1073,7 +1073,7 @@ class UserController extends PageController {
         }
         if (strpos($message, "is not unique") !== false) {
           if (array_key_exists('nickname', $updateUser['_issues'])) {
-            $message = Yii::t('discussion', 'Nickname already in use, Choose another');
+            $message = Yii::t('discussion', 'Nickname already in use. Choose another!');
           }
         } else {
           $message = Yii::t('discussion', 'Some technical problem occurred, contact administrator');
@@ -1155,4 +1155,3 @@ class UserController extends PageController {
   }
 
 }
-

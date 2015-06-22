@@ -91,7 +91,7 @@ msgstr "Modifica Discussione"
 
 msgctxt "discussion"
 msgid "Email address"
-msgstr "indirizzo e-mail"
+msgstr "Indirizzo email"
 
 msgctxt "discussion"
 msgid "Email id already in use, Please choose a different email id"
@@ -204,6 +204,10 @@ msgstr "Inserisci il nome"
 msgctxt "discussion"
 msgid "Please enter last name"
 msgstr "Inserisci il cognome"
+
+msgctxt "discussion"
+msgid "Please enter nickname"
+msgstr "Inserisci un nickname"
 
 msgctxt "discussion"
 msgid "Please enter valid lnk url"
@@ -1423,7 +1427,7 @@ msgstr "Cittadinanza"
 
 msgctxt "discussion"
 msgid "Confirm Email"
-msgstr "Conferma Email"
+msgstr "Conferma email"
 
 msgctxt "discussion"
 msgid "Data is empty for drawing chart"
@@ -1599,8 +1603,8 @@ msgid "Nickname available"
 msgstr "Nickname disponibile"
 
 msgctxt "discussion"
-msgid "Nickname already in use. Choose Another"
-msgstr "Nickname già in uso. Scegline un altro"
+msgid "Nickname already in use. Choose another!"
+msgstr "Nickname già in uso. Scegli un altro nickname!"
 
 msgctxt "discussion"
 msgid "Choose your nickname"
