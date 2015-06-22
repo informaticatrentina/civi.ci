@@ -6,7 +6,7 @@
   <div class="span12">
     <div class="pull-left">
       <h1>
-        {{discussionTitle}} 
+        {{discussionTitle}}
       </h1>
     </div>
     {% if isAdmin == true %}
@@ -62,7 +62,7 @@
         <td>0</td>
         {%endif%}
         <td>
-          {% if proposal.weightmap is iterable %} 
+          {% if proposal.weightmap is iterable %}
           <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
           <g>
           {% for key,value in proposal.weightmap %}
@@ -70,20 +70,20 @@
           <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
           {% endfor %}
           </g>
-          </svg> 
+          </svg>
           {% else %}
           {{proposal.weightmap}}
           {%endif%}
         </td>
         {% if isAdmin == true %}
           <td class="hidden-print"><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
-        {% endif %}      
+        {% endif %}
         <td class="hidden-print">
           <div class="dropdown">
             <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
             <ul class="dropdown-menu">
               {% if isAdmin == true %}
-                <li class="edit-proposal" proposal-id="{{proposal.id}}" proposal-summary="{{proposal.content.summary}}">
+                <li class="edit-proposal" proposal-id="{{proposal.id}}">
                   <a a href="#formModal" data-toggle="modal">{{t('discussion','Edit')}}</a>
                 </li>
               {% endif %}
@@ -99,12 +99,12 @@
                 {% if proposal.status == 'active' %}
                   <li>
                     <a proposal-id='{{proposal.id}}' class="proposalStatus">{{t('discussion', 'Hide')}} </a>
-                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span>
                   </li>
                 {% else %}
                   <li>
                     <a proposal-id='{{proposal.id}}'  class="proposalStatus">{{t('discussion', 'Show')}}</a>
-                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span> 
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span>
                   </li>
                 {% endif %}
               {% endif %}

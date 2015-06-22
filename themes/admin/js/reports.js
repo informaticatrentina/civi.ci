@@ -25,12 +25,12 @@ $(document).ready(function() {
       }
     });
   });
-  
+
   $('.edit-proposal').click(function(){
     $('#proposal-error').addClass('hidden');
     var proposalId = $(this).attr('proposal-id');
     var proposalTitle = $(this).parents('tr').children('td').children('.proposal-title').html();
-    var proposalSummary = $(this).attr('proposal-summary');
+    var proposalSummary = $(this).parents('tr').children('td').siblings('.proposal-summary').html();
     var newProposalSummary = proposalSummary.replace(/<br \/>/g, '');
     var proposalDescription = $(this).parents('tr').children('td').siblings('.proposal-description').html();
     var newProposalDescription = proposalDescription.replace(/<br>/g, '');
@@ -40,7 +40,7 @@ $(document).ready(function() {
     $('#proposal-id').val(proposalId);
     $('#title, #proposal-summary').trigger('keyup');
    });
-  
+
   $('#updateProposal').click(function(e) {
     e.preventDefault();
     var title = $('#title').val();
@@ -71,10 +71,10 @@ $(document).ready(function() {
         $('#proposal-error').html(Yii.t('js', ' Please select atleast one topic'));
         return false;
       }
-    }    
+    }
     $('#update-proposal-form').submit();
   });
-  
+
   $("#title, #proposal-summary").bind('paste', function(e) {
     var self = $(this);
     self.attr('maxlength', '');
@@ -119,8 +119,8 @@ $(document).ready(function() {
         break;
     }
   });
-  
-  $('#title, #proposal-summary').keyup(function() {        
+
+  $('#title, #proposal-summary').keyup(function() {
     switch ($(this).attr('id')) {
       case 'title':
         titleCount = tcharLimit - $(this).val().length;
@@ -140,14 +140,14 @@ $(document).ready(function() {
         break;
     }
     if (titleCount <= tcharLimit && titleCount >= 0 && proposalCount <= icharLimit && proposalCount >= 0) {
-      $('#proposal-error').addClass('hidden'); 
+      $('#proposal-error').addClass('hidden');
       $('#proposal-error').html('');
       $('#updateProposal').removeAttr('disabled');
     } else if (titleCount >= 0 && titleCount <= tcharLimit) {
       if (proposalCount < 0) {
         $('#proposal-error').html(Yii.t('js', 'Proposal Introduction should be atmost 500 characters'));
         $('#proposal-error').removeClass('hidden');
-        $('#updateProposal').attr('disabled','true'); 
+        $('#updateProposal').attr('disabled','true');
       }
     } else if (proposalCount >= 0 && proposalCount <= icharLimit) {
       if (titleCount < 0) {
