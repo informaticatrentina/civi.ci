@@ -586,6 +586,94 @@ msgid "Configuration Value"
 msgstr "Valore di configurazione"
 
 msgctxt "discussion"
+msgid "Status of Link Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento link. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Status of Opinion Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento opinioni. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Status of Proposal Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento proposte. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Text to display on home page when submission if Off"
+msgstr "Testo da mostrare in Home Page quando l'inserimento è disattivato"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Proposal Title"
+msgstr "Numero massimo di caratteri nel titolo della proposta"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Proposal Introduction"
+msgstr "Numero massimo di caratteri nell'introduzione della proposta"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Opinion"
+msgstr "Numero masssimo di caratteri nell'opinione"
+
+msgctxt "discussion"
+msgid "Threshold value of opinions to post furthur proposals"
+msgstr "Valore di soglia di opinioni per ulteriori proposte"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when opinion submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di opinioni è disattivato"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when link submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di link è disattivato"
+
+msgctxt "discussion"
+msgid "Moderator's email address (Comma seperated email id)"
+msgstr "Indirizzo email dei moderatori (separati da virgole)"
+
+msgctxt "discussion"
+msgid "Getting additional user information. (Use 0 for OFF and 1 for ON)"
+msgstr "Informazioni utente aggiuntive. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Proposal sorting"
+msgstr "Ordinamento proposte"
+
+msgctxt "discussion"
+msgid "Alphabetical"
+msgstr "Alfabetico"
+
+msgctxt "discussion"
+msgid "No of opinion"
+msgstr "Numero opinioni"
+
+msgctxt "discussion"
+msgid "Custom weight"
+msgstr "Personalizzato"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when proposal submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di proposte è disattivato"
+
+msgctxt "discussion"
+msgid "Number of Columns in Proposal Page"
+msgstr "Numero di colonne nella pagina delle proposte"
+
+msgctxt "discussion"
+msgid "Show question for addtional information"
+msgstr "Mostra domande per informazioni aggiuntive"
+
+msgctxt "discussion"
+msgid "Select Question For Additional User Information"
+msgstr "Seleziona le domande per le informazioni utente aggiuntive"
+
+msgctxt "discussion"
+msgid "Save changes"
+msgstr "Salva modifiche"
+
+msgctxt "discussion"
+msgid ""
+msgstr ""
+
+msgctxt "discussion"
 msgid "Discussion Slug"
 msgstr "Slug della discussione"
 

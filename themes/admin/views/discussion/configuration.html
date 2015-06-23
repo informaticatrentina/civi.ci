@@ -11,7 +11,9 @@
           {% for configuration in configurations %}
             {% if configuration.name_key != 'user_additional_info_question' %}
               {% if configuration.name_key == 'additional_information_status' and configuration.value == 1 %}
-                {% set configuration = { 'name' : configuration.name ~ '<br/><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Show question for addtional information</button>', 
+                {% set cfg_additional_info_name =  t('discussion', configuration.name) %}
+                {% set cfg_additional_info_label =  t('discussion', 'Show question for addtional information') %}
+                {% set configuration = { 'name' : cfg_additional_info_name ~ '<br/><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">' ~ cfg_additional_info_label ~ '</button>', 
                                          'value' : configuration.value,
                                          'name_key': configuration.name_key
                                        }
@@ -24,7 +26,7 @@
                   {% if key == configuration.value %}
                     {% set proposalChecked = 'checked="checked"' %}
                   {% endif %}
-                  {% set proposalSortingHtml = proposalSortingHtml ~ '<input class="proposal-sorting-option"' ~ proposalChecked ~ 'type="radio" name="proposal_sorting" value="' ~ key ~ '">&nbsp;&nbsp;' ~ sorting_order %}
+                  {% set proposalSortingHtml = proposalSortingHtml ~ '<input class="proposal-sorting-option"' ~ proposalChecked ~ 'type="radio" name="proposal_sorting" value="' ~ key ~ '">&nbsp;&nbsp;' ~ t('discussion', sorting_order) %}
                 {% endfor %}
                 {% set configuration = { 'name' : 'Proposal sorting',
                                          'value' : proposalSortingHtml,
@@ -34,7 +36,7 @@
               {% endif %}
               <tr>
                 <td class='hidden'>{{ configuration.name_key }}</td>
-                <td class='name'>{{ configuration.name }}</td>
+                <td class='name'>{{ t('discussion', configuration.name) }}</td>
                 <td class='value'>{{ configuration.value }}</td>
               </tr>
             {% endif %}
@@ -48,7 +50,7 @@
   <form role="form" action="" method="POST" id="additional-info-question-form">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel"><center>Select Question For Additional User Information</center></h3>
+      <h3 id="myModalLabel"><center>{{ t('discussion', 'Select Question For Additional User Information') }}</center></h3>
     </div>
     <div class="modal-body" style='padding-left: 150px;'>
       <div id="error" style="display:none;"></div>
@@ -63,8 +65,8 @@
       {% endfor %}
     </div>
     <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-      <button id="save-additional-info-question" class="btn btn-primary">Save changes</button>
+      <button class="btn" data-dismiss="modal" aria-hidden="true">{{ t('discussion', 'Close') }}</button>
+      <button id="save-additional-info-question" class="btn btn-primary">{{ t('discussion', 'Save changes') }}</button>
     </div>
   </form>
 </div>
