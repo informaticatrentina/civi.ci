@@ -40,6 +40,10 @@ msgid "Please enter valid email id"
 msgstr "Inserisci una email valida"
 
 msgctxt "discussion"
+msgid "Please enter Nickname"
+msgstr "Inserisci un nickname"
+
+msgctxt "discussion"
 msgid " Please select atleast one topic."
 msgstr "Seleziona almeno un argomento."
 

@@ -206,7 +206,7 @@ msgid "Please enter last name"
 msgstr "Inserisci il cognome"
 
 msgctxt "discussion"
-msgid "Please enter nickname"
+msgid "Please enter Nickname"
 msgstr "Inserisci un nickname"
 
 msgctxt "discussion"
