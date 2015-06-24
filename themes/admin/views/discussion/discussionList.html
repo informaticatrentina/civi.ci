@@ -7,6 +7,7 @@
       <a class="btn btn-info admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion">{{ t('discussion', 'View All Discussions') }}</a>
       <a class="btn btn-info admin-allStatistics-link" href="{{constant('BASE_URL')}}admin/statistics">{{ t('discussion', 'View All Statistics') }}</a>
       <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/all/csv">{{ t('discussion', 'Export To CSV') }}</a>
+      <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/all/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
     </div>
   </div>
 </div>
@@ -59,6 +60,7 @@
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
                 {% if isAdmin == true %}
                   <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
+                  <li><a href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{ info.discussionId }}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a></li>
                 {% endif %}
               </ul>
             </div>

@@ -1594,3 +1594,34 @@ msgctxt "discussion"
 msgid "Admin user Proposal Count"
 msgstr "Numero proposte - admin utente"
 
+msgctxt "discussion"
+msgid "User"
+msgstr "Utente"
+
+msgctxt "discussion"
+msgid "Organization"
+msgstr "Organizzazione"
+
+msgctxt "discussion"
+msgid "First Name"
+msgstr "Nome"
+
+msgctxt "discussion"
+msgid "Save changes"
+msgstr "Salva modifiche"
+
+msgctxt "discussion"
+msgid "Additional Info"
+msgstr "Informazioni Addizionali"
+
+msgctxt "discussion"
+msgid "Proposal Id"
+msgstr "Proposta Id"
+
+msgctxt "discussion"
+msgid "Export Opinion To CSV"
+msgstr "Esporta Opinioni in CSV"
+
+msgctxt "discussion"
+msgid "Author Email"
+msgstr "Autore email"

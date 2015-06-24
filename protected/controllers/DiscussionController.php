@@ -651,9 +651,11 @@ class DiscussionController  extends PageController {
     $proposalOpinions = array();
     $inactiveOpinions = array();
     $title = '';
+    $proposalId = '';
     $aggregatorManager = new AggregatorManager();
     if (array_key_exists('id', $_GET) && !empty($_GET['id'])) {
       $proposalTitle = array();
+      $proposalId = $_GET['id'];
       $proposalTitle = $aggregatorManager->getEntry(1, 0, $_GET['id'], 'active', '', '', '', 0, '', '', 1, '', array(), '', 'title', '', '', '', CIVICO, '');
       if (array_key_exists('0', $proposalTitle) && !empty($proposalTitle[0])) {
         if (array_key_exists('title', $proposalTitle[0]) && !empty($proposalTitle[0]['title'])) {
@@ -716,7 +718,8 @@ class DiscussionController  extends PageController {
       'opinions' => $proposalOpinions,
       'title' => $title,
       'slug' => $discussionSlug,
-      'emails' => $emails
+      'emails' => $emails,
+      'proposalId' => $proposalId
     ));
   }
 
@@ -2573,11 +2576,38 @@ class DiscussionController  extends PageController {
       'opinion_voting_count' => Yii::t('discussion', 'Vote on triangle'),
       'text_opinion_count' => Yii::t('discussion', 'Opinion Count'),
       'total_links' => Yii::t('discussion', 'Number of Links'),
+      'proposal_id' => Yii::t('discussion', 'Proposal Id'),
     );
+    $additionalInfo = json_decode(ADDITIONAL_INFORMATION, TRUE);
+    ksort($additionalInfo);
+    foreach ($additionalInfo as $infoKey => $info) {
+      $header[$infoKey] = Yii::t('discussion', $info['text']);
+    }
     $allproposals = array();
+    $userInfos = array();
     foreach ($discussionDetail as $discussion) {
       $this->discussionId = $discussion['id'];
       $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+      $userEmails = $detailContent['emails'];
+      $addInfo = $this->getUserAdditionalInfo($userEmails);
+      foreach ($detailContent['allProposals'] as $user) {
+        if(array_key_exists($user['author']['slug'], $addInfo)) {
+          $userInfos[$user['id']] = $addInfo[$user['author']['slug']];
+        }
+      }
+      foreach ($additionalInfo as $key => $value) {
+        foreach($userInfos as &$info) {
+          if(!array_key_exists($key, $info)) {
+            $info[$key] = '';
+          }
+          foreach ($info as $keys => &$values) {
+            if (!array_key_exists($keys, $additionalInfo)) {
+              unset($info[$keys]);
+            }
+          }
+          ksort($info);
+        }
+      }
       $admin = new AdminController('admin');
       $allproposals[] = $admin->createDataForExport($detailContent, $discussion);
     }
@@ -2585,14 +2615,17 @@ class DiscussionController  extends PageController {
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
-    foreach ($allproposals as $proposal) {
-      foreach($proposal as $proposalContent) {
+    foreach ($allproposals as &$proposal) {
+      foreach($proposal as &$proposalContent) {
+        if(array_key_exists($proposalContent['proposal_id'], $userInfos)) {
+          $proposalContent = array_merge($proposalContent, $userInfos[$proposalContent['proposal_id']]);
+        }
         @fputcsv($filePath, $proposalContent);
       }
     }
     exit;
   }
-  
+
   public function actionAllStatistics() {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
     $this->setHeader('2.0');
