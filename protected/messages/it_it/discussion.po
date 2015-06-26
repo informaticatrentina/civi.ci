@@ -1682,3 +1682,116 @@ msgctxt "discussion"
 msgid "Admin user Proposal Count"
 msgstr "Numero proposte - admin utente"
 
+# RBAC Module strings #
+
+msgctxt "rbac"
+msgid "User"
+msgstr "Utente"
+
+msgctxt "rbac"
+msgid "User List"
+msgstr "Elenco utenti"
+
+msgctxt "rbac"
+msgid "Role List"
+msgstr "Elenco ruoli"
+
+msgctxt "rbac"
+msgid "Assign Role"
+msgstr "Assegna ruolo"
+
+msgctxt "rbac"
+msgid "Add Role"
+msgstr "Aggiungi ruolo"
+
+msgctxt "rbac"
+msgid "No role has been defined yet. Click on <strong>add role</strong> button to create a role."
+msgstr "Non è stato ancora definito alcun ruolo. Clicca su <strong>aggiungi ruolo</strong> per crearne uno."
+
+msgctxt "rbac"
+msgid "Add role"
+msgstr "Aggiungi ruolo"
+
+msgctxt "rbac"
+msgid "S.No."
+msgstr "Id"
+
+msgctxt "rbac"
+msgid "Role"
+msgstr "Ruolo"
+
+msgctxt "rbac"
+msgid "Permission"
+msgstr "Permesso"
+
+msgctxt "rbac"
+msgid "Action"
+msgstr "Azione"
+
+msgctxt "rbac"
+msgid "Assign Permission"
+msgstr "Assegna permesso"
+
+msgctxt "rbac"
+msgid "Change Pemission"
+msgstr "Cambia permesso"
+
+msgctxt "rbac"
+msgid "role"
+msgstr "ruolo"
+
+msgctxt "rbac"
+msgid "Select Permission"
+msgstr "Seleziona permesso"
+
+msgctxt "rbac"
+msgid "Assign"
+msgstr "Assegna"
+
+msgctxt "rbac"
+msgid "Update"
+msgstr "Aggiorna"
+
+msgctxt "rbac"
+msgid "Role name"
+msgstr "Nome ruolo"
+
+msgctxt "rbac"
+msgid "Save"
+msgstr "Salva"
+
+msgctxt "rbac"
+msgid "Edit"
+msgstr "Modifica"
+
+msgctxt "rbac"
+msgid "Delete"
+msgstr "Elimina"
+
+msgctxt "rbac"
+msgid "Active"
+msgstr "Attivo"
+
+msgctxt "rbac"
+msgid "Inactive"
+msgstr "Disattivo"
+
+msgctxt "rbac"
+msgid "status"
+msgstr "Stato"
+
+msgctxt "rbac"
+msgid "User email"
+msgstr "Email utente"
+
+msgctxt "rbac"
+msgid "Change Role"
+msgstr "Cambia ruolo"
+
+msgctxt "rbac"
+msgid "Are you sure you want to delete"
+msgstr "Sei sicuro di voler eliminare"
+
+msgctxt "rbac"
+msgid ""
+msgstr ""
