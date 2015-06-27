@@ -1393,6 +1393,9 @@ class DiscussionController  extends PageController {
         $configuration['value'] = explode(',', $configuration['value']);
         $configuration['value'] = array_map('trim', $configuration['value']);
       }
+      if ($configuration['name_key'] == 'footer_html') {
+         $configuration['value'] = stripslashes(htmlspecialchars($configuration['value']));
+      }
       $stripped[$configuration['name_key']] = $configuration;
     }
     if (!empty($_POST)) {
@@ -1400,6 +1403,9 @@ class DiscussionController  extends PageController {
         $this->_saveModeratorsEmail($_POST['value']);
       }
       $value = htmlspecialchars($_POST['value']);
+      if ($_POST['key'] == 'footer_html') {
+        $value =  trim(addslashes(htmlspecialchars(html_entity_decode($_POST['value']))));
+      }
       $config->key = $_POST['key'];
       $config->type = 'config';
       $config->value = $value;

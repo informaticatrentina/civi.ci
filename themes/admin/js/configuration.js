@@ -15,8 +15,9 @@ $(document).ready(function() {
       if ($(this).find('input').length) {
         return;
       }
-      if ($(this).siblings('.name').text() == 'Text to display on home page when submission if Off') {
-        var input = $("<textarea></textarea>").val($(this).text());
+      if ($(this).siblings('.name').text() == 'Text to display on home page when submission if Off' ||
+        $(this).siblings('.name').text() == 'Footer html to display on each page') {
+        var input = $("<textarea style='width:700px; height: 100px;'></textarea>").val($(this).text());
       } else {
         var input = $("<input type='text' size='5' />").val($(this).text());
       }

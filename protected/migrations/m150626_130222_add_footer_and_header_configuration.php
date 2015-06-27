@@ -20,8 +20,8 @@ class m150626_130222_add_footer_and_header_configuration extends CDbMigration {
     //add configuration for footer html on each page
     $this->execute(
       "INSERT INTO `configuration` (`config_key`, `name`, `value`, `name_key`,
-      `display_order`, `last_modified`, `editor_email`) VALUES('config', 'Footer html 
-      to display on each page', 'Please enter footer html in configuration', 
+      `display_order`, `last_modified`, `editor_email`) VALUES('config',
+      'Footer html to display on each page', 'Please enter footer html in configuration',
       'footer_html', '18', " . $time . ", 'pradeep@incaendo.com')"
     );
   }

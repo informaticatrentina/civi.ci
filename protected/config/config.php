@@ -185,7 +185,8 @@ return array(
                 't' => 'Yii::t',
                 'adminMenuVisible' => 'adminMenuVisible',
                 'checkPermission' => 'checkPermission',
-                'sanitization' => 'sanitization'
+                'sanitization' => 'sanitization',
+                'getFooterHtml' => 'getFooterHtml'
             )
         ),
         'db' => array(
