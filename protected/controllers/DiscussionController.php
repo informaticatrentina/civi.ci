@@ -741,7 +741,8 @@ class DiscussionController  extends PageController {
         'link_text' => Yii::app()->globaldef->params['link_text'],
         'all_proposal_off' => Yii::app()->globaldef->params['submission'],
         'proposal_text' => Yii::app()->globaldef->params['proposal_text'],
-        'proposal_layout' => $proposalLayout
+        'proposal_layout' => $proposalLayout,
+        'attached_image_on_proposal' => Yii::app()->globaldef->params['attach_img_on_proposal']
       );
     }
       $this->render('discussionProposals', $data);
