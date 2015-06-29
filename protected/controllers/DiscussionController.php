@@ -275,7 +275,7 @@ class DiscussionController  extends PageController {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
     $this->setHeader('2.0');
     //check if user belong to admin users or not
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('create_new_discussion');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -307,7 +307,11 @@ class DiscussionController  extends PageController {
     $this->setHeader('2.0');
     $isHighlighter = checkPermission('can_mark_highlighted');
     $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $can_show_hide_opinion == false) {
+    $configureHomePage = checkPermission('configure_home_page');
+    $createNewDiscussion = checkPermission('create_new_discussion');
+    $accessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $can_show_hide_opinion == FALSE && $configureHomePage == FALSE
+      && $createNewDiscussion == FALSE && $accessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $discussion = $this->_getDiscussionProposalOpinionLinks();
@@ -763,7 +767,8 @@ class DiscussionController  extends PageController {
     }
     $isAdmin = checkPermission('admin');
     $canShowHideOpinion = checkPermission('can_show_hide_opinion');
-    if ($isAdmin == false && $canShowHideOpinion == false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($isAdmin == false && $canShowHideOpinion == false && $canAccessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $opinions = array();
@@ -928,8 +933,8 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL . 'login?back=' . $_SERVER['REQUEST_URI']);
     }
     $this->setHeader('2.0');
-    $isAdmin = checkPermission('admin');
-    if ($isAdmin ==false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($canAccessReport ==false) {
       $this->redirect(BASE_URL);
     }
     $links = array();
@@ -1460,7 +1465,8 @@ class DiscussionController  extends PageController {
     }
     $isHighlighter = checkPermission('can_mark_highlighted');
     $canShowHideOpinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $canShowHideOpinion == false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $canShowHideOpinion == FALSE && $canAccessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $discussion = new Discussion();
@@ -1489,7 +1495,7 @@ class DiscussionController  extends PageController {
    * This function is used to show all proposals
    */
   public function actionExport() {
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('access_report');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -2095,7 +2101,7 @@ class DiscussionController  extends PageController {
    * This function is used for saving and getting Home page configuration.
    */
   public function actionHomePageConfig() {
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('configure_home_page');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -2317,8 +2323,7 @@ class DiscussionController  extends PageController {
           $emails[] = $email['email'];
         }
       }
-      $userController = new UserController('user');
-      $contributorsEmail = $userController->getAuthorEmail($author, TRUE);
+      $contributorsEmail = $this->getAuthorEmail($author, TRUE);
       $userInfo = array();
       if (!empty($contributorsEmail)) {
         $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $contributorsEmail['user']));
@@ -2523,8 +2528,9 @@ class DiscussionController  extends PageController {
    * This method is used to get all discussions, their proposals, opinions and links.
    */
   public function actionAllDiscussion() {
-    $isAdmin = checkPermission('admin');
-    if ($isAdmin == false) {
+    $canAccessReport = checkPermission('access_report');
+    $canShowHideOpinion = checkPermission('can_show_hide_opinion');
+    if ($canAccessReport == FALSE && $canShowHideOpinion == FALSE) {
       $this->redirect(BASE_URL);
     }
     try {
@@ -2747,7 +2753,8 @@ class DiscussionController  extends PageController {
     $this->setHeader('2.0');
     $isHighlighter = checkPermission('can_mark_highlighted');
     $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $can_show_hide_opinion == false) {
+    $accessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $can_show_hide_opinion == FALSE && $accessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $chartDetail = array();
@@ -2870,7 +2877,7 @@ class DiscussionController  extends PageController {
           'author_name' => array(), 'discussion_author' => array());
       $discussionDetail = array();
       $discussion = new Discussion();
-      $discussionInfo = $discussion->getDiscussionDetail();      
+      $discussionInfo = $discussion->getDiscussionDetail();
       $authorName = array();
       $authorId = array();
       $discussionWiseAuthor = array();
@@ -2903,8 +2910,7 @@ class DiscussionController  extends PageController {
           $discussionWiseOpinionAuthor[$info['id']] = $discussionContent['opinion_author_id'];
         }
       }
-      $userController = new UserController('user');
-      $user = $userController->getAuthorEmail($authorId, TRUE);
+      $user = $this->getAuthorEmail($authorId, TRUE);
       //get non admin user count for each discussion
       foreach ($discussionDetail as &$discussion) {
         $authorId = array_unique($discussionWiseAuthor[$discussion['discussionId']]);
@@ -2949,7 +2955,7 @@ class DiscussionController  extends PageController {
         }
       }
       //get discussion author's email id
-      $discussionAuthorEmail  = $userController->getAuthorEmail($discussionAuthorId, TRUE);
+      $discussionAuthorEmail  = $this->getAuthorEmail($discussionAuthorId, TRUE);
       $user['admin_user'] = array_merge($user['admin_user'], $discussionAuthorEmail['admin_user']);
       $resp['emails'] = array_merge($user['user'], $user['admin_user']);
       $resp['user'] = $user;
@@ -3169,6 +3175,74 @@ class DiscussionController  extends PageController {
     }
     return $users;
   }
-}
 
-?>
+  /**
+   * getAuthorEmail
+   * function is used for getting author email on tthe basis of author id
+   * @param array $authorId  - author slug
+   * @param boolean $checkAdmin - if true then return admin user on admin key
+   *   else it return all email on user key
+   * @return array $userEmail
+   */
+  public function getAuthorEmail($authorIds, $checkAdmin = FALSE) {
+    try {
+      $userEmail = array('user' => array(), 'admin_user' => array());
+      if (isModuleExist('rbacconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('rbacconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
+      }
+      if (is_array($authorIds)) {
+        $authorIds = array_unique($authorIds);
+      }
+      $emails = $this->_getContributorsEmail($authorIds);
+      if (!empty($emails) && $checkAdmin == TRUE) {
+        foreach ($emails as $key => $email) {
+          $isAdmin = User::checkPermission($email, 'is_admin');
+          if ($isAdmin == TRUE) {
+            $userEmail['admin_user'][$key] = $email;
+          } else {
+            $userEmail['user'][$key] = $email;
+          }
+        }
+      } else {
+        $userEmail['user'] = $emails;
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getAuthorEmail ');
+    }
+    return $userEmail;
+  }
+
+  /**
+   * _getContributorsEmail
+   * function is used for getting author email who have submitted proposal, opinions
+   * and links on the basis of contributors id (id)
+   * @param array $contributorsId
+   * @return array $contributorEmail - email id of contributor (user)
+   */
+  private function _getContributorsEmail($contributorsId) {
+    try {
+      $userEmail = array();
+      if (empty($contributorsId)) {
+        return $userEmail;
+      }
+      $identityManager = new UserIdentityAPI();
+      $authorsEmails = $identityManager->getUserDetail(IDM_USER_ENTITY, array('id' =>
+      $contributorsId), true, false);
+      if (array_key_exists('_items', $authorsEmails) && !empty($authorsEmails['_items'])) {
+        foreach ($authorsEmails['_items'] as $authorEmail) {
+          if (array_key_exists('_id', $authorEmail) && !empty($authorEmail['_id'])
+            && array_key_exists('email', $authorEmail) && !empty($authorEmail['email'])) {
+            $userEmail[$authorEmail['_id']] = $authorEmail['email'];
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in _getContributorsEmail');
+    }
+    return $userEmail;
+  }
+}

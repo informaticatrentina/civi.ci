@@ -2,6 +2,7 @@
 {% set isHighlighter = checkPermission('can_mark_highlighted') %}
 {% set canShowHideOpinion = checkPermission('can_show_hide_opinion') %}
 {% set isAdmin = checkPermission('admin') %}
+{% set canAccessReport = checkPermission('access_report') %}
 <div class="row">
   <div class="span12">
     <div class="pull-left">
@@ -9,7 +10,7 @@
         {{discussionTitle}} 
       </h1>
     </div>
-    {% if isAdmin == true %}
+    {% if canAccessReport == true %}
       <div class="pull-right btn-toolbar">
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
         <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{discussionId}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
@@ -34,7 +35,7 @@
           {% if isAdmin == true %}
             <th>{{ t('discussion', 'Sorting Order') }}</th>
           {% endif %}
-          {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) %}
+          {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) or (canAccessReport == true) %}
             <th class="sorter-false">{{ t('discussion','Ops') }}</th>
           {% endif %}
         </tr>
@@ -86,12 +87,12 @@
                   <a a href="#formModal" data-toggle="modal">{{t('discussion','Edit')}}</a>
                 </li>
               {% endif %}
-              {% if (isAdmin == true ) or (canShowHideOpinion == true)%}
+              {% if (isAdmin == true ) or (canShowHideOpinion == true) or (canAccessReport == true) %}
                 <li>
                   <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/opinion?id={{proposal.id}}">{{ t('discussion','View opinions')}}</a>
                 </li>
               {% endif %}
-              {% if isAdmin == true %}
+              {% if isAdmin == true or canAccessReport == true %}
                 <li>
                   <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/links?id={{proposal.id}}">{{ t('discussion','View links')}}</a>
                 </li>
@@ -118,7 +119,7 @@
                   <a class="proposalLinks highlighter" href="{{constant('BASE_URL')}}admin/discussion/proposal/highlight/{{slug}}?id={{proposal.id}}" highlight = "{{highlighterAttribute}}">{{ highlighterText }}</a>
                 </li>
               {% endif %}
-              {% if isAdmin == true %}
+              {% if canAccessReport == true %}
                 <li>
                   <a href="{{constant('BASE_URL')}}admin/export/opinions/proposal/{{proposal.id}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
                 </li>

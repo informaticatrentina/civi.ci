@@ -1,3 +1,9 @@
+{% set isAdmin = checkPermission('admin') %}
+{% set configureHomePage = checkPermission('configure_home_page') %}
+{% set createNewDiscussion = checkPermission('create_new_discussion') %}
+{% set accessReport = checkPermission('access_report') %}
+{% set canShowHideOpinion = checkPermission('can_show_hide_opinion') %}
+{% set canMarkHighlighted = checkPermission('can_mark_highlighted') %}
 {% if shownNicknamePopUp is defined %}
   {% if shownNicknamePopUp == 1 %}
     <button id="btns" class="hide" data-toggle="modal" data-target="#myModal"></button>
@@ -73,18 +79,25 @@
   <div class="span12">
     <h1 class="title">{{ t('discussion','Discussions List') }}</h1>
     <div class="btn-toolbar">
-      <a class="btn btn-success admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add">{{ t('discussion', 'Create Discussion') }}</a>
-      <a class="btn btn-warning admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage">{{ t('discussion', 'Configure Home Page') }}</a>
-      <a class="btn btn-info admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion">{{ t('discussion', 'View All Discussions') }}</a>
-      <a class="btn btn-info admin-allStatistics-link" href="{{constant('BASE_URL')}}admin/statistics">{{ t('discussion', 'View All Statistics') }}</a>
-      <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/all/csv">{{ t('discussion', 'Export To CSV') }}</a>
-      <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/all/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
+      {% if createNewDiscussion == true %}
+        <a class="btn btn-success admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add">{{ t('discussion', 'Create Discussion') }}</a>
+      {% endif %}
+      {% if configureHomePage == true %}
+        <a class="btn btn-warning admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage">{{ t('discussion', 'Configure Home Page') }}</a>
+      {% endif %}
+      {% if accessReport == true or canShowHideOpinion == true %}
+        <a class="btn btn-info admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion">{{ t('discussion', 'View All Discussions') }}</a>
+      {% endif %}
+      {% if accessReport == true %}
+        <a class="btn btn-info admin-allStatistics-link" href="{{constant('BASE_URL')}}admin/statistics">{{ t('discussion', 'View All Statistics') }}</a>
+        <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/all/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/all/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
+      {% endif %}
     </div>
   </div>
 </div>
 <div class="row">
   <div class="span12">
-    {% set isAdmin = checkPermission('admin') %}
     <table  id="discussions-list" class="table table-bordered table-striped table-condensed">
       <thead>
         <tr>
@@ -99,7 +112,9 @@
           {% if isAdmin == true %}
             <th>{{ t('discussion', 'Sorting Order') }}</th>
           {% endif %}
-          <th>{{ t('discussion', 'Ops') }}</th>
+          {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
+            <th>{{ t('discussion', 'Ops') }}</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -119,23 +134,29 @@
           <td>{{ info.opinionCount}}</td>
           <td>{{ info.opinionVoting}}</td>
           <td>{{ info.userCount}}</td>
-          <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
-          <td>
-            <div class="dropdown">
-              <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                {% if isAdmin == true %}
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
-                {% endif %}  
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
-                {% if isAdmin == true %}
-                  <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
-                  <li><a href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{ info.discussionId }}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a></li>
-                {% endif %}
-              </ul>
-            </div>
-          </td>
+          {% if isAdmin == true %}
+            <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
+          {% endif %}
+          {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
+            <td>
+              <div class="dropdown">
+                <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  {% if isAdmin == true %}
+                    <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
+                  {% endif %}
+                  {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
+                    <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
+                  {% endif %}
+                  {% if accessReport == true %}
+                    <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
+                    <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
+                    <li><a href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{ info.discussionId }}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </td>
+          {% endif %}
         </tr>
         {% set totalProposal = totalProposal + info.proposalCount %}
         {% set totalOpinion = totalOpinion + info.opinionCount + info.opinionVoting %}

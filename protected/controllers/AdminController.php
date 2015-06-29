@@ -166,6 +166,10 @@ class AdminController extends PageController {
    */
   public function actionExportOpinions() {
     try {
+      $isAdmin = checkPermission('access_report');
+      if ($isAdmin == false) {
+        $this->redirect(BASE_URL);
+      }
       $proposalOpinions = array();
       if (array_key_exists('type', $_GET) && !empty($_GET['type']) && array_key_exists('id', $_GET) && !empty($_GET['id'])) {
         switch($_GET['type']) {
@@ -275,8 +279,7 @@ class AdminController extends PageController {
           $emails[$email['_id']] = $email['email'];
         }
       }
-      $userController = New UserController('user');
-      $userAdditionalInfo = $userController->getUserAdditionalInfo($author);
+      $userAdditionalInfo = $this->getUserAdditionalInfo($author);
       $additionalInfo = defined('ADDITIONAL_INFORMATION') ? json_decode(ADDITIONAL_INFORMATION, TRUE) : array();
       ksort($additionalInfo);
       if (!empty($proposalOpinions)) {
@@ -336,5 +339,111 @@ class AdminController extends PageController {
     } catch(Exception $e) {
       Yii::log('Error in CSV Generation for opinions.', ERROR, $e->getMessage());
     }
+  }
+
+  /**
+   * getUserAdditionalInfo
+   * This function is used to get user additional user info.
+   * @param array $authorIds
+   * @return array
+   * @throws Exception
+   */
+  public function getUserAdditionalInfo($authorIds) {
+    try {
+      $users = array();
+      if (isModuleExist('backendconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('backendconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+      }
+      if (is_array($authorIds)) {
+        $authorIds = array_unique($authorIds);
+      }
+      $userIdentityApi = new UserIdentityAPI();
+      $emails = $this->_getContributorsEmail($authorIds);
+      $question = json_decode(ADDITIONAL_INFORMATION, TRUE);
+      if (!empty($emails)) {
+        $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $emails));
+        if (array_key_exists('_items', $userInfo)) {
+          foreach ($userInfo['_items'] as $user) {
+            if (array_key_exists('age', $user)) {
+              $users[$user['_id']]['age'] = $user['age'];
+            }
+            if (array_key_exists('age_range', $user)) {
+              $users[$user['_id']]['age_range'] = $user['age_range'];
+            }
+            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
+            && array_key_exists($user['sex'][0], $question['sex']['value'])) {
+              $users[$user['_id']]['sex'] = $question['sex']['value'][$user['sex'][0]];
+            }
+            if (array_key_exists('citizenship', $user)
+            && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+              $users[$user['_id']]['citizenship'] = $question['citizenship']['value'][$user['citizenship']];
+            }
+            if (array_key_exists('education-level', $user) &&
+            array_key_exists($user['education-level'], $question['education_level']['value'])) {
+              $users[$user['_id']]['education_level'] = $question['education_level']['value'][$user['education-level']];
+            }
+            if (array_key_exists('work', $user)
+            && array_key_exists($user['work'], $question['work']['value'])) {
+              $users[$user['_id']]['work'] = $question['work']['value'][$user['work']];
+            }
+            if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
+              if (array_key_exists($user['public-authority']['name'], $question['public_authority']['value'])) {
+                $users[$user['_id']]['public_authority'] = $question['public_authority']['value'][$user['public-authority']['name']];
+              }
+            }
+            if (array_key_exists('profile-info', $user) && !empty($user['profile-info'])) {
+              if (array_key_exists('profession', $user['profile-info'])) {
+                $users[$user['_id']]['profession'] =  $user['profile-info']['profession'];
+              }
+              if (array_key_exists('residence', $user['profile-info'])) {
+                $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
+              }
+              if (array_key_exists('association', $user['profile-info']) &&
+                array_key_exists('value', $question['association']) &&
+                array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+                $users[$user['_id']]['association'] = $question['association']['value'][$user['profile-info']['association']];
+              }
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getUserAdditionalInfo');
+    }
+    return $users;
+  }
+
+  /**
+   * _getContributorsEmail
+   * function is used for getting author email who have submitted proposal, opinions
+   * and links on the basis of contributors id (id)
+   * @param array $contributorsId
+   * @return array $contributorEmail - email id of contributor (user)
+   */
+  private function _getContributorsEmail($contributorsId) {
+    try {
+      $userEmail = array();
+      if (empty($contributorsId)) {
+        return $userEmail;
+      }
+      $identityManager = new UserIdentityAPI();
+      $authorsEmails = $identityManager->getUserDetail(IDM_USER_ENTITY, array('id' =>
+      $contributorsId), true, false);
+      if (array_key_exists('_items', $authorsEmails) && !empty($authorsEmails['_items'])) {
+        foreach ($authorsEmails['_items'] as $authorEmail) {
+          if (array_key_exists('_id', $authorEmail) && !empty($authorEmail['_id'])
+            && array_key_exists('email', $authorEmail) && !empty($authorEmail['email'])) {
+            $userEmail[$authorEmail['_id']] = $authorEmail['email'];
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in _getContributorsEmail');
+    }
+    return $userEmail;
   }
 }
