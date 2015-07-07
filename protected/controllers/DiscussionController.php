@@ -2296,8 +2296,8 @@ class DiscussionController  extends PageController {
           'public_authority' => array(), 'residence' => array(), 'profession' => array(),
           'association' => array());
       $finalArr = array();
-      $isAdmin = checkPermission('admin');
-      if ($isAdmin == false || !ctype_digit($disucssionId)) {
+      $canAccessReport = checkPermission('access_report');
+      if ($canAccessReport == false || !ctype_digit($disucssionId)) {
         $this->redirect(BASE_URL);
       }
       Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
