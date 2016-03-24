@@ -12,7 +12,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-
 msgctxt "discussion"
 msgid "Add a new Proposal "
 msgstr "Aggiungi una nuova proposta"
@@ -588,6 +587,94 @@ msgstr "Nome della configurazione"
 msgctxt "discussion"
 msgid "Configuration Value"
 msgstr "Valore di configurazione"
+
+msgctxt "discussion"
+msgid "Status of Link Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento link. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Status of Opinion Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento opinioni. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Status of Proposal Submission. (Use 0 for OFF and 1 for ON)"
+msgstr "Inserimento proposte. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Text to display on home page when submission if Off"
+msgstr "Testo da mostrare in Home Page quando l'inserimento è disattivato"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Proposal Title"
+msgstr "Numero massimo di caratteri nel titolo della proposta"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Proposal Introduction"
+msgstr "Numero massimo di caratteri nell'introduzione della proposta"
+
+msgctxt "discussion"
+msgid "Maximun Characters in Opinion"
+msgstr "Numero masssimo di caratteri nell'opinione"
+
+msgctxt "discussion"
+msgid "Threshold value of opinions to post furthur proposals"
+msgstr "Valore di soglia di opinioni per ulteriori proposte"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when opinion submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di opinioni è disattivato"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when link submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di link è disattivato"
+
+msgctxt "discussion"
+msgid "Moderator's email address (Comma seperated email id)"
+msgstr "Indirizzo email dei moderatori (separati da virgole)"
+
+msgctxt "discussion"
+msgid "Getting additional user information. (Use 0 for OFF and 1 for ON)"
+msgstr "Informazioni utente aggiuntive. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Proposal sorting"
+msgstr "Ordinamento proposte"
+
+msgctxt "discussion"
+msgid "Alphabetical"
+msgstr "Alfabetico"
+
+msgctxt "discussion"
+msgid "No of opinion"
+msgstr "Numero opinioni"
+
+msgctxt "discussion"
+msgid "Custom weight"
+msgstr "Personalizzato"
+
+msgctxt "discussion"
+msgid "Text to display on proposal window when proposal submission is Off"
+msgstr "Testo da mostrare nella finestra della proposta quando l'inserimento di proposte è disattivato"
+
+msgctxt "discussion"
+msgid "Number of Columns in Proposal Page"
+msgstr "Numero di colonne nella pagina delle proposte"
+
+msgctxt "discussion"
+msgid "Show question for addtional information"
+msgstr "Mostra domande per informazioni aggiuntive"
+
+msgctxt "discussion"
+msgid "Select Question For Additional User Information"
+msgstr "Seleziona le domande per le informazioni utente aggiuntive"
+
+msgctxt "discussion"
+msgid "Save changes"
+msgstr "Salva modifiche"
+
+msgctxt "discussion"
+msgid ""
+msgstr ""
 
 msgctxt "discussion"
 msgid "Discussion Slug"
@@ -1669,3 +1756,117 @@ msgstr "Esporta Opinioni in CSV"
 msgctxt "discussion"
 msgid "Author Email"
 msgstr "Autore email"
+
+# RBAC Module strings #
+
+msgctxt "rbac"
+msgid "User"
+msgstr "Utente"
+
+msgctxt "rbac"
+msgid "User List"
+msgstr "Elenco utenti"
+
+msgctxt "rbac"
+msgid "Role List"
+msgstr "Elenco ruoli"
+
+msgctxt "rbac"
+msgid "Assign Role"
+msgstr "Assegna ruolo"
+
+msgctxt "rbac"
+msgid "Add Role"
+msgstr "Aggiungi ruolo"
+
+msgctxt "rbac"
+msgid "No role has been defined yet. Click on <strong>add role</strong> button to create a role."
+msgstr "Non è stato ancora definito alcun ruolo. Clicca su <strong>aggiungi ruolo</strong> per crearne uno."
+
+msgctxt "rbac"
+msgid "Add role"
+msgstr "Aggiungi ruolo"
+
+msgctxt "rbac"
+msgid "S.No."
+msgstr "Id"
+
+msgctxt "rbac"
+msgid "Role"
+msgstr "Ruolo"
+
+msgctxt "rbac"
+msgid "Permission"
+msgstr "Permesso"
+
+msgctxt "rbac"
+msgid "Action"
+msgstr "Azione"
+
+msgctxt "rbac"
+msgid "Assign Permission"
+msgstr "Assegna permesso"
+
+msgctxt "rbac"
+msgid "Change Pemission"
+msgstr "Cambia permesso"
+
+msgctxt "rbac"
+msgid "role"
+msgstr "ruolo"
+
+msgctxt "rbac"
+msgid "Select Permission"
+msgstr "Seleziona permesso"
+
+msgctxt "rbac"
+msgid "Assign"
+msgstr "Assegna"
+
+msgctxt "rbac"
+msgid "Update"
+msgstr "Aggiorna"
+
+msgctxt "rbac"
+msgid "Role name"
+msgstr "Nome ruolo"
+
+msgctxt "rbac"
+msgid "Save"
+msgstr "Salva"
+
+msgctxt "rbac"
+msgid "Edit"
+msgstr "Modifica"
+
+msgctxt "rbac"
+msgid "Delete"
+msgstr "Elimina"
+
+msgctxt "rbac"
+msgid "Active"
+msgstr "Attivo"
+
+msgctxt "rbac"
+msgid "Inactive"
+msgstr "Disattivo"
+
+msgctxt "rbac"
+msgid "status"
+msgstr "Stato"
+
+msgctxt "rbac"
+msgid "User email"
+msgstr "Email utente"
+
+msgctxt "rbac"
+msgid "Change Role"
+msgstr "Cambia ruolo"
+
+msgctxt "rbac"
+msgid "Are you sure you want to delete"
+msgstr "Sei sicuro di voler eliminare"
+
+msgctxt "rbac"
+msgid ""
+msgstr ""
