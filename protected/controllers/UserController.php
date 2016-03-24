@@ -2,7 +2,7 @@
 
 /**
  * UserController
- * 
+ *
  * UserController class inherit pageController for including header .
  * Actions are defined in UserController.
  * User controller is used for user related functionality - registration,
@@ -10,7 +10,7 @@
  * Author: Pradeep Kumar<pradeep@incaendo.com>
  * This file is part of <Civico>.
  * This file can not be copied and/or distributed without the express permission of
-  <ahref Foundation.
+ * <ahref Foundation.
  */
 class UserController extends PageController {
 
@@ -40,7 +40,7 @@ class UserController extends PageController {
 
   /**
    * actionRegister
-   * this function is used for register new user 
+   * this function is used for register new user
    * this function also set the user information in session and redirect to user
    * on same page from where he made a request for registration
    */
@@ -50,61 +50,76 @@ class UserController extends PageController {
       $backUrl = BASE_URL;
       $user = array_map('trim', $_POST);
       if (!empty($user)) {
-        if (empty($user['firstname'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter first name'));
-        }
-        if (empty($user['lastname'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter last name'));
-        }
-        if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
-          throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
-        }
-        if (empty($user['cemail'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter same email'));
-        }
-        if ($user['email'] != $user['cemail']) {
-          throw new Exception(Yii::t('discussion', 'Please enter same email'));
-        }
-        if (empty($user['password'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter password'));
-        }       
-        if (empty($user['confirm_password'])) {
-          throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
-        }
-        if ($user['password'] !== $user['confirm_password']) {
-          throw new Exception(Yii::t('discussion', 'Password does not match'));
-        }
-        if (!array_key_exists('terms_and_condition', $user)) {
-          throw new Exception(Yii::t('discussion', 'Please check term and condition checkbox'));
-        }
-        if (!array_key_exists('privacy_policy', $user)) {
-          throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
-        }
-        $userDetail = array(
-          'firstname' => $user['firstname'],
-          'lastname' => $user['lastname'],
-          'email' => $user['email'],
-          'password' => $user['password'],
-          'status' => 0,
-          'source' => CIVICO
-        );
-        if (!empty($_GET['back'])) {
-          $back = substr($_GET['back'], 1);
-          if (!empty($back)) {
-            $backUrl = BASE_URL . substr($_GET['back'], 1);
+        if (!empty($user['registration-type'])) {
+          if (empty($user['firstname'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter first name'));
           }
-        }
-        $module = Yii::app()->getModule('backendconnector');
-        if (empty($module)) {
-          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
-        }
-        $userIdentityMgr = new UserIdentityManager();
-        $saveUser = $userIdentityMgr->createUser($userDetail);
-        if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
-          $this->_sendActivationMail($user);
-          $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
+          if ($user['registration-type'] == 'user') {
+            if (empty($user['lastname'])) {
+              throw new Exception(Yii::t('discussion', 'Please enter last name'));
+            }
+            if (empty($user['nickname'])) {
+              throw new Exception(Yii::t('discussion', 'Please enter nickname'));
+            }
+          } else if ($user['registration-type'] == 'org') {
+            $user['lastname'] = ' ';
+          }
+          if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new Exception(Yii::t('discussion', 'Please enter a valid email'));
+          }
+          if (empty($user['cemail'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter same email'));
+          }
+          if ($user['email'] != $user['cemail']) {
+            throw new Exception(Yii::t('discussion', 'Please enter same email'));
+          }
+          if (empty($user['password'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter password'));
+          }
+          if (empty($user['confirm_password'])) {
+            throw new Exception(Yii::t('discussion', 'Please enter confirm password'));
+          }
+          if ($user['password'] !== $user['confirm_password']) {
+            throw new Exception(Yii::t('discussion', 'Password does not match'));
+          }
+          if (!array_key_exists('terms_and_condition', $user)) {
+            throw new Exception(Yii::t('discussion', 'Please check term and condition checkbox'));
+          }
+          if (!array_key_exists('privacy_policy', $user)) {
+            throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
+          }
+          $userDetail = array(
+            'firstname' => $user['firstname'],
+            'lastname' => $user['lastname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'status' => 0,
+            'type' => $user['registration-type'],
+            'source' => CIVICO
+          );
+          if ($user['registration-type'] == 'user') {
+            $userDetail['nickname'] = $user['nickname'];
+          }
+          if (!empty($_GET['back'])) {
+            $back = substr($_GET['back'], 1);
+            if (!empty($back)) {
+              $backUrl = BASE_URL . substr($_GET['back'], 1);
+            }
+          }
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module)) {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+          $userIdentityMgr = new UserIdentityManager();
+          $saveUser = $userIdentityMgr->createUser($userDetail);
+          if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
+            $this->_sendActivationMail($user);
+            $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
+          } else {
+            $saveUser['msg'] = Yii::t('discussion', $saveUser['msg']);
+          }
         } else {
-          $saveUser['msg'] = Yii::t('discussion', $saveUser['msg']);
+          throw new Exception(Yii::t('discussion', 'Please select a valid registration type'));
         }
       }
     } catch (Exception $e) {
@@ -112,8 +127,6 @@ class UserController extends PageController {
       Yii::log($e->getMessage(), ERROR, 'Error in actionRegister method');
     }
     $this->layout = 'userManager';
-    $js = Yii::app()->getClientScript();
-    $js->registerScriptFile(THEME_URL . 'js/userRegistration.js', CClientScript::POS_END);
     $this->render('registration', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
   }
 
@@ -243,7 +256,7 @@ class UserController extends PageController {
     }
     return $userEmail;
   }
-  
+
   /**
    * _sendActivationMail
    * function is used for sending activation email in background
@@ -299,7 +312,7 @@ class UserController extends PageController {
     $html = str_replace("{{regards}}", $userInfo['regards'], $html);
     return $html;
   }
-  
+
   /**
    * actionActivateUser
    * function is used for activate by using activation link
@@ -347,7 +360,7 @@ class UserController extends PageController {
             throw new Exception('Failed to update status as active for email ' . $email);
           }
         }
-      } else { 
+      } else {
         $message = Yii::t("discussion", "We are sorry, the page you are looking for seems to be missing.");
       }
     } catch (Exception $e) {
@@ -526,7 +539,7 @@ class UserController extends PageController {
           }
           if (array_key_exists('education-level', $userInfo)) {
             $postData['education_level'] = $userInfo['education-level'];
-	          if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+                 if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
               $postData['education_level'] =  'other';
               $postData['education_level_description'] = $userInfo['education-level'];
             }
@@ -910,5 +923,235 @@ class UserController extends PageController {
     }
   }
 
+  /**
+   * actionCheckNickname
+   * Method used to check whether the nick name is already present or not.
+   *
+   * @author Harsh <harsh@incaendo.com>
+   * @return JSON Response is returned with a message and a success status
+   * @throws Exception
+   */
+  public function actionCheckNickname() {
+    $response = array(
+      'msg' => Yii::t('discussion', 'Nickname already in use. Choose another!') ,
+      'success' => TRUE
+    );
+    try {
+      if (array_key_exists('nickname', $_GET) && !empty($_GET['nickname'])) {
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $user = new UserIdentityAPI();
+        $userDetail = array(
+          'nickname' => $_GET['nickname']
+        );
+        $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userDetail, false, false, true);
+        if (array_key_exists('_items', $userStatus) && empty($userStatus['_items'])) {
+          $response['success'] = FALSE;
+          $response['msg'] = Yii::t('discussion', 'Nickname available');
+        }
+      }
+    } catch (Exception $exception) {
+      $response['success'] = TRUE;
+      $response['msg'] = Yii::t('discussion', 'Some error occured. Please try again.');
+      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname');
+    }
+    echo CJSON::encode($response);
+    exit;
+  }
+
+  /**
+   * actionSaveNickname
+   * Method used to save nickname
+   *
+   * @author Harsh <harsh@incaendo.com>
+   * @return JSON Response message and success status are returned.
+   * @throws Exception
+   */
+  public function actionSaveNickname() {
+    $response = array(
+        'msg' => '',
+        'success' => FALSE
+    );
+    try {
+      if ((array_key_exists('nickname', $_GET) && array_key_exists('neverAddNickname', $_GET)) && ($_GET['nickname'] != '' || $_GET['neverAddNickname'] == ACTIVE)) {
+        $module = Yii::app()->getModule('backendconnector');
+        if (empty($module)) {
+          throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+        }
+        $nickname = $_GET['nickname'];
+        $user = new UserIdentityAPI();
+        $userDetail = array();
+        $sessionArr = Yii::app()->session['user'];
+        if (!empty($sessionArr) && array_key_exists('id', $sessionArr) &&
+                isset($sessionArr['id'])) {
+          $userDetail['id'] = $sessionArr['id'];
+          $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userDetail, false, false, false);
+          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
+            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+                    !empty($userStatus['_items']['0']['site-user-info']) &&
+                    is_array($userStatus['_items']['0']['site-user-info'])) {
+              $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
+              if ($_GET['neverAddNickname'] == 1) {
+                if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
+                  $tempSiteInfo = $tempSiteUserInfo[CIVICO];
+                  $tempUserInfo = array('never-add-nickname' => 1);
+                  $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
+                } else {
+                  $tempSiteUserInfo[CIVICO] = array('never-add-nickname' => 1);
+                  $tempSiteUserInfo['site-user-info'] = $tempSiteUserInfo;
+                }
+                $response = $this->saveUserNickname($userDetail['id'], false, $tempSiteUserInfo);
+              } else {
+                $response = $this->saveUserNickname($userDetail['id'], $nickname, $tempSiteUserInfo);
+              }
+            } else {
+              $userSiteInfo = array();
+              if ($_GET['neverAddNickname'] == 1) {
+                $userSiteInfo['site-user-info'][CIVICO] = array('never-add-nickname' => 1);
+                $response = $this->saveUserNickname($userDetail['id'], false, $userSiteInfo);
+              } else {
+                $userSiteInfo['site-user-info'] = array();
+                $response = $this->saveUserNickname($userDetail['id'], $nickname, $userSiteInfo);
+              }
+            }
+          } else {
+            throw new Exception('Some error occured in getting user detail');
+          }
+        }
+      } else {
+        $response['msg'] = Yii::t('discussion', 'Nickname cannot be empty');
+      }
+    } catch (Exception $exception) {
+      $response['msg'] = Yii::t('discussion', 'Some error occured. Please try again.');
+      Yii::log($exception->getMessage(), ERROR, 'Error in action Check Nickname!');
+    }
+    echo CJSON::encode($response);
+    exit;
+  }
+
+  /**
+   * saveUserNickname
+   * Method used to add user nickname in its details.
+   *
+   * @param INT $userId
+   * @param STRING $nickname
+   * @param ARRAY $userSiteInfo
+   * @return ARRAY Response with a message and a success status are returned
+   */
+  public function saveUserNickname($userId, $nickname = false, $userSiteInfo) {
+    $response = array(
+        'msg' => '',
+        'success' => FALSE
+    );
+    $user = new UserIdentityAPI();
+    $userInfo['id'] = $userId;
+    if ($nickname != false) {
+      $userInfo['nickname'] = $nickname;
+    }
+    if (array_key_exists('site-user-info', $userSiteInfo) &&
+      !empty($userSiteInfo['site-user-info'])) {
+      $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
+    }
+    $updateUser = $user->curlPut(IDM_USER_ENTITY, $userInfo);
+    if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+      $response['id'] = $updateUser['_id'];
+      $response['msg'] = Yii::t('discussion', 'Nickname is successfully added to your account');
+      $sessionArr = Yii::app()->session['user'];
+      $sessionArr['show-add-nickname-popup'] = 0;
+      if ($nickname == false) {
+        $response['msg'] = Yii::t('discussion', 'You will never be asked from now');
+      }
+      $response['success'] = true;
+    } else {
+      $message = Yii::t('discussion', 'Some error occured please try again');
+      if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'ERR') {
+        if (array_key_exists('nickname', $updateUser['_issues'])) {
+          $message = $updateUser['_issues']['nickname'];
+        }
+        if (strpos($message, "is not unique") !== false) {
+          if (array_key_exists('nickname', $updateUser['_issues'])) {
+            $message = Yii::t('discussion', 'Nickname already in use. Choose another!');
+          }
+        } else {
+          $message = Yii::t('discussion', 'Some technical problem occurred, contact administrator');
+        }
+      }
+      $response['msg'] = $message;
+    }
+    return $response;
+  }
+
+  /**
+   * Method used to save tags for :
+   * using nickname in place of author names,
+   * never displaying this pop up again.
+   * @author Harsh <harsh@incaendo.com>
+   * @throws Exception
+   */
+  public function actionDisplayNickname() {
+    try {
+      if (!empty($_POST)) {
+        $postData = $_POST;
+        $sessionArr = Yii::app()->session['user'];
+        if (array_key_exists('id', $sessionArr) && !empty($sessionArr['id'])) {
+          $tagToBeInserted = array();
+          if (array_key_exists('btn_use_nickname', $postData)) {
+            $tagToBeInserted = array('use-nickname' => 1);
+          } else if (array_key_exists('btn_never_display_nickname', $postData)) {
+            if (array_key_exists('never_display_nickname', $postData) &&
+                    $postData['never_display_nickname'] = 'on') {
+              $tagToBeInserted = array('never-display-nickname' => 1);
+            }
+          }
+          $userInfo = array();
+          $userInfo['id'] = $sessionArr['id'];
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module)) {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+          $user = new UserIdentityAPI();
+          $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userInfo, false, false, false);
+          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
+            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+                    !empty($userStatus['_items']['0']['site-user-info']) &&
+                    is_array($userStatus['_items']['0']['site-user-info'])) {
+              $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
+              if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
+                $tempSiteInfo = $tempSiteUserInfo[CIVICO];
+                $tempUserInfo = $tagToBeInserted;
+                $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
+              } else {
+                $tempSiteUserInfo[CIVICO] = $tagToBeInserted;
+                $tempSiteUserInfo['site-user-info'] = $tempSiteUserInfo;
+              }
+              $response = $this->saveUserNickname($userInfo['id'], false, $tempSiteUserInfo);
+            } else {
+              $userSiteInfo['site-user-info'][CIVICO] = $tagToBeInserted;
+              $response = $this->saveUserNickname($userInfo['id'], false, $userSiteInfo);
+            }
+            if (!array_key_exists('success', $response) || !$response['success']) {
+              throw new Exception('Not got success while saving use nickname tags');
+            }
+            if (array_key_exists('success', $response) && $response['success'] &&
+              array_key_exists('use-nickname', $tagToBeInserted) &&
+              array_key_exists('nickname', $sessionArr)) {
+              $sessionArr['firstname'] = $sessionArr['nickname'];
+              $sessionArr['lastname'] = '';
+              Yii::app()->session['user'] = $sessionArr;
+            }
+          } else {
+            throw new Exception('User detail is returned empty.');
+          }
+        }
+      }
+    } catch (Exception $exception) {
+      Yii::log('Error in actionDisplayNickname method', ERROR, $exception->getMessage());
+    }
+    $this->redirect(Yii::app()->request->urlReferrer);
+  }
+
 }
-?>

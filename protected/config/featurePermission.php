@@ -27,7 +27,8 @@ class featurePermission {
     
     public static $admin = array('is admin');
     
-    public static $role = array('Can mark highlighted', 'Can post answers on opinion', 'Can Show Hide Opinion');
+    public static $role = array('Can mark highlighted', 'Can post answers on opinion', 'Can Show Hide Opinion',
+                                'Configure home page', 'Create new discussion', 'Access report');
     
 }
 

@@ -91,7 +91,7 @@ msgstr "Modifica Discussione"
 
 msgctxt "discussion"
 msgid "Email address"
-msgstr "indirizzo e-mail"
+msgstr "Indirizzo email"
 
 msgctxt "discussion"
 msgid "Email id already in use, Please choose a different email id"
@@ -204,6 +204,10 @@ msgstr "Inserisci il nome"
 msgctxt "discussion"
 msgid "Please enter last name"
 msgstr "Inserisci il cognome"
+
+msgctxt "discussion"
+msgid "Please enter Nickname"
+msgstr "Inserisci un nickname"
 
 msgctxt "discussion"
 msgid "Please enter valid lnk url"
@@ -741,67 +745,67 @@ msgctxt "discussion"
 msgid "Additional Description (Header Text)"
 msgstr "Descrizione supplementare (Testo testata)"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Failed to write file to disk"
 msgstr "Impossibile scrivere file su disco"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "File size exceeded"
 msgstr "Dimensioni del file superato"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Html Content"
 msgstr "html Content"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Invalid Discussion"
 msgstr "Discussione non valido"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Missing File Name"
 msgstr "Manca Nome file"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Missing a temporary folder"
 msgstr "Manca una cartella temporanea"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Only Numbers are allowed"
 msgstr "Solo i numeri sono permessi"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Only png and jpg/jpeg image allowed"
 msgstr "Solo png e immagine jpg / jpeg permesso"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter valid youtube or vimeo video url"
 msgstr "Inserisci URL valido del video su youtube o vimeo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal Image"
 msgstr "proposta Immagine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Some error occured in file uploading"
 msgstr "Qualche errore si è verificato in un file caricato"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Sorting Order"
 msgstr "Ordine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Sorting order can not be empty"
 msgstr "Ordinamento non può essere vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "The uploaded file was only partially uploaded"
 msgstr "Il file caricato è stato caricato solo parzialmente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Upload Image"
 msgstr "Carica Immagine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "file was not uploaded "
 msgstr "file non è stato caricato"
 
@@ -1169,59 +1173,59 @@ msgctxt "discussion"
 msgid "Yes continuosly"
 msgstr "Sì, in modo continuativo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "citizenship"
 msgstr "cittadinanza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "degree"
 msgstr "Laurea/diploma universitario o titolo superiore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "education level"
 msgstr "livello di istruzione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "elemetary school"
 msgstr "Licenza elementare"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "highschool"
 msgstr "Diploma o qualifica di scuola media superiore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "middle school"
 msgstr "Licenza scuola media"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "save"
 msgstr "Salva"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select age range"
 msgstr "seleziona la fascia di età"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select authority"
 msgstr "seleziona l'ente di appartenenza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select citizenship"
 msgstr "seleziona la cittadinanza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select eduction"
 msgstr "seleziona il livello di istruzione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select gender"
 msgstr "seleziona il genere"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select your work"
 msgstr "seleziona il lavoro"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please activate you account"
 msgstr "Per favore attiva il tuo account"
 
@@ -1325,143 +1329,143 @@ msgctxt "discussion"
 msgid "Good Morning"
 msgstr "Buongiorno"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Association"
 msgstr "Ordine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please provide your profession"
 msgstr "Inserisci la tua professione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please provide your residence"
 msgstr "Inserisci il tuo luogo di residenza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please select association"
 msgstr "Seleziona l'ordine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Profession"
 msgstr "Professione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Residence"
 msgstr "Luogo di residenza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "profession"
 msgstr "professione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "residence"
 msgstr "luogo di residenza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "select association"
 msgstr "Seleziona l'ordine"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Allowed image extentions are "
 msgstr "Le estensioni consentite per le immagini sono"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Banner"
 msgstr "Banner"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Configuration Saved Successfully"
 msgstr "Configurazione salvata correttamente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Configure Home Page"
 msgstr "Configura Home Page"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Home Page Configuration Panel"
 msgstr "Pannello di configurazione Home Page"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Introduction Text"
 msgstr "Testo introduttivo"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Layout"
 msgstr "Layout"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Main Logo"
 msgstr "Logo principale"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Option1"
 msgstr ""
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter valid layout value"
 msgstr "Inserire un valore valido per il layout"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Problem uploading home banner"
 msgstr "Si è verificato un problema nell'upload del banner"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Problem uploading home main logo"
 msgstr "Si è verificato un problema nell'upload del logo principale"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Problem uploading home sub logo"
 msgstr "Si è verificato un problema nell'upload del logo secondario"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal is updated only by admin user"
 msgstr "La proposta può essere aggiornata solo dall'ammnistratore"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal order has been saved successfully"
 msgstr "L'ordine delle proposte è stato salvato correttamente"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Sorting order or proposal id is empty"
 msgstr "Il criterio di ordinamento delle proposte è vuoto"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Sub Logo"
 msgstr "Logo secondario"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Update Homepage"
 msgstr "Aggiorna Homepage"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Citizenship"
 msgstr "Cittadinanza"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Confirm Email"
-msgstr "Conferma Email"
+msgstr "Conferma email"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Data is empty for drawing chart"
 msgstr "Non ci sono dati per produrre il grafico"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Education Level"
 msgstr "Livello di istruzione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Error in actionAllDiscussion method :"
 msgstr ""
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Error in actionAllProposal method :"
 msgstr ""
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "No of user"
 msgstr "Numero utenti"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Opinion Count"
 msgstr "Opinioni"
 
@@ -1486,43 +1490,43 @@ msgid "Admin Proposal Count"
 msgstr "Proposte admin"
 
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please enter same email"
 msgstr "Inserisci lo stesso indirizzo email"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions."
 msgstr "Reimposta la tua password facendo click su questo {start_ahref_link} link {end_ahref_link} oppure copia e incolla il link nel browser e segui le istruzioni."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Print Discussion"
 msgstr "Stampa discussione"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Proposal Count"
 msgstr "Proposte"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Statistics"
 msgstr "Statistiche"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions."
 msgstr "Grazie per esserti registrato. Attiva il tuo account facendo click su questo {start_ahref_link} link {end_ahref_link} oppure copia e incolla il link nel browser e segui le istruzioni."
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "There are no links for this proposal"
 msgstr "Non ci sono link per questa proposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "There are no opinions for this proposal"
 msgstr "Non ci sono opinioni per questa proposta"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "View All Discussions"
 msgstr "Vedi tutte le discussioni"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "View All Statistics"
 msgstr "Vedi tutte le statistiche"
 
@@ -1542,7 +1546,7 @@ msgctxt "discussion"
 msgid "List of User Registered who all contributed in proposal, visualization, and opinion"
 msgstr "Elenco utenti che hanno contribuito con proposte, valutazioni, opinioni"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "WARNING: Registration is successful only if you receive an email verification and account activation."
 msgstr "ATTENZIONE: La registrazione è andata a buon fine solo se riceverete una email di verifica e attivazione account."
 
@@ -1554,7 +1558,7 @@ msgctxt "discussion"
 msgid "Export To CSV"
 msgstr "Esporta in CSV"
 
-msgctxt "discussion" 
+msgctxt "discussion"
 msgid "Export To Excel"
 msgstr "Esporta in Excel"
 
@@ -1594,3 +1598,74 @@ msgctxt "discussion"
 msgid "Admin user Proposal Count"
 msgstr "Numero proposte - admin utente"
 
+msgctxt "discussion"
+msgid "User"
+msgstr "Utente"
+
+msgctxt "discussion"
+msgid "Organization"
+msgstr "Organizzazione"
+
+msgctxt "discussion"
+msgid "First Name"
+msgstr "Nome"
+
+msgctxt "discussion"
+msgid "Check Availability"
+msgstr "Controlla disponibilità"
+
+msgctxt "discussion"
+msgid "Nickname available"
+msgstr "Nickname disponibile"
+
+msgctxt "discussion"
+msgid "Nickname already in use. Choose another!"
+msgstr "Nickname già in uso. Scegli un altro nickname!"
+
+msgctxt "discussion"
+msgid "Choose your nickname"
+msgstr "Scegli il tuo nickname"
+
+msgctxt "discussion"
+msgid "Check Availability ?"
+msgstr "Controlla disponibilità"
+
+msgctxt "discussion"
+msgid "Never show this again ?"
+msgstr "Non mostrare più"
+
+msgctxt "discussion"
+msgid "Save changes"
+msgstr "Salva modifiche"
+
+msgctxt "discussion"
+msgid "Use your nickname everywhere"
+msgstr "Usa il tuo nickname ovunque"
+
+msgctxt "discussion"
+msgid "Use your nickname on this site. On all posts you posted"
+msgstr "Usa il tuo nickname su questo sito, per tutti i tuoi contributi"
+
+msgctxt "discussion"
+msgid "Yes use my nickname"
+msgstr "Sì, usa il mio nickname"
+
+msgctxt "discussion"
+msgid "This cannot be changed again proceed with a thoughtful mind !!"
+msgstr "Non potrà essere cambiato di nuovo. Scegli con attenzione!"
+
+msgctxt "discussion"
+msgid "Additional Info"
+msgstr "Informazioni Addizionali"
+
+msgctxt "discussion"
+msgid "Proposal Id"
+msgstr "Proposta Id"
+
+msgctxt "discussion"
+msgid "Export Opinion To CSV"
+msgstr "Esporta Opinioni in CSV"
+
+msgctxt "discussion"
+msgid "Author Email"
+msgstr "Autore email"

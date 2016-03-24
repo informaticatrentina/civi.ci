@@ -553,3 +553,21 @@ function checkAdditionalFormFilled() {
     }
   }
 }
+
+/**
+ * Function getFooterHtml
+ * It is used for getting footer html that is set in configuration panel
+ * @return string $footerHtml
+ */
+function getFooterHtml() {
+  $footerHtml = '';
+  $config = new Configuration();
+  $config->type = 'config';
+  $configurations = $config->get();
+  foreach ($configurations as $configuration) {
+    if ($configuration['name_key'] == 'footer_html') {
+      $footerHtml = html_entity_decode($configuration['value']);
+    }
+  }
+  return $footerHtml;
+}

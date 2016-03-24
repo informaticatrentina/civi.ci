@@ -185,6 +185,8 @@ return array(
                 't' => 'Yii::t',
                 'adminMenuVisible' => 'adminMenuVisible',
                 'checkPermission' => 'checkPermission',
+                'sanitization' => 'sanitization',
+                'getFooterHtml' => 'getFooterHtml'
             )
         ),
         'db' => array(
@@ -234,6 +236,7 @@ return array(
                 'feeds/opinion' => 'feed/opinion',
                 'admin/configuration' => 'discussion/configuration',
                 'admin/discussion/proposal/list/<slug:[\w-]+>' => 'discussion/reports',
+                'admin/export/opinions/<type:[\w-]+>/<id:[\w-]+>/<file:[\w-]+>' => 'admin/exportOpinions',
                 'admin/export/<id:[\w-]+>/<type:[\w-]+>' => 'discussion/export',
                 'discussion/proposal/edit/<slug:[\w-]+>' => 'discussion/editProposal',
                 'admin/discussion/proposal/highlight/<slug:[\w-]+>' => 'discussion/highlightProposal',
@@ -249,6 +252,9 @@ return array(
                 'user/question' => 'user/saveAdditionalInfo',
                 'user/forgot-password' => 'user/forgotPassword',
                 'user/change-password' => 'user/changePassword',
+                'user/checknickname' => 'user/checkNickname',
+                'user/savenickname' => 'user/saveNickname',
+                'user/displaynickname' => 'user/displayNickname',
                 'question/save' => 'user/saveAdditinalInformationQuestion',
                 'admin/proposal/order' => 'discussion/saveProposalSortingOrder',
                 'admin/config/homepage' => 'discussion/homepageConfig',

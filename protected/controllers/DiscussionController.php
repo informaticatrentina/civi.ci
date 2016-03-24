@@ -69,11 +69,50 @@ class DiscussionController  extends PageController {
       $chunkSize = $configuration['layout'];
     }
     $discussions = array_chunk($stripedContent, $chunkSize);
+    $showNicknamePopUp = FALSE;
+    $showUseNickname = INACTIVE;
+    if (!empty(Yii::app()->session['user'])) {
+      $sessionArr = Yii::app()->session['user'];
+      if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
+        if ($sessionArr['show-add-nickname-popup'] == TRUE) {
+          $showNicknamePopUp = TRUE;
+        }
+      }
+      if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
+        Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
+        if (is_array($sessionArr)) {
+          if (array_key_exists('never-display-nickname', $sessionArr) &&
+            isset($sessionArr['never-display-nickname']) &&
+            $sessionArr['never-display-nickname'] == ACTIVE) {
+            $showUseNickname = INACTIVE;
+          } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+            isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+              $showUseNickname = INACTIVE;
+          } else {
+            if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+              if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+                if ($sessionArr['use-nickname'] == ACTIVE) {
+                  $showUseNickname = INACTIVE;
+                } else {
+                  $showUseNickname = ACTIVE;
+                }
+              } else {
+                $showUseNickname = ACTIVE;
+              }
+            }
+          }
+        }
+        if ($showUseNickname == ACTIVE) {
+          $sessionArr['show-use-nickname'] = ACTIVE;
+        }
+      }
+      Yii::app()->session['user'] = $sessionArr;
+    }
     if (defined('DIV_COLORS')) {
       $color = unserialize(DIV_COLORS);
-      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
+      $this->render('index', array('color' => $color, 'submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration, 'shownNicknamePopUp' => $showNicknamePopUp, 'showUseNickname' => $showUseNickname));
     } else {
-      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration));
+      $this->render('index', array('submission' => Yii::app()->globaldef->params['submission'], 'discussions' => $discussions, 'text' => Yii::app()->globaldef->params['homepage_text'], 'homeDetails' => $configuration, 'shownNicknamePopUp' => $showNicknamePopUp, 'showUseNickname' => $showUseNickname));
     }
   }
 
@@ -149,6 +188,54 @@ class DiscussionController  extends PageController {
           if(!$showQuestionModal) {
             $userController->updateLastLoginTime($userInfo);
           }
+          if (array_key_exists('_items', $response) && !empty($response['_items'])
+            && array_key_exists('0', $response['_items']) && !empty($response['_items']['0'])
+            && array_key_exists('site-user-info', $response['_items']['0'])
+            && !empty($response['_items']['0']['site-user-info']) &&
+            array_key_exists(CIVICO, $response['_items']['0']['site-user-info'])
+            && !empty($response['_items']['0']['site-user-info'][CIVICO])) {
+            $siteUserInfo = $response['_items']['0']['site-user-info'][CIVICO];
+            if (array_key_exists('nickname', $response['_items']['0'])) {
+              $temp['has-nickname'] = ACTIVE;
+            } else {
+              $temp['has-nickname'] = INACTIVE;
+              $temp['show-add-nickname-popup'] = ACTIVE;
+            }
+            if (array_key_exists('never-add-nickname', $siteUserInfo)) {
+              $temp['never-add-nickname'] = $siteUserInfo['never-add-nickname'];
+            }
+            if (array_key_exists('use-nickname', $siteUserInfo)) {
+              $temp['use-nickname'] = $siteUserInfo['use-nickname'];
+              $temp['firstname'] = $response['_items']['0']['nickname'];
+              $temp['lastname'] = '';
+            }
+            if (array_key_exists('never-display-nickname', $siteUserInfo)) {
+              $temp['never-display-nickname'] = $siteUserInfo['never-display-nickname'];
+            }
+            if (array_key_exists('never-add-nickname', $siteUserInfo)
+              || array_key_exists('nickname', $response['_items']['0'])) {
+              $temp['show-add-nickname-popup'] = INACTIVE;
+            } else {
+              $temp['show-add-nickname-popup'] = ACTIVE;
+            }
+          } else {
+            if (array_key_exists('nickname', $response['_items']['0'])) {
+              $temp['has-nickname'] = ACTIVE;
+            } else {
+              $temp['has-nickname'] = INACTIVE;
+              $temp['show-add-nickname-popup'] = ACTIVE;
+            }
+          }
+          if (array_key_exists('type', $response['_items']['0'])) {
+            $temp['user-type'] = $response['_items']['0']['type'];
+            if (isset($temp['user-type']) && $temp['user-type'] == 'org') {
+              $showQuestionModal = FALSE;
+              if (array_key_exists('show-add-nickname-popup', $temp)) {
+                $temp['show-add-nickname-popup'] = INACTIVE;
+              }
+              $temp['show-use-nickname'] = ACTIVE;
+            }
+          }
           Yii::app()->session['user'] = $temp;
           $isAdmin = checkPermission('is_admin');
           $_SESSION['user']['admin'] = $isAdmin;
@@ -188,7 +275,7 @@ class DiscussionController  extends PageController {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
     $this->setHeader('2.0');
     //check if user belong to admin users or not
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('create_new_discussion');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -220,16 +307,57 @@ class DiscussionController  extends PageController {
     $this->setHeader('2.0');
     $isHighlighter = checkPermission('can_mark_highlighted');
     $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $can_show_hide_opinion == false) {
+    $configureHomePage = checkPermission('configure_home_page');
+    $createNewDiscussion = checkPermission('create_new_discussion');
+    $accessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $can_show_hide_opinion == FALSE && $configureHomePage == FALSE
+      && $createNewDiscussion == FALSE && $accessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $discussion = $this->_getDiscussionProposalOpinionLinks();
-    $authorNames = $discussion['author_name'];
-    asort($authorNames);
+    $showNicknamePopUp = FALSE;
+    $sessionArr = Yii::app()->session['user'];
+    if (is_array($sessionArr) && array_key_exists('show-add-nickname-popup', $sessionArr)) {
+      if ($sessionArr['show-add-nickname-popup'] == TRUE) {
+        $showNicknamePopUp = TRUE;
+      }
+    }
+    $showUseNickname = INACTIVE;
+    if (array_key_exists('enable_nickname_use', Yii::app()->globaldef->params) &&
+        Yii::app()->globaldef->params['enable_nickname_use'] == 1) {
+      if (is_array($sessionArr)) {
+        if (array_key_exists('never-display-nickname', $sessionArr) &&
+          isset($sessionArr['never-display-nickname']) &&
+          $sessionArr['never-display-nickname'] == ACTIVE) {
+          $showUseNickname = INACTIVE;
+        } else if (array_key_exists('show-use-nickname', $sessionArr) &&
+          isset($sessionArr['show-use-nickname']) && $sessionArr['show-use-nickname'] == 1) {
+            $showUseNickname = INACTIVE;
+        } else {
+          if (array_key_exists('nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+            if (array_key_exists('use-nickname', $sessionArr) && isset($sessionArr['nickname'])) {
+              if ($sessionArr['use-nickname'] == ACTIVE) {
+                $showUseNickname = INACTIVE;
+              } else {
+                $showUseNickname = ACTIVE;
+              }
+            } else {
+              $showUseNickname = ACTIVE;
+            }
+          }
+        }
+      }
+      if ($showUseNickname == ACTIVE) {
+        $sessionArr['show-use-nickname'] = ACTIVE;
+      }
+    }
+    Yii::app()->session['user'] = $sessionArr;
     $this->render('discussionList', array(
         'discussionInfo' => $discussion['discussion'],
         'emails' => $discussion['emails'],
-        'authorNames' => $authorNames
+        'authorNames' => $discussion['author_name'],
+        'shownNicknamePopUp' => $showNicknamePopUp,
+        'showUseNickname' => $showUseNickname
     ));
   }
 
@@ -414,11 +542,6 @@ class DiscussionController  extends PageController {
           $imageExtention = end($imageExtention);
           if (!in_array($imageExtention, $allowedImageExtentions)) {
             throw new Exception(Yii::t('discussion', 'Only png and jpg/jpeg image allowed'));
-          }
-        }
-        if (array_key_exists('hasTopics', $postData) && $postData['hasTopics'] == true) {
-          if (!array_key_exists('topics', $postData)) {
-            throw new Exception(Yii::t('discussion', 'One topic should be selected'));
           }
         }
         $_POST = array_map('userInputPurifier', $_POST);
@@ -622,7 +745,8 @@ class DiscussionController  extends PageController {
         'link_text' => Yii::app()->globaldef->params['link_text'],
         'all_proposal_off' => Yii::app()->globaldef->params['submission'],
         'proposal_text' => Yii::app()->globaldef->params['proposal_text'],
-        'proposal_layout' => $proposalLayout
+        'proposal_layout' => $proposalLayout,
+        'attached_image_on_proposal' => Yii::app()->globaldef->params['attach_img_on_proposal']
       );
     }
       $this->render('discussionProposals', $data);
@@ -643,7 +767,8 @@ class DiscussionController  extends PageController {
     }
     $isAdmin = checkPermission('admin');
     $canShowHideOpinion = checkPermission('can_show_hide_opinion');
-    if ($isAdmin == false && $canShowHideOpinion == false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($isAdmin == false && $canShowHideOpinion == false && $canAccessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $opinions = array();
@@ -651,8 +776,10 @@ class DiscussionController  extends PageController {
     $proposalOpinions = array();
     $inactiveOpinions = array();
     $title = '';
+    $proposalId = '';
     $aggregatorManager = new AggregatorManager();
     if (array_key_exists('id', $_GET) && !empty($_GET['id'])) {
+      $proposalId = $_GET['id'];
       $proposalTitle = array();
       $proposalTitle = $aggregatorManager->getEntry(1, 0, $_GET['id'], 'active', '', '', '', 0, '', '', 1, '', array(), '', 'title', '', '', '', CIVICO, '');
       if (array_key_exists('0', $proposalTitle) && !empty($proposalTitle[0])) {
@@ -716,7 +843,8 @@ class DiscussionController  extends PageController {
       'opinions' => $proposalOpinions,
       'title' => $title,
       'slug' => $discussionSlug,
-      'emails' => $emails
+      'emails' => $emails,
+      'proposalId' => $proposalId
     ));
   }
 
@@ -805,8 +933,8 @@ class DiscussionController  extends PageController {
       $this->redirect(BASE_URL . 'login?back=' . $_SERVER['REQUEST_URI']);
     }
     $this->setHeader('2.0');
-    $isAdmin = checkPermission('admin');
-    if ($isAdmin ==false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($canAccessReport ==false) {
       $this->redirect(BASE_URL);
     }
     $links = array();
@@ -1270,6 +1398,9 @@ class DiscussionController  extends PageController {
         $configuration['value'] = explode(',', $configuration['value']);
         $configuration['value'] = array_map('trim', $configuration['value']);
       }
+      if ($configuration['name_key'] == 'footer_html') {
+         $configuration['value'] = stripslashes(htmlspecialchars($configuration['value']));
+      }
       $stripped[$configuration['name_key']] = $configuration;
     }
     if (!empty($_POST)) {
@@ -1277,6 +1408,9 @@ class DiscussionController  extends PageController {
         $this->_saveModeratorsEmail($_POST['value']);
       }
       $value = htmlspecialchars($_POST['value']);
+      if ($_POST['key'] == 'footer_html') {
+        $value =  trim(addslashes(htmlspecialchars(html_entity_decode($_POST['value']))));
+      }
       $config->key = $_POST['key'];
       $config->type = 'config';
       $config->value = $value;
@@ -1331,7 +1465,8 @@ class DiscussionController  extends PageController {
     }
     $isHighlighter = checkPermission('can_mark_highlighted');
     $canShowHideOpinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $canShowHideOpinion == false) {
+    $canAccessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $canShowHideOpinion == FALSE && $canAccessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $discussion = new Discussion();
@@ -1360,7 +1495,7 @@ class DiscussionController  extends PageController {
    * This function is used to show all proposals
    */
   public function actionExport() {
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('access_report');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -1967,7 +2102,7 @@ class DiscussionController  extends PageController {
    * This function is used for saving and getting Home page configuration.
    */
   public function actionHomePageConfig() {
-    $isAdmin = checkPermission('admin');
+    $isAdmin = checkPermission('configure_home_page');
     if ($isAdmin == false) {
       $this->redirect(BASE_URL);
     }
@@ -2165,8 +2300,8 @@ class DiscussionController  extends PageController {
           'public_authority' => array(), 'residence' => array(), 'profession' => array(),
           'association' => array());
       $finalArr = array();
-      $isAdmin = checkPermission('admin');
-      if ($isAdmin == false || !ctype_digit($disucssionId)) {
+      $canAccessReport = checkPermission('access_report');
+      if ($canAccessReport == false || !ctype_digit($disucssionId)) {
         $this->redirect(BASE_URL);
       }
       Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
@@ -2192,8 +2327,7 @@ class DiscussionController  extends PageController {
           $emails[] = $email['email'];
         }
       }
-      $userController = new UserController('user');
-      $contributorsEmail = $userController->getAuthorEmail($author, TRUE);
+      $contributorsEmail = $this->getAuthorEmail($author, TRUE);
       $userInfo = array();
       if (!empty($contributorsEmail)) {
         $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => $contributorsEmail['user']));
@@ -2403,8 +2537,9 @@ class DiscussionController  extends PageController {
    * This method is used to get all discussions, their proposals, opinions and links.
    */
   public function actionAllDiscussion() {
-    $isAdmin = checkPermission('admin');
-    if ($isAdmin == false) {
+    $canAccessReport = checkPermission('access_report');
+    $canShowHideOpinion = checkPermission('can_show_hide_opinion');
+    if ($canAccessReport == FALSE && $canShowHideOpinion == FALSE) {
       $this->redirect(BASE_URL);
     }
     try {
@@ -2573,11 +2708,38 @@ class DiscussionController  extends PageController {
       'opinion_voting_count' => Yii::t('discussion', 'Vote on triangle'),
       'text_opinion_count' => Yii::t('discussion', 'Opinion Count'),
       'total_links' => Yii::t('discussion', 'Number of Links'),
+      'proposal_id' => Yii::t('discussion', 'Proposal Id'),
     );
+    $additionalInfo = json_decode(ADDITIONAL_INFORMATION, TRUE);
+    ksort($additionalInfo);
+    foreach ($additionalInfo as $infoKey => $info) {
+      $header[$infoKey] = $info['text'];
+    }
     $allproposals = array();
+    $userInfos = array();
     foreach ($discussionDetail as $discussion) {
       $this->discussionId = $discussion['id'];
       $detailContent = $this->getDiscussionProposalOpininonLinksForNonAdminUser();
+      $userEmails = $detailContent['emails'];
+      $addInfo = $this->getUserAdditionalInfo($userEmails);
+      foreach ($detailContent['allProposals'] as $user) {
+        if(array_key_exists($user['author']['slug'], $addInfo)) {
+          $userInfos[$user['id']] = $addInfo[$user['author']['slug']];
+        }
+      }
+      foreach ($additionalInfo as $key => $value) {
+        foreach($userInfos as &$info) {
+          if(!array_key_exists($key, $info)) {
+            $info[$key] = '';
+          }
+          foreach ($info as $keys => &$values) {
+            if (!array_key_exists($keys, $additionalInfo)) {
+              unset($info[$keys]);
+            }
+          }
+          ksort($info);
+        }
+      }
       $admin = new AdminController('admin');
       $allproposals[] = $admin->createDataForExport($detailContent, $discussion);
     }
@@ -2585,8 +2747,11 @@ class DiscussionController  extends PageController {
     header("Content-Type: text/csv");
     $filePath = fopen("php://output", 'w');
     @fputcsv($filePath, $header);
-    foreach ($allproposals as $proposal) {
-      foreach($proposal as $proposalContent) {
+    foreach ($allproposals as &$proposal) {
+      foreach($proposal as &$proposalContent) {
+        if(array_key_exists($proposalContent['proposal_id'], $userInfos)) {
+          $proposalContent = array_merge($proposalContent, $userInfos[$proposalContent['proposal_id']]);
+        }
         @fputcsv($filePath, $proposalContent);
       }
     }
@@ -2598,7 +2763,8 @@ class DiscussionController  extends PageController {
     $this->setHeader('2.0');
     $isHighlighter = checkPermission('can_mark_highlighted');
     $can_show_hide_opinion = checkPermission('can_show_hide_opinion');
-    if ($isHighlighter == false && $can_show_hide_opinion == false) {
+    $accessReport = checkPermission('access_report');
+    if ($isHighlighter == FALSE && $can_show_hide_opinion == FALSE && $accessReport == FALSE) {
       $this->redirect(BASE_URL);
     }
     $chartDetail = array();
@@ -2723,7 +2889,7 @@ class DiscussionController  extends PageController {
           'author_name' => array(), 'discussion_author' => array());
       $discussionDetail = array();
       $discussion = new Discussion();
-      $discussionInfo = $discussion->getDiscussionDetail();      
+      $discussionInfo = $discussion->getDiscussionDetail();
       $authorName = array();
       $authorId = array();
       $discussionWiseAuthor = array();
@@ -2756,8 +2922,7 @@ class DiscussionController  extends PageController {
           $discussionWiseOpinionAuthor[$info['id']] = $discussionContent['opinion_author_id'];
         }
       }
-      $userController = new UserController('user');
-      $user = $userController->getAuthorEmail($authorId, TRUE);
+      $user = $this->getAuthorEmail($authorId, TRUE);
       //get non admin user count for each discussion
       foreach ($discussionDetail as &$discussion) {
         $authorId = array_unique($discussionWiseAuthor[$discussion['discussionId']]);
@@ -2802,7 +2967,7 @@ class DiscussionController  extends PageController {
         }
       }
       //get discussion author's email id
-      $discussionAuthorEmail  = $userController->getAuthorEmail($discussionAuthorId, TRUE);
+      $discussionAuthorEmail  = $this->getAuthorEmail($discussionAuthorId, TRUE);
       $user['admin_user'] = array_merge($user['admin_user'], $discussionAuthorEmail['admin_user']);
       $resp['emails'] = array_merge($user['user'], $user['admin_user']);
       $resp['user'] = $user;
@@ -3027,6 +3192,74 @@ class DiscussionController  extends PageController {
     }
     return $users;
   }
-}
 
-?>
+  /**
+   * getAuthorEmail
+   * function is used for getting author email on tthe basis of author id
+   * @param array $authorId  - author slug
+   * @param boolean $checkAdmin - if true then return admin user on admin key
+   *   else it return all email on user key
+   * @return array $userEmail
+   */
+  public function getAuthorEmail($authorIds, $checkAdmin = FALSE) {
+    try {
+      $userEmail = array('user' => array(), 'admin_user' => array());
+      if (isModuleExist('rbacconnector') == false) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing'));
+      }
+      $module = Yii::app()->getModule('rbacconnector');
+      if (empty($module)) {
+        throw new Exception(Yii::t('discussion', 'rbacconnector module is missing or not defined'));
+      }
+      if (is_array($authorIds)) {
+        $authorIds = array_unique($authorIds);
+      }
+      $emails = $this->_getContributorsEmail($authorIds);
+      if (!empty($emails) && $checkAdmin == TRUE) {
+        foreach ($emails as $key => $email) {
+          $isAdmin = User::checkPermission($email, 'is_admin');
+          if ($isAdmin == TRUE) {
+            $userEmail['admin_user'][$key] = $email;
+          } else {
+            $userEmail['user'][$key] = $email;
+          }
+        }
+      } else {
+        $userEmail['user'] = $emails;
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in getAuthorEmail ');
+    }
+    return $userEmail;
+  }
+
+  /**
+   * _getContributorsEmail
+   * function is used for getting author email who have submitted proposal, opinions
+   * and links on the basis of contributors id (id)
+   * @param array $contributorsId
+   * @return array $contributorEmail - email id of contributor (user)
+   */
+  private function _getContributorsEmail($contributorsId) {
+    try {
+      $userEmail = array();
+      if (empty($contributorsId)) {
+        return $userEmail;
+      }
+      $identityManager = new UserIdentityAPI();
+      $authorsEmails = $identityManager->getUserDetail(IDM_USER_ENTITY, array('id' =>
+      $contributorsId), true, false);
+      if (array_key_exists('_items', $authorsEmails) && !empty($authorsEmails['_items'])) {
+        foreach ($authorsEmails['_items'] as $authorEmail) {
+          if (array_key_exists('_id', $authorEmail) && !empty($authorEmail['_id'])
+            && array_key_exists('email', $authorEmail) && !empty($authorEmail['email'])) {
+            $userEmail[$authorEmail['_id']] = $authorEmail['email'];
+          }
+        }
+      }
+    } catch (Exception $e) {
+      Yii::log($e->getMessage(), ERROR, 'Error in _getContributorsEmail');
+    }
+    return $userEmail;
+  }
+}
