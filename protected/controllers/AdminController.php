@@ -3,9 +3,9 @@
 
 /**
  * AdminController
- * 
+ *
  * AdminController class inherit controller (base) class .
- * It is used for all admin panel related activity. 
+ * It is used for all admin panel related activity.
  * Copyright (c) 2015 <ahref Foundation -- All rights reserved.
  * Author: Pradeep Kumar<pradeep@incaendo.com>
  * This file is part of <Civico>.
@@ -14,10 +14,9 @@
  */
 ob_start();
 class AdminController extends PageController {
-  
+
   /**
    * beforeAction
-   *
    * @param $action
    * @return boolean
    */
@@ -29,10 +28,8 @@ class AdminController extends PageController {
 
   /**
    * Function sessionExistence
-   * 
    * Function is used for check whether session exists or not.
-   * 
-   * Function handles only ajax request. 
+   * Function handles only ajax request.
    */
   public function actionSessionExistence() {
     if (Yii::app()->request->isAjaxRequest) {
@@ -281,7 +278,9 @@ class AdminController extends PageController {
           $emails[$email['_id']] = $email['email'];
         }
       }
-      $userAdditionalInfo = $this->getUserAdditionalInfo($author);
+
+      $userController = New UserController('user');
+      $userAdditionalInfo = $userController->getUserAdditionalInfo($author);
       $additionalInfo = defined('ADDITIONAL_INFORMATION') ? json_decode(ADDITIONAL_INFORMATION, TRUE) : array();
       ksort($additionalInfo);
       if (!empty($proposalOpinions)) {
@@ -328,7 +327,7 @@ class AdminController extends PageController {
       $additionalInfo = defined('ADDITIONAL_INFORMATION') ? json_decode(ADDITIONAL_INFORMATION, TRUE) : array();
       ksort($additionalInfo);
       foreach ($additionalInfo as $infoKey => $info) {
-        $header[$infoKey] = $info['text'];
+        $header[$infoKey] = Yii::t('discussion', $info['text']);
       }
       header("Content-disposition: attachment; filename=report_" . date("Ymd") .".csv");
       header("Content-Type: text/csv");

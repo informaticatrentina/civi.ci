@@ -2,7 +2,7 @@
 
 /**
  * DiscussionController
- * 
+ *
  * DiscussionController class inherit controller (base) class .
  * Actions are defined in DiscussionController.
  * Copyright (c) 2013 <ahref Foundation -- All rights reserved.
@@ -38,7 +38,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionInDdex
-   * 
+   *
    * This is the default 'index' action that is invoked
    * when an action is not explicitly requested by users.
    */
@@ -268,7 +268,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionCreateDiscussion
-   * 
+   *
    * This function is used for create discussion
    */
   public function actionCreateDiscussion() {
@@ -299,7 +299,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionGetDiscussion
-   * 
+   *
    * This function is used for getting existing discussions' information
    */
   public function actionGetDiscussion() {
@@ -363,7 +363,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionUpdateDiscussion
-   * 
+   *
    * This function is used for existing contest
    * Only admin user can update a contest
    */
@@ -421,7 +421,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionDeleteContest
-   * 
+   *
    * This function is used for delete an existing contest
    */
   public function actionDeleteContest() {
@@ -435,7 +435,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionLogout
-   * 
+   *
    * This function is used for logout user and destroy user session
    */
   public function actionLogout() {
@@ -449,7 +449,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionList
-   * 
+   *
    * This function is used to list all the discussions.
    */
   public function actionList() {
@@ -480,7 +480,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionSubmitProposal
-   * 
+   *
    * This function is used to submit a proposal.
    */
   public function actionSubmitProposal() {
@@ -564,7 +564,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionDiscussionProposals
-   * 
+   *
    * This function is used to display all proposals of a discussion.
    */
   public function actionProposals($proposalData = array(), $errorMessage = '') {
@@ -685,7 +685,7 @@ class DiscussionController  extends PageController {
            'opinion_text'=> $opinionText, 'opinion_id' => $opinionId);
         }
       }
-      header('Content-type: application/json; charset=UTF-8');      
+      header('Content-type: application/json; charset=UTF-8');
       echo json_encode($resp);
       die;
     }
@@ -694,7 +694,7 @@ class DiscussionController  extends PageController {
       $discussion->tags = $_GET['tag'] . '{' . TOPIC_TAG_SCHEME . $_GET['slug'] . '/topics}';
     }
     $proposals = $discussion->getOnlyProposals();
-    //check whether count is exist in entries array or not 
+    //check whether count is exist in entries array or not
     if (!empty($proposals)) {
       $return['success'] = true;
       $countFromEntries = end($proposals);
@@ -754,7 +754,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionOpinion
-   * 
+   *
    * This function is used for get opinion for a discussion and manipulate opinion
    * @author Rahul <rahul@incaendo.com>
    */
@@ -781,6 +781,7 @@ class DiscussionController  extends PageController {
     if (array_key_exists('id', $_GET) && !empty($_GET['id'])) {
       $proposalId = $_GET['id'];
       $proposalTitle = array();
+      $proposalId = $_GET['id'];
       $proposalTitle = $aggregatorManager->getEntry(1, 0, $_GET['id'], 'active', '', '', '', 0, '', '', 1, '', array(), '', 'title', '', '', '', CIVICO, '');
       if (array_key_exists('0', $proposalTitle) && !empty($proposalTitle[0])) {
         if (array_key_exists('title', $proposalTitle[0]) && !empty($proposalTitle[0]['title'])) {
@@ -850,7 +851,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionUpdateOpinion
-   * 
+   *
    * This function is used for update status of existing opinion
    * @author Rahul<rahul@incaendo.com>
    */
@@ -923,7 +924,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionGetLinks
-   * 
+   *
    * This function is used for links
    * @author Rahul<rahul@incaendo.com>
    */
@@ -984,7 +985,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionUpdateLink
-   * 
+   *
    * This function is used for update status of existing link
    * @author Rahul<rahul@incaendo.com>
    */
@@ -1058,7 +1059,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionGetProposal
-   * 
+   *
    * This function is used for get proposal for existing discussion
    * @author Rahul<rahul@incaendo.com>
    */
@@ -1119,7 +1120,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionUpdateLink
-   * 
+   *
    * This function is used for update status of existing link
    * @author Rahul<rahul@incaendo.com>
    */
@@ -1193,7 +1194,7 @@ class DiscussionController  extends PageController {
 
   /**
    * updateHeatMapTagForProposalStatus
-   * 
+   *
    * function is used for update heatmap tad based on opinion status
    */
   public function updateHeatMapTagForProposalStatus($id, $tagName, $proposalStatus) {
@@ -1236,7 +1237,7 @@ class DiscussionController  extends PageController {
 
   /**
    * updateLinkCount
-   * 
+   *
    * This function is used for update link count tag based on link status
    */
   public function updateLinkCount($id, $status) {
@@ -1453,7 +1454,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionReports
-   * 
+   *
    * This function is used to show all proposals
    */
   public function actionReports() {
@@ -1491,7 +1492,7 @@ class DiscussionController  extends PageController {
 
   /**
    * actionExport
-   * 
+   *
    * This function is used to show all proposals
    */
   public function actionExport() {
@@ -1551,7 +1552,7 @@ class DiscussionController  extends PageController {
       $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $heading);
       $col++;
     }
-    // Loop through the result set 
+    // Loop through the result set
     $rowNumber++;
     foreach ($allProposals as $proposal) {
       $col = 'A';
@@ -1638,13 +1639,13 @@ class DiscussionController  extends PageController {
     }
     $this->redirect(BASE_URL . 'admin/discussion/proposal/list/' . $_GET['slug']);
   }
-  
+
   /**actionHighlightProposal
-   * 
+   *
    * This function is used to highlight / unhighlight proposal.
    * It handles only ajax request.
    */
-  public function actionHighlightProposal() {        
+  public function actionHighlightProposal() {
     try {
       if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)) {
         $this->actionError();
@@ -1688,7 +1689,7 @@ class DiscussionController  extends PageController {
         $key = array_search($proposalTagArray, $proposalAllTags[0]['tags']);
         if (isset($key)) {
           unset($proposalAllTags[0]['tags'][$key]);
-        }        
+        }
       }
       $aggregatorManager->tags = $proposalAllTags[0]['tags'];
       $response = $aggregatorManager->updateProposal();
@@ -1702,7 +1703,7 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
-  
+
   /**submitOpinionAnswer
    * This method is used to submit answer on opinion.
    * This method is only for ajax requests.
@@ -1755,7 +1756,7 @@ class DiscussionController  extends PageController {
     echo json_encode($response);
     exit;
   }
-  
+
   /**
    * actionSaveTrianglePosition
    * function is used for save triangle position only
@@ -1797,7 +1798,7 @@ class DiscussionController  extends PageController {
   public function actionDocumentation() {
     $this->render('document');
   }
-  
+
   /**
    * actionSaveOrder
    * funtion is used to save sorting order
@@ -2074,7 +2075,7 @@ class DiscussionController  extends PageController {
             if (array_key_exists('tags', $proposal)) {
               $sort = FALSE;
               foreach ($proposal['tags'] as $tag) {
-                if ($tag['scheme'] == PROPOSAL_SORTING_TAG_SCHEME && $tag['weight'] != 0) {   
+                if ($tag['scheme'] == PROPOSAL_SORTING_TAG_SCHEME && $tag['weight'] != 0) {
                   $sortedProposal[$tag['weight']] = $proposal;
                   $sort = TRUE;
                 }
@@ -2096,7 +2097,7 @@ class DiscussionController  extends PageController {
     }
     return $sortedProposal;
   }
-  
+
   /**
    * actionHomePageConfig
    * This function is used for saving and getting Home page configuration.
@@ -2179,7 +2180,7 @@ class DiscussionController  extends PageController {
     $cs->registerScriptFile(THEME_URL . 'js/homeConfig.js', CClientScript::POS_END);
     $this->render('homepageconfig', array('homeConfig' => $homeDetails, 'message' => $message));
   }
-  
+
   /**
    * uploadImage
    * This function is used to check allowed image extensions and upload size limit.
@@ -2322,7 +2323,7 @@ class DiscussionController  extends PageController {
       $author = array_unique($discussionDetail['author']);
       $userEmail = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('id' => $author), TRUE, false);
       $emails = array();
-      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {  
+      if (array_key_exists('_items', $userEmail) && !empty($userEmail['_items'])) {
         foreach ($userEmail['_items'] as $email) {
           $emails[] = $email['email'];
         }
@@ -2440,7 +2441,7 @@ class DiscussionController  extends PageController {
         continue;
       }
       switch($key) {
-        case 'age':          
+        case 'age':
           $chartData['age'] = array(
               'title' => $title,
               'header' => $header,
@@ -2713,7 +2714,7 @@ class DiscussionController  extends PageController {
     $additionalInfo = json_decode(ADDITIONAL_INFORMATION, TRUE);
     ksort($additionalInfo);
     foreach ($additionalInfo as $infoKey => $info) {
-      $header[$infoKey] = $info['text'];
+      $header[$infoKey] = Yii::t('discussion', $info['text']);
     }
     $allproposals = array();
     $userInfos = array();
@@ -2757,7 +2758,7 @@ class DiscussionController  extends PageController {
     }
     exit;
   }
-  
+
   public function actionAllStatistics() {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap.css');
     $this->setHeader('2.0');
@@ -2874,10 +2875,10 @@ class DiscussionController  extends PageController {
         'discussionTitle' => $discussionTitle
     ));
   }
-  
+
   /**
    * _getDiscussionProposalOpinionLinks
-   * function is used for getting 
+   * function is used for getting
    *  1) discussion detail
    *  2) Proposal count for each discussion
    *  3) Total no of user for each discussion
@@ -2885,7 +2886,7 @@ class DiscussionController  extends PageController {
    */
   private function _getDiscussionProposalOpinionLinks() {
     try {
-      $resp = array('discussion' => array(), 'emails' => array(), 'user' => array(), 
+      $resp = array('discussion' => array(), 'emails' => array(), 'user' => array(),
           'author_name' => array(), 'discussion_author' => array());
       $discussionDetail = array();
       $discussion = new Discussion();
