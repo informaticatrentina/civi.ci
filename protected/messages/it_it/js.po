@@ -537,3 +537,23 @@ msgstr "Nickname già in uso. Scegline un altro"
 msgctxt "discussion"
 msgid "This cannot be changed again proceed with a thoughtful mind !!"
 msgstr "Non potrà essere cambiato di nuovo. Scegli con attenzione!"
+
+msgctxt "discussion"
+msgid "Please enter a valid First Name. Only alphanumeric chars and single spaces allowed!"
+msgstr "Inserisci un nome valido. Solo caratteri alfanumerici e spazi consentiti!"
+
+msgctxt "discussion"
+msgid "Please enter a valid Last Name. Only alphanumeric chars and single spaces allowed!"
+msgstr "Inserisci un cognome valido. Solo caratteri alfanumerici e spazi consentiti!"
+
+msgctxt "discussion"
+msgid "Please enter a valid Nickname. Only alphanumeric chars and single spaces allowed!"
+msgstr "Inserisci un nickname valido. Solo caratteri alfanumerici e spazi consentiti!"
+
+msgctxt "discussion"
+msgid "Some error occured please try again"
+msgstr "Si è verificato un errore. Riprova"
+
+msgctxt "discussion"
+msgid "Some error occured, please try again"
+msgstr "Si è verificato un errore. Riprova"
