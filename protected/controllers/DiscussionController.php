@@ -3148,8 +3148,8 @@ class DiscussionController  extends PageController {
             if (array_key_exists('age', $user)) {
               $users[$user['_id']]['age'] = $user['age'];
             }
-            if (array_key_exists('age_range', $user)) {
-              $users[$user['_id']]['age_range'] = $user['age_range'];
+            if (array_key_exists('age-range', $user)) {
+              $users[$user['_id']]['age_range'] = $user['age-range'];
             }
             if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
             && array_key_exists($user['sex'][0], $question['sex']['value'])) {
