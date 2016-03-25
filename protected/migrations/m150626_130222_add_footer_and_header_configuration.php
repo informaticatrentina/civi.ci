@@ -13,8 +13,7 @@ class m150626_130222_add_footer_and_header_configuration extends CDbMigration {
     //add configuration for attaching image on proposal
     $this->execute(
       "INSERT INTO `configuration` (`config_key`, `name`, `value`, `name_key`,
-      `display_order`, `last_modified`, `editor_email`) VALUES('config', 'Attach image
-      on Proposal. (Use 0 for OFF and 1 for ON)', '0', 'attach_img_on_proposal', '17', 
+      `display_order`, `last_modified`, `editor_email`) VALUES('config', 'Attach image on Proposal. (Use 0 for OFF and 1 for ON)', '0', 'attach_img_on_proposal', '17', 
       " . $time . ", 'pradeep@incaendo.com')"
     );
     //add configuration for footer html on each page

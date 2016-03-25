@@ -1757,6 +1757,22 @@ msgctxt "discussion"
 msgid "Author Email"
 msgstr "Autore email"
 
+msgctxt "discussion"
+msgid "Enable use of Nicknames"
+msgstr "Abilita nicknames. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Disable registration link"
+msgstr "Disabilita registrazione. (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Attach image on Proposal. (Use 0 for OFF and 1 for ON)"
+msgstr "Abilita immagini nelle proposte (Usa 0 per OFF, 1 per ON)"
+
+msgctxt "discussion"
+msgid "Footer html to display on each page"
+msgstr "Testo da mostrare nel footer"
+
 # RBAC Module strings #
 
 msgctxt "rbac"
