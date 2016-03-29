@@ -3,7 +3,7 @@ RELEASE NOTES
 Date: 16/09/2013
 Release Tag: 0.0.1.0
 Notes:
-First release of civico. 
+First release of civico.
 Required Aggregator version is 0.0.8.0
 ------------------------------------------
 
@@ -28,3 +28,15 @@ Release Tag: 1.0.3
 Notes:
 Gitlab milestone 1.03
 Aggregator Version required: 0.0.8.0
+----------------------------------------------
+
+Date 08/01/2015
+Release Tag: infotn-release-1.0
+Notes:
+  First InfoTN release
+----------------------------------------------
+
+Date 29/03/2016
+Release Tag: infotn-release-1.1
+Notes:
+  Add nicknames and organisations feature
