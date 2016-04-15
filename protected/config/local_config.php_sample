@@ -23,7 +23,7 @@ error_reporting(0);
 ini_set('display_errors', 0);
 
 /**
- * Setting the protocol based on url accessed.
+ * Setting the protocol based on url accessed
  */
 $protocol = 'http://';
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
@@ -42,8 +42,8 @@ ini_set('date.timezone', 'Europe/Rome');
  * Define installation details
  */
 define('BASE_URL', PROTOCOL . '{{ BASE_URL }}');
-define('IMAGE_URL', BASE_URL.'/images/');
-define('CONTEST_IMAGE_URL', BASE_URL.'uploads/contestImage/');
+define('IMAGE_URL', BASE_URL. '/images/');
+define('CONTEST_IMAGE_URL', BASE_URL . 'uploads/contestImage/');
 
 /**
  * Constant for database configuration
@@ -52,6 +52,7 @@ define('DB_HOST', '{{ DB_HOST }}');
 define('DB_NAME', '{{ DB_NAME }}');
 define('DB_USER', '{{ DB_USER }}');
 define('DB_PASS', '{{ DB_PASSWORD }}');
+define('DB_CHARSET', 'utf8');
 
 /**
  * Define aggregator API URL (http://API_URL/)
@@ -78,7 +79,7 @@ define('SITE_SESSION_COOKIE_NAME', 'civico');
 /**
  * Define contest Admin users email
  */
-define('DISCUSSION_ADMIN_USERS', '["santosh@incaendo.com", "rahul@incaendo.com", "daniele@ahref.eu", "monica@ahref.eu"]');
+define('DISCUSSION_ADMIN_USERS', '["santosh@incaendo.com", "pradeep@incaendo.com"]');
 
 /**
  * Define site language
@@ -127,18 +128,23 @@ define('CIVICO', 'civico');
 /**
  * define constant for civiclinks constant
  */
-define('CIVICLINKS_NETWORK_TOKEN', '{{CIVICLINKS_NETWORK_TOKEN}}');
+define('CIVICLINKS_NETWORK_TOKEN', '{{ CIVICLINKS_NETWORK_TOKEN }}');
 
 /**
- * Constants for profile manager.
+ * Constants for profile manager
  */
-define('PROFILE_IMAGE_URL', '{{PROFILE_IMAGE_URL}}');
-define('PROFILE_URL', '{{PROFILE_URL}}');
+define('PROFILE_IMAGE_URL', '{{ PROFILE_IMAGE_URL }}');
+define('PROFILE_URL', '{{ PROFILE_URL }}');
 
 /**
- * constant for registration page url (page for user's registeration)
+ * constant for registration page url (page for users registration)
  */
-define('REGISTRATION_URL','{{REGISTRATION_URL}}');
+define('REGISTRATION_URL','{{ REGISTRATION_URL }}');
+
+/**
+ * constant for logout url
+ */
+define('LOGOUT_URL', BASE_URL . 'logout');
 
 /**
  * Max filesize
@@ -151,9 +157,9 @@ ini_set('upload_max_filesize','5M');
 define('ALL_ENTRY', 999999);
 
 /**
- * Constant for Session Time out time.
+ * Constant for Session Time out time
  */
-define('SESSION_TIMEOUT_TIME', '{{SESSION_TIMEOUT_TIME}}');
+define('SESSION_TIMEOUT_TIME', '{{ SESSION_TIMEOUT_TIME }}');
 
 /**
  * Constant for submission
@@ -161,12 +167,12 @@ define('SESSION_TIMEOUT_TIME', '{{SESSION_TIMEOUT_TIME}}');
 define('SUBMISSION_CLOSED', true);
 
 /**
- * Constant for theme. Avaliable themes: partecipa, destinazioneitalia, bagnacavallo
+ * Define constant for theme
  */
-define('SITE_THEME', 'partecipa');
+define('SITE_THEMES', 'partecipa');
 
 /**
- * Constant for number of boxes to be shown in a single row on home page.
+ * Constant for number of boxes to be shown in a single row on home page
  */
 define('CHUNK_SIZE', 3);
 
@@ -174,138 +180,210 @@ define('CHUNK_SIZE', 3);
  * This constant is used in destinazioneitalia theme. The indexes of array are the
  * name of discussions and their values are the color of div of that discussion.
  */
-$divColors = array('Rendere' => 'yellow', 'Attrarre' => 'red', 'Investire' => 'blue', 'Promuovere' => 'green');
+$divColors = array(
+  'educare' => 'skyblue',
+  'donare' => 'olive',
+  'produrre' => 'blue',
+  'cooperare' => 'yellow',
+  'lavorare' => 'red',
+  'curare' => 'wheat',
+  'recuperare' => 'purple'
+  );
+
 $divColors = serialize($divColors);
 define('DIV_COLORS', $divColors);
 
 /**
- * Constant for key and languages of translation.
+ * Constant for key and languages of translation
  */
-define('TRANSLATION_API_KEY', 'AIzaSyAi_wN2rqgMoHUxv1BhqBjmJNIome-jwLI');
+define('TRANSLATION_API_KEY', '{{ TRANSLATION_API_KEY }}-jwLI');
 define('TRANSLATE_LANGUAGE', '["slovenian", "italian", "english"]');
 
 /**
- * Constant for nuber of characters 
+ * Constant for number of characters
  */
-define('CHAR_LIMIT', '{{CHAR_LIMIT}}');
-define('USER_GENERATED_DIRECTORY', '["assets", "themes/go"]');
+define('CHAR_LIMIT', '{{ CHAR_LIMIT }}');
+define('USER_GENERATED_DIRECTORY', '["assets"]');
 
-//no of proposal submmitted by a user
-define('PROPOSAL_SUBMIT_LIMIT', 5);
+// no of proposal submmitted by a user
+define('PROPOSAL_SUBMIT_LIMIT', 3);
 
-//constant for disable google language detection
-define('GOOGLE_TRANSLATION_ENABLED', 1);
+// constant for disable google language detection
+define('GOOGLE_TRANSLATION_ENABLED', 0);
 
-//authentication key for google analytic code
-define('GOOGLE_ANALYTIC_AUTH_KEY','{{GOOGLE_ANALYTIC_AUTH_KEY}}');
-define('GOOGLE_ANALYTIC_COOKIE_DOMAIN','{{GOOGLE_ANALYTIC_COOKIE_DOMAIN}}');
+// authentication key for google analytic code
+define('GOOGLE_ANALYTIC_AUTH_KEY','{{ GOOGLE_ANALYTIC_AUTH_KEY }}');
+define('GOOGLE_ANALYTIC_COOKIE_DOMAIN','{{ GOOGLE_ANALYTIC_COOKIE_DOMAIN }}');
 
 /**
  * Constant to define active log level. Possible vaues are:
  * info, error, trace, warning
  * we can pass multiple values as comma sepreated
  */
-define('LOG_LEVEL_ACTIVE', 'error');
+define('LOG_LEVEL_ACTIVE', 'error, info, trace');
 
-//constant for ahref foundation url
-define('AHREF_FOUNDATION_URL', 'http://www.ahref.eu/it');
-//super admin user
-define('RBAC_ADMIN_USER', 'rahultripathi0123@gmail.com');
-//all permissions that can be assigned.
-define('PERMISSION', '["is admin", "Can mark highlighted", "Can post answers on opinion"]');
+// super admin user
+define('RBAC_ADMIN_USER', 'santosh@incaendo.com');
 
-//directory name for saving uploaded file
-define('UPLOAD_DIRECTORY', 'uploads');
+// all permissions that can be assigned
+$rbacPermission = array(
+  'is_admin' => 'Admin',
+  'can_post_answers_on_opinion' => 'Can post answers on opinion',
+  'can_mark_highlighted' => 'Can mark highlighted',
+  'can_show_hide_opinion' => 'Can Show Hide Opinion',
+  'configure_home_page' => 'Configure home page',
+  'create_new_discussion' => 'Create new discussion',
+  'access_report' => 'Access report'
+  );
+define('PERMISSION', json_encode($rbacPermission));
 
-//constant for opinion and link submission (1 for status is on and 0 for OFF)
-define('OPINION_SUBMISSION', '{"discussion_slug":1,"discussion_slug":0}');
-define('LINK_SUBMISSION', '{"discussion_slug":1,"discussion_slug":0}');
-
-// set 1 for enable sendmail else 0
-define('ENABLE_SENDMAIL', 1);
-
-/**
- *  Constant for send Email
- */
-define('SMTP_HOST', '');
-define('SMTP_PORT', '');
-define('SMTP_USER', '');
-define('SMTP_PASSWORD', '');
-define('SMTP_AUTH', true);
-//constant for defual email
-define('DEFAULT_EMAIL', '');
-//constant for smtp secure
-define('SMTP_SECURE', '');
-
-/* Feed email: the email author for the feeds */
-define('FEED_EMAIL', 'noreply@civiclinks.it');
-
-//define constant for available feature in theme
+// define constant for available feature in theme
 $themeFeature = array('notification_email' => true, 'visibility_changes_email' => true);
 define('THEME_FEATURE', json_encode($themeFeature));
 
+/**
+ * Email sending constants
+ */
+// set 1 for enable sendmail else 0 for smtp
+define('ENABLE_SENDMAIL', 0);
+define('SMTP_HOST', 'smtp.infotn.it');
+define('SMTP_PORT', '25');
+define('SMTP_USER', 'info@partecipa.tn.it');
+define('SMTP_PASSWORD', 'ds453grt');
+define('SMTP_AUTH', true);
+// Default email
+define('DEFAULT_EMAIL', 'info@partecipa.tn.it');
+// Feed email: the email author for the feeds
+define('FEED_EMAIL', 'noreply@partecipa.tn.it');
 
 /**
- * Constant to define modules(list of enabled modules)
- */
-$enabledModules = array('backendconnector', 'rbacconnector', 'static/navbar');
+* Constant to define modules(list of enabled modules)
+*/
+define('ENABLE_NAVBAR_MODULE', 1);
+$enabledModules = array('backendconnector','rbacconnector', 'static/navbar');
 define('ENABLE_MODULES_LIST', json_encode($enabledModules));
 
-
-
-//Define constant for generate encrypted link
-define('EM_API_KEY', 'a87669e925f30da27c253e75d832af14');
+// Define constant for generate encrypted link
 define('EM_SALT', '07d14f9b716a88cae4ce709d80ce8287793f63ae');
-define('ENCRYPTION_KEY', 'incaendo');
+define('ENCRYPTION_KEY', 'infoTN');
 define('ACTIVATION_LINK_TIME_OUT', 5 * 86400);
 
+// Define constants for users additional details and statistics
 $question = array(
-    'age_range' => array(
-               'text' => Yii::t('discussion', 'Age range'),
-               'value' => array('18-24' => '18-24', '25-39' => '25-39',
-                                '40-64' => '40-64', '65-80' => '65-80', 'over 80' => 'over 80'
-                               )
-             ),
-    'age' => array(
-               'text' => Yii::t('discussion', 'Age')
-             ),
-    'gender' => array(
-                  'text' => Yii::t('discussion', 'Gender'),
-                  'value' => array('M' => Yii::t('discussion', 'Male'), 'F' => Yii::t('discussion', 'Female'))
-                ),
-    'education_level' => array(
-                    'text' => Yii::t('discussion', 'education level'),
-                    'value' => array(
-                                'elemetaryschool' =>  Yii::t('discussion','elemetary school'),
-                                'middleschool' =>  Yii::t('discussion','middle school'),
-                              'highschool' =>  Yii::t('discussion','highschool'),
-                                'degree' =>  Yii::t('discussion', 'degree'),
-                                'other' => 'other'
-                     )
-                   ),
-    'citizenship' => array(
-                      'text' => Yii::t('discussion', 'citizenship'),
-                      'value' => array(
-                        'italian' =>  Yii::t('discussion', 'Italian'),
-                        'foreign' =>  Yii::t('discussion', 'Foreign')
-                      )
-                    ),
-    'work' => array(
-                      'text' => Yii::t('discussion', 'Work'),
-                      'value' => array(
-                                   'Y' => Yii::t('discussion', 'Yes'),
-                                   'N' => Yii::t('discussion', 'No'),
-                                   'YC' =>  Yii::t('discussion', 'Yes continuosly'),
-                                   'NC' =>  Yii::t('discussion', 'Not continuosly')
-                                 )
-                      ),
-    'public_authority' => array(
-                            'text' => Yii::t('discussion', 'Public authority'),
-                            'value' => array(
-                                'healthauthority' => Yii::t('discussion', 'Health Authority'),
-                                'province' => Yii::t('discussion', 'Province'),
-                                'localauthority' => Yii::t('discussion', 'Local authority'),
-                                'civilsociety' => Yii::t('discussion', 'Civil Society')
-                            )),
-);
+  'age_range' => array(
+    'text' => 'Fascia di età',
+    'value' => array(
+      '18-24' => '18-24',
+      '25-39' => '25-39',
+      '40-64' => '40-64',
+      '65-80' => '65-80',
+      'over 80' => 'over 80'
+      )
+    ),
+  'age' => array(
+   'text' => 'Età'
+   ),
+  'sex' => array(
+    'text' => 'Genere',
+    'value' => array('M' => 'Maschio', 'F' => 'Femmina')
+    ),
+  'education_level' => array(
+    'text' => 'Livello di istruzione',
+    'value' => array(
+      'elemetaryschool' =>  'Licenza elementare',
+      'middleschool' =>  'Licenza scuola media',
+      'highschool' =>  'Diploma o qualifica di scuola media superiore',
+      'degree' =>  'Laurea/diploma universitario o titolo superiore',
+      'other' => 'Altro'
+      )
+    ),
+  'citizenship' => array(
+    'text' => 'Cittadinanza',
+    'value' => array(
+      'italian' =>  'Italiana',
+      'foreign' =>  'Straniera'
+      )
+    ),
+  'work' => array(
+    'text' => 'Lavoro',
+    'value' => array(
+      'YC' => 'Sì, in modo continuativo',
+      'NC' => 'Sì, in modo non continuativo',
+      'N' => 'No'
+      )
+    ),
+  'public_authority' => array(
+    'text' => 'Ente di appartenenza',
+    'value' => array(
+      'healthauthority' => 'Azienda sanitaria',
+      'province' => 'Provincia',
+      'localauthority' => 'Amministrazione locale',
+      'civilsociety' => 'Società civile',
+      'other' => 'Altro'
+      )
+    ),
+  'profession' => array(
+    'text' => Yii::t('discussion', 'Profession')
+    ),
+  'residence' => array(
+    'text' => Yii::t('discussion', 'Residence')
+    ),
+  'association' => array(
+    'text' => Yii::t('discussion', 'Association'),
+    'value' => array(
+      'option1' =>  Yii::t('discussion', 'Option1'),
+      'other' => 'other'
+      )
+    )
+  );
 define('ADDITIONAL_INFORMATION', json_encode($question));
+
+$proposalSortingOrder = array('albhabetical' => 'Alphabetical', 'opinion_count' => 'No of opinion', 'custom_weight' => 'Custom weight');
+define('PROPOSAL_SORTING_BASE', json_encode($proposalSortingOrder));
+
+$statisticsPoint = array(
+  'age' => 'Età', 'gender' => 'Genere',
+  'citizenship' => 'Cittadinanza',
+  'work' => 'Lavoro',
+  'education_level' => 'Istruzione',
+  'public_authority' => 'Ente di appartenenza'
+  );
+define('USER_STATISTIC_POINT', json_encode($statisticsPoint));
+
+$userStatisticChart = array(
+  'age' => array(
+    'title' => 'Utente - Età',
+    'header' => array('User', 'Età')
+    ),
+  'sex' => array(
+    'title' => 'Utente - Genere',
+    'header' => array('User', 'Genere')
+    ),
+  'citizenship' => array(
+    'title' => 'Utente - Cittadinanza',
+    'header' => array('User', 'Cittadinanza')
+    ),
+  'work' => array(
+    'title' => 'Utente - Lavoro',
+    'header' => array('User', 'Lavoro')
+    ),
+  'education_level' => array(
+    'title' => 'Utente - Istruzione',
+    'header' => array('User', 'Istruzione')
+    ),
+  'public_authority' => array(
+    'title' => 'Ente di appartenenza',
+    'header' => array('User', 'Ente')
+    )
+  );
+define('USER_STATISTIC_CHART_INFO', json_encode($userStatisticChart));
+
+$allStatistics = array(
+  'age' => 'Età',
+  'sex' => 'Genere',
+  'education_level' => 'Istruzione',
+  'citizenship' => 'Cittadinanza',
+  'work' => 'Lavoro',
+  'public_authority' => 'Ente di appartenenza'
+  );
+define('STATS', json_encode($allStatistics));
