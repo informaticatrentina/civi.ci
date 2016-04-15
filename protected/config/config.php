@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is used for define constant and configuration of Aggregator project 
+ * This file is used for define constant and configuration of Aggregator project
  * Copyright (c) 2013 <ahref Foundation -- All rights reserved.
  * Author: Sankalp Mishra <sankalp@incaendo.com>
  * This file is part of <Civico>.
@@ -32,12 +32,12 @@ setThemeForUrl();
 define('DEFAULT_LIMIT', 1);
 
 /**
- * define constant for default offset 
+ * define constant for default offset
  */
 define('DEFAULT_OFFSET', 0);
 
 /**
- * define constant for curl timeout (execution time) 
+ * define constant for curl timeout (execution time)
  */
 define('CURL_TIMEOUT', 60);
 
@@ -58,7 +58,7 @@ define('ADULT', 0);
 define('MINOR', 1);
 
 /**
- * define constant for entry limit 
+ * define constant for entry limit
  */
 define('ENTRY_LIMIT', 40);
 
@@ -96,7 +96,7 @@ define('UNDERSTANDING', serialize($understanding));
 
 /*
  * define constant for profile image size
- * Profile image will be square like(350*350) 
+ * Profile image will be square like(350*350)
  */
 define('PROFILE_IMAGE_SIZE', 350);
 /**
@@ -195,6 +195,7 @@ return array(
             'username' => DB_USER,
             'password' => DB_PASS,
             'emulatePrepare' => true,
+            'charset' => DB_CHARSET,
         ),
         'image' => array(
             'class' => 'application.extensions.image.CImageComponent',
@@ -205,7 +206,7 @@ return array(
             'showScriptName' => false,
             'caseSensitive' => false,
             'rules' => array(
-//afterbaseurl    => 'controller/action'  
+//afterbaseurl    => 'controller/action'
                 '' => 'discussion/index',
                 'discussion/proposal/translate' => 'discussion/saveTranslatedProposal',
                 'translate/opinion' => 'discussion/saveTranslatedOpinion',
@@ -285,6 +286,5 @@ return array(
     ),
     'modules'=> defined('ENABLE_MODULES_LIST') ? json_decode(ENABLE_MODULES_LIST, TRUE) : array()
 );
-
 
 define('FEED_EMAIL', 'noreply@civiclinks.it');
