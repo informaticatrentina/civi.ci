@@ -33,6 +33,15 @@ class UserController extends PageController {
     }
   }
 
+	/**
+	 * Method called before any specific ation call
+	 *
+	 * @property beforeAction
+	 *
+	 * @param $action
+	 *
+	 * @return bool always true
+	 */
   public function beforeAction($action) {
     new JsTrans('js', SITE_LANGUAGE);
     return true;
