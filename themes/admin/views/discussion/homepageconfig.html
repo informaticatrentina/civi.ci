@@ -1,7 +1,7 @@
 <div class="row">
   <div class="span12">
     <div class="form-group">
-      <form id="home-page-config-form" class="form-create-discussion" action="{{constant('BASE_URL')}}admin/config/homepage" method="post"  enctype = "multipart/form-data">      
+      <form id="home-page-config-form" class="form-create-discussion" action="{{constant('BASE_URL')}}admin/config/homepage" method="post"  enctype = "multipart/form-data">
         <div>
           <center><h5>{{ t('discussion', 'Home Page Configuration Panel') }}</h5></center>
           <hr/>
@@ -15,7 +15,7 @@
         <div class="{{class}}" id="error-msg">
           {% if message.msg is not empty %}
             {{ message.msg }}
-          {% endif %}  
+          {% endif %}
         </div>
         <label for="homeMainLogo">{{ t('discussion', 'Main Logo') }}</label>
         {% if homeConfig is not empty %}
@@ -31,6 +31,14 @@
           {% endif %}
         {% endif %}
         <input type="file" class="home-sub-logo input-block-level input-large" name="homeSubLogo">
+        <label>{{ t('discussion','Sub Logo URL') }}</label>
+        {% set sub_logo_url = '' %}
+        {% if homeConfig is not empty %}
+          {% if homeConfig.sub_logo_url is not empty %}
+            {% set sub_logo_url = homeConfig.sub_logo_url %}
+          {% endif %}
+        {% endif %}
+        <input type="text" name="homeSubLogoUrl" class="home-sub-logo-url input-xxlarge" placeholder="http://www.example.com" value="{{sub_logo_url}}">
         <label>{{ t('discussion','Banner') }} </label>
         {% if homeConfig is not empty %}
           {% if homeConfig.banner is not empty %}
@@ -53,7 +61,7 @@
             {% set layout = homeConfig.layout %}
           {% endif %}
         {% endif %}
-        <input type="text" class="home-layout" maxlength="1" name="homeLayout" value="{{layout}}"/>    
+        <input type="text" class="home-layout" maxlength="1" name="homeLayout" value="{{layout}}"/>
         <br>
         <button class="homeConfigUpdate btn btn-large btn-primary" style="float: none;" type="submit" name='homeConfigSubmit'>{{ t('discussion', 'Update Homepage') }}</button>
       </form>

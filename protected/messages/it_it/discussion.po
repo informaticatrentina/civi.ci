@@ -1773,6 +1773,14 @@ msgctxt "discussion"
 msgid "Footer html to display on each page"
 msgstr "Testo da mostrare nel footer"
 
+msgctxt "discussion"
+msgid "Please enter a valid URL"
+msgstr "Inserisci un URL valido"
+
+msgctxt "discussion"
+msgid "Sub Logo URL"
+msgstr "URL logo secondario"
+
 # RBAC Module strings #
 
 msgctxt "rbac"

@@ -571,6 +571,17 @@ class DiscussionController  extends PageController {
     Yii::app()->clientScript->registerCssFile(THEME_URL . 'css/bootstrap_3.css');
     Yii::app()->clientScript->registerScriptFile(ADMIN_THEME_URL . 'js/admin.js', CClientScript::POS_END);
     $this->setHeader('3.0');
+    $homeConfig = new Configuration();
+    $homeConfig->type = 'homeconfig';
+    $homeConfigurations = $homeConfig->get();
+    $configuration = array();
+    foreach ($homeConfigurations as $config) {
+      if ($config['name_key'] == 'introduction_text') {
+        $configuration[$config['name_key']] = html_entity_decode(stripslashes($config['value']));
+      } else {
+        $configuration[$config['name_key']] = $config['value'];
+      }
+    }
     $discussion = new Discussion();
     // $discussion->sort = '-creation_date';
     $discussionInfo = array();
@@ -746,7 +757,8 @@ class DiscussionController  extends PageController {
         'all_proposal_off' => Yii::app()->globaldef->params['submission'],
         'proposal_text' => Yii::app()->globaldef->params['proposal_text'],
         'proposal_layout' => $proposalLayout,
-        'attached_image_on_proposal' => Yii::app()->globaldef->params['attach_img_on_proposal']
+        'attached_image_on_proposal' => Yii::app()->globaldef->params['attach_img_on_proposal'],
+        'homeDetails' => $configuration,
       );
     }
       $this->render('discussionProposals', $data);
@@ -2136,6 +2148,13 @@ class DiscussionController  extends PageController {
           } else if(array_key_exists('img', $response) && !empty($response['img'])
             && $response['success'] == true) {
             $homeDetails['sub_logo'] = $response['img'];
+          }
+        }
+        if (array_key_exists('homeSubLogoUrl', $homeConfigDetails) && !empty($homeConfigDetails['homeSubLogoUrl'])) {
+          if ((!filter_var(trim($homeConfigDetails['homeSubLogoUrl']), FILTER_VALIDATE_URL) === false) || (trim($homeConfigDetails['homeSubLogoUrl']) == '') ) {
+            $homeDetails['sub_logo_url'] = trim($homeConfigDetails['homeSubLogoUrl']);
+          } else {
+            throw new Exception(Yii::t('discussion', 'Please enter a valid URL'));
           }
         }
         if (array_key_exists('homeBanner', $_FILES) && $_FILES['homeBanner']['error'] != 4) {
