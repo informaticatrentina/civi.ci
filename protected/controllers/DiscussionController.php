@@ -2357,8 +2357,8 @@ class DiscussionController  extends PageController {
           if (array_key_exists('age', $user)) {
             $graphData['age'][] = $user['age'];
           }
-          if (array_key_exists('age_range', $user)) {
-            $graphData['age_range'][] = $user['age_range'];
+          if (array_key_exists('age-range', $user)) {
+            $graphData['age_range'][] = $user['age-range'];
           }
           if (array_key_exists('education-level', $user)) {
             if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
@@ -2446,6 +2446,7 @@ class DiscussionController  extends PageController {
     if (defined('STATS')) {
       $statPoints = json_decode(STATS, TRUE);
     }
+
     foreach ($userData as $key => $data) {
       $title = '';
       if (array_key_exists($key, $chartInfo) && array_key_exists('title', $chartInfo[$key])) {
@@ -2455,6 +2456,7 @@ class DiscussionController  extends PageController {
       if (array_key_exists($key, $chartInfo) && array_key_exists('header', $chartInfo[$key])) {
         $header = array($chartInfo[$key]['header'][0] => $chartInfo[$key]['header'][1]);
       }
+
       //key is in allowed stat points, if not then skip that data
       if (!array_key_exists($key, $statPoints)) {
         continue;
@@ -2462,6 +2464,13 @@ class DiscussionController  extends PageController {
       switch($key) {
         case 'age':
           $chartData['age'] = array(
+              'title' => $title,
+              'header' => $header,
+              'data' => $data
+          );
+          break;
+        case 'age_range':
+          $chartData['age_range'] = array(
               'title' => $title,
               'header' => $header,
               'data' => $data
@@ -2827,8 +2836,8 @@ class DiscussionController  extends PageController {
           if (array_key_exists('age', $user)) {
             $graphData['age'][] = $user['age'];
           }
-          if (array_key_exists('age_range', $user)) {
-            $graphData['age_range'][] = $user['age_range'];
+          if (array_key_exists('age-range', $user)) {
+            $graphData['age_range'][] = $user['age-range'];
           }
           if (array_key_exists('education-level', $user)) {
             if (!array_key_exists($user['education-level'], $question['education_level']['value'])) {
