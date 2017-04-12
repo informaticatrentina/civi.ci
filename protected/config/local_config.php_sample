@@ -79,7 +79,7 @@ define('SITE_SESSION_COOKIE_NAME', 'civico');
 /**
  * Define contest Admin users email
  */
-define('DISCUSSION_ADMIN_USERS', '["santosh@incaendo.com", "pradeep@incaendo.com"]');
+define('DISCUSSION_ADMIN_USERS', '["anna.stefani@infotn.it", "daniela.gaviani@infotn.it", "alessio.massaro@infotn.it", "gianfranco.stellucci@infotn.it"]');
 
 /**
  * Define site language
@@ -223,7 +223,7 @@ define('GOOGLE_ANALYTIC_COOKIE_DOMAIN','{{ GOOGLE_ANALYTIC_COOKIE_DOMAIN }}');
 define('LOG_LEVEL_ACTIVE', 'error, info, trace');
 
 // super admin user
-define('RBAC_ADMIN_USER', 'santosh@incaendo.com');
+define('RBAC_ADMIN_USER', 'anna.stefani@infotn.it');
 
 // all permissions that can be assigned
 $rbacPermission = array(
