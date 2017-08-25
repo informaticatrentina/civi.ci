@@ -1,0 +1,77 @@
+<div class="container">
+  <br>
+  {% set isAdmin = checkPermission('admin') %}
+  <table class="table table-bordered">
+    <th>{{ t('discussion','Discussion Title') }}</th>
+    <th>{{ t('discussion','Discussion Summary') }}</th>
+    <th>{{ t('discussion','Discussion Author') }}</th>
+    {% if isAdmin == true %}
+    <th>{{ t('discussion', 'Sorting Order') }}</th>
+    {% endif %}
+    <th>{{ t('discussion', 'Proposal Count') }}</th>
+    <th>{{ t('discussion', 'Opinion Count') }}</th>
+    <th>{{ t('discussion', 'No of user') }}</th>
+    {% set totalProposal = 0 %}
+    {% set totalOpinion = 0 %}
+    {% for info in discussionInfo %}
+    <tr>
+      <td>{{ info.discussionTitle }}</td>
+      <td>{{ info.discussionSummary }}</td>
+      {% set authorEmail = '' %}
+      {% if attribute(emails, info.discussionAuthorSlug) is not empty %}
+      {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
+      {% endif %}
+      <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
+      {% if isAdmin == true %}
+      <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
+      {% endif %}
+      <td>{{ info.proposalCount }}</td>
+      <td>{{ info.opinionCount}}</td>
+      <td>{{ info.userCount}}</td>
+    </tr>
+    {% set totalProposal = totalProposal + info.proposalCount %}
+    {% set totalOpinion = totalOpinion + info.opinionCount %}
+    {% endfor %}
+  </table>
+  <br/>
+  <b> 
+    {{ t('discussion','Number of Proposals') }}
+    : {{totalProposal}}
+    <br/>
+    {{ t('discussion','Number of Visualization + Opinions') }}
+    : {{totalOpinion}}
+    <br/>
+    {{ t('discussion','Number of User Registered') }}
+    : {{authorNames|length}}
+    <br/>
+    {{ t('discussion','List of User Registered who all contributed in proposal, visualization, and opinion') }}
+    <br/>
+    <br/>
+  </b>
+  {% for author in authorNames %}
+  {{author}}<br>
+  {% endfor %}
+  <br><br>
+  {% for chartDetailKey, chartDetailValue in chartDetails %}
+  <div style="width:100%;float:left;">
+    <div>
+      {% set discussionTitles = chartDetailKey|split('_') %}
+      {% set discussionTitle = discussionTitles|join(' ') %}
+      {% set discussionTitle = discussionTitle|capitalize %}
+      <h3>{{discussionTitle}}</h3>
+    </div>
+    {% for chartKey, chartValue in chartDetailValue %}
+    <div  class="span8">
+      <div id="line_chart_{{chartDetailKey}}_{{chartKey}}"></div>
+    </div>
+    {%endfor%}
+  </div>
+  {%endfor%}
+</div>
+<script>
+  var baseUrl = "{{constant('BASE_URL')}}";
+  var chartDetails = '{{chartDetails|json_encode|raw}}';
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="{{constant('THEME_URL')}}js/reportStatistics.js"></script>
+<script src="{{constant('THEME_URL')}}js/discussionList.js"></script>

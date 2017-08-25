@@ -1,21 +1,27 @@
 <div class="container">
-  <div class="row">
-    <br>
+  <div class="container darkheader">
+    <div class="row">
+      <div class="span2"><a class="link" href="{{constant('BASE_URL')}}admin/discussion/add"> {{ t('discussion', 'Create Discussion')}}</a>
+      </div>
+    </div>
+  </div>
+  <br>
     <table class="table table-bordered">
       <th>{{ t('discussion','Discussion Title') }}</th>
       <th>{{ t('discussion','Discussion Summary') }}</th>
       <th>{{ t('discussion','Discussion Author') }}</th>
-      <th>{{ t('discussion','Submit Proposal') }}</th>
+      <th>{{ t('discussion','Edit') }}</th>      
+      <th>{{ t('discussion','View Proposals') }}</th>
       {% for info in discussionInfo %}
       <tr>
-        <td><a href="{{constant('BASE_URL')}}discussion/proposals/{{ info.discussionSlug }}">{{ info.discussionTitle }}</a></td>
+        <td>{{ info.discussionTitle }}</td>
         <td>{{ info.discussionSummary }}</td>
         <td>{{ info.discussionAuthor }}</td>
-        <td><a href="{{constant('BASE_URL')}}discussion/proposal/submit/{{ info.discussionSlug }}">{{ t('discussion','Submit')}}</a></td>
+        <td><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></td>
+        <td><a href="{{constant('BASE_URL')}}discussion/proposal/view/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></td>
       </tr>
       {% endfor %}
     </table>
     <br/>
   </div>
-</div>
 <script src="{{constant('BASE_URL')}}js/deleteContest.js"></script>
