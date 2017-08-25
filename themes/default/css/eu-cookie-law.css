@@ -1,0 +1,24 @@
+/* --- EU Cookie Law Popup --- */
+
+.cookiebanner #cookie-law {
+  background: rgba(226, 226, 226, 1) none repeat scroll 0 0;
+  box-shadow: 1px 1px 5px black;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+  width: 100%;
+}
+
+.cookiebanner a.close-cookie-banner {
+    background: red none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #ffffff !important;
+    font-weight: bold;
+    padding: 1px 5px;
+    text-decoration: none !important;
+}
+
+.cookiebanner a.close-cookie-banner:hover {
+  color: #cccccc !important;
+}

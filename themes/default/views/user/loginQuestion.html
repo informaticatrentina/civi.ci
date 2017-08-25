@@ -1,0 +1,163 @@
+<div class="container">
+  <form role="form" method="POST" action="" id="additional-info-form">
+    <div>
+      <center><h5>{{t('discussion', 'User Information')}}</h5></center>
+      <hr/>
+    </div>
+    <div class="form-group alert-error" id="error-msg">{{message}}</div>
+    {% if additional_info.age_range is not empty %}
+      <div class="form-group">
+        <label for="age_range"> {{additional_info.age_range.text}} </label>
+        <select name="age_range" id="age-range">
+          <option value="">{{t('discussion','select age range') }}</option>
+          {% for key,value in additional_info.age_range.value %}
+            {% set selected = '' %}
+            {% if post_data.age_range == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %}
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+    {% if additional_info.age is not empty %}
+      <div class="form-group">
+        <label for="age">  {{additional_info.age.text}}</label>
+        {% set ageValue = '' %}
+        {% if post_data.age is not empty %}
+          {% set ageValue = post_data.age %}
+        {% endif %}
+        <input id="age" class="input-block-level" type="text" maxlength="2" placeholder="{{t('discussion','age') }}" name="age" value="{{ageValue}}">
+      </div>
+    {% endif %}
+    {% if additional_info.sex is not empty %}
+      <div class="form-group">
+        <label for="gender"> {{additional_info.sex.text}} </label>
+        <select name="sex" id="gender">
+          <option value="">{{t('discussion','select gender') }}</option>
+          {% for key,value in additional_info.sex.value %}
+            {% set selected = '' %}
+            {% if post_data.sex == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %}
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+      </div>      
+    {% endif %}
+    {% if additional_info.education_level is not empty %}
+      <div class="form-group">
+        <label for="education_level"> {{additional_info.education_level.text}} </label>
+        <select name="education_level" id="education-level">
+          <option value="">{{t('discussion','select eduction') }}</option>
+          {% for key,value in additional_info.education_level.value %}
+            {% set selected = '' %}
+            {% if post_data.education_level == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %} 
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+        {% set style = 'style="display:none;"' %}
+        {% if post_data.education_level_description is not empty %}
+          {% set style = '' %}
+        {% endif %} 
+        <textarea row='3' name="education_level_description" id='education-level-description' {{style}}>{{post_data.education_level_description}}</textarea>
+      </div>      
+    {% endif %}
+    {% if additional_info.citizenship is not empty %}
+      <div class="form-group">
+        <label for="citizenship"> {{additional_info.citizenship.text}} </label>
+        <select name="citizenship" id="citizenship">
+          <option value="">{{t('discussion','select citizenship')}}</option>
+          {% for key,value in additional_info.citizenship.value %}
+            {% set selected = '' %}
+            {% if post_data.citizenship == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %} 
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+      </div>      
+    {% endif %}
+    {% if additional_info.work is not empty %}
+      <div class="form-group">
+        <label for="work"> {{additional_info.work.text}} </label>
+        <select name="work" id="work">
+          <option value="">{{t('discussion','select your work')}}</option>
+          {% for key,value in additional_info.work.value %}
+            {% set selected = '' %}
+            {% if post_data.work == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %}
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+      </div>      
+    {% endif %}
+    {% if additional_info.public_authority is not empty %}
+      <div class="form-group">
+        <label for="public_authority"> {{additional_info.public_authority.text}} </label>
+        <select name="public_authority" id="public-authority">
+          <option value="">{{t('discussion','select authority')}}</option>
+          {% set style = 'style="display:none;"' %}
+          {% for key,value in additional_info.public_authority.value %}
+            {% set selected = '' %}
+            {% if post_data.public_authority == key %}
+              {% set selected = 'selected="selected"' %}
+              {% set style = '' %}
+            {% endif %}
+            <option  {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+        <textarea row='3' name="authority_description" id='authority-description' {{style}}>{{post_data.authority_description}}</textarea>
+      </div>      
+    {% endif %}
+    {% if additional_info.profession is not empty %}
+      <div class="form-group">
+        <label for="profession">  {{additional_info.profession.text}}</label>
+        {% set professionValue = '' %}
+        {% if post_data.profession is not empty %}
+          {% set professionValue = post_data.profession %}
+        {% endif %}
+        <textarea id="profession" class="input-block-level" placeholder="{{t('discussion','profession') }}" name="profession">{{professionValue}}</textarea>
+      </div>
+    {% endif %}
+    {% if additional_info.residence is not empty %}
+      <div class="form-group">
+        <label for="residence">  {{additional_info.residence.text}}</label>
+        {% set residenceValue = '' %}
+        {% if post_data.residence is not empty %}
+          {% set residenceValue = post_data.residence %}
+        {% endif %}
+        <textarea id="residence" class="input-block-level" placeholder="{{t('discussion','residence') }}" name="residence">{{residenceValue}}</textarea>
+      </div>
+    {% endif %}
+    {% if additional_info.association is not empty %}
+      <div class="form-group">
+        <label for="association"> {{additional_info.association.text}} </label>
+        <select name="association" id="association">
+          <option value="">{{t('discussion','select association') }}</option>
+          {% for key,value in additional_info.association.value %}
+            {% set selected = '' %}
+            {% if post_data.association == key %}
+              {% set selected = 'selected="selected"' %}
+            {% endif %}
+            <option {{selected}} value="{{key}}">{{value}}</option>
+          {% endfor %}
+        </select>
+        {% set style = 'style="display:none;"' %}
+        {% if post_data.association_description is not empty %}
+          {% set style = '' %}
+        {% endif %}
+        <textarea row='3' name="association_description" id='association-description' {{style}}>{{post_data.association_description}}</textarea>
+      </div>
+    {% endif %}
+    <div class="form-group">
+       <input type="button" class='btn btn-primary' id="save-additional-info" name="save_additional_info" value="{{t('discussion', 'save')}}">
+    </div>      
+  </form>
+</div>
+<script type="text/javascript">
+  var showQuestionModal = "{{show_question_modal}}";
+</script>
