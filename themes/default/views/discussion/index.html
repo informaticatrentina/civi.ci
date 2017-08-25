@@ -1,0 +1,158 @@
+{% if shownNicknamePopUp is defined %}
+  {% if shownNicknamePopUp == 1 %}
+    <button id="btns" class="hide" data-toggle="modal" data-target="#myModal"></button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Choose your nickname') }}</h4>
+          </div>
+          <div class="modal-body">
+            <div class="display_message_nickname"></div>
+              <div class="form-group">
+                <label for="nickname" class="control-label">{{ t('discussion', 'Nickname') }}:</label>
+                <input type="text" class="form-control" id="nickname">
+                <a href="#" id="check_availability">{{ t('discussion', 'Check Availability ?') }}</a>
+                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" id="never_add_nickname" name="never_add_nickname" />
+                {{ t('discussion', 'Never show this again ?') }}
+                <br><br>
+                <p class="hide alert-danger" id="never_add_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
+            <button type="button" class="btn btn-primary" id="save_nickname">{{ t('discussion', 'Save changes') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+{% if showUseNickname is defined %}
+  {% if showUseNickname == 1 %}
+    <button id="btn-show-use-nickname" class="hide" data-toggle="modal" data-target="#show-use-nickname-modal"></button>
+
+    <div class="modal fade" id="show-use-nickname-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Use your nickname everywhere') }}</h4>
+          </div>
+          <form action="{{constant('BASE_URL')}}user/displaynickname" method="post">
+            <div class="modal-body">
+              <div class="display_message_nickname"></div>
+              <div class="form-group">
+                <label class="control-label">{{ t('discussion', 'Use your nickname on this site. On all posts you posted') }}</label>
+                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" id="never_display_nickname" name="never_display_nickname" />
+                {{ t('discussion', 'Never show this again ?') }}
+                <br><br>
+                <p class="hide alert-danger" id="never_display_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
+              <button type="submit" class="btn btn-primary" name="btn_use_nickname" value="1" id="use_nickname">{{ t('discussion', 'Yes use my nickname') }}</button>
+              <button type="submit" class="btn btn-primary hide" name="btn_never_display_nickname" value="1" id="btn_never_display_nickname">{{ t('discussion', 'Save Changes') }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+<div class="container">
+  <div class="row-fluid">
+    <div class="span12" style="position:relative;">
+      <div class="border-line">
+        {% if homeDetails is not empty %}
+          {% if homeDetails.main_logo is not empty %}
+            <h1 class="site-title">
+              <a class="partecipa-logo" rel="home" title="Io Partecipo" href="{{constant('BASE_URL')}}"><img src="{{constant('BASE_URL')}}{{homeDetails.main_logo}}" alt="Io Partecipo"></a>
+            </h1>
+          {% endif %}
+        {% endif %}
+        {% if homeDetails is not empty %}
+          {% if homeDetails.sub_logo is not empty %}
+            <div class="psp-logo">
+              <a href="http://www.provincia.trento.it"><img src="{{constant('BASE_URL')}}{{homeDetails.sub_logo}}" alt="psp"></a>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% if homeDetails is not empty %}
+    {% if homeDetails.banner is not empty %}
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="banner">
+                  <img src="{{constant('BASE_URL')}}{{homeDetails.banner}}" alt="banner" />
+              </div>
+          </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if homeDetails is not empty %}
+    {% if homeDetails.introduction_text is not empty %}
+      <div class="row-fluid">
+        <div class="span12">
+          <div class="introtxt">
+            {{homeDetails.introduction_text}}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if submission !=1 %}
+  <div class="row">
+    <div class="span8 offset2">
+      <div class="alert alert-error pagination-centered alert-submission-closed">{{text}}</div>
+    </div>
+  </div>
+  {%endif%}
+  {% set layoutWidth = 'span6' %}
+  {% if homeDetails is not empty %}
+    {% if homeDetails.layout is not empty %}
+      {% if homeDetails.layout == 1 %}
+        {% set layoutWidth = 'span12' %}
+      {% elseif homeDetails.layout == 2 %}
+        {% set layoutWidth = 'span6' %}
+      {% elseif homeDetails.layout == 3 %}
+        {% set layoutWidth = 'span4' %}
+      {% elseif homeDetails.layout == 4 %}
+        {% set layoutWidth = 'span3' %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+  {% for discussion in discussions %}
+  <div class="row-fluid">
+    {% for discusion in discussion%}
+      {% set styleColor = '' %}
+      {% for key,colorv in color %}
+        {%if key in discusion.slug %}
+          {% set styleColor = colorv %}
+        {%endif%}
+      {% endfor %}
+      <div class="{{layoutWidth}} themes {{styleColor}} by-{{discussion.author_id}}">
+      <a href="{{constant('BASE_URL')}}discussion/proposals/{{discusion.slug}}" class="linktotheme">
+        <div class="title">{{ discusion.title }}</div>
+        <p class="description">{{ discusion.summary }}</p>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+</div>
+<script>
+  var baseUrl = '{{constant("BASE_URL")}}';
+</script>
