@@ -1,0 +1,110 @@
+<div class="container-narrow">
+  <div class="masthead">
+    <img src="{{constant('THEME_URL')}}images/logo-partecipa.jpg">
+      <h4 class="muted">IoPartecipo - {{constant('TITLE')}}</h4>
+  </div>
+  <h2>{{title}}</h2>
+  <div class="proposal-title">
+    <h4>{{summary}}</h4>    
+  </div>
+  {% for proposal in allProposals %}
+    <div class='pid-{{proposal.id}}'>
+      <div class="text">
+        <h2>{{proposal.title}}</h2>
+        <h5>{{proposal.creation_date|date("d/m/Y H:i:s")}}</h5>
+        <br/><br/>
+        <div class="author">
+          <img src="{{constant('PROFILE_IMAGE_URL')~proposal.0.author.slug}}/{{constant('PROFILE_IMAGE_SIZE')}}" class="avatar">
+          <div class="name"><a href='{{constant("PROFILE_URL")}}{{proposal.author.slug}}'>da  {{proposal.author.name}}</a></div>
+          {% set userSlug = proposal.author.slug %}
+          {% if attribute(adminUser, userSlug) is empty %}
+            {% if attribute(user, userSlug) is not empty %}
+              {% for authKey,authValue in attribute(user,userSlug) %}
+                {{question[authKey].text}}&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{authValue}}
+                <br/>
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="row-fluid">
+          <div class="span2 immagine">
+            {% if proposal.weightmap is iterable %} 
+              <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
+                <g>
+                  {% for key,value in proposal.weightmap %}
+                    <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
+                    <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
+                  {% endfor %}
+                </g>
+              </svg> 
+            {% else %}
+              {{proposal.weightmap}}
+            {%endif%}
+          </div>
+          <div class="span10 intro">{{proposal.content.summary}}</div>
+          <div class="row-fluid">
+            <div class="span12 main-desc">
+              {{proposal.content.description}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="opinion">
+        <h4 class="muted">opinioni su questa proposta</h4>
+      </div>
+      <div class="comments">
+        {% set opinionNotExistsText =  t('discussion', 'There are no opinions for this proposal') %}
+        {% for key, value in proposal.opinions%}
+          {% set opinionNotExistsText =  '' %}
+          <div class="author comment opid-{{id}}">
+            <svg style="float: left" version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" width="53px" height="43px"  viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
+              <g>
+                {% for key,understand in understanding %}
+                  {% if value.tags.0.weight == key%}
+                    <polygon class="sl" index="{{ key }}" understanding="{{ understand.a }}" comprehension="{{ understand.c }}" fill=" {{ understand.fill }}" points="{{ understand.points }}" msg="{{ understand.msg }}"/>
+                  {% else %}
+                    <polygon class="sl" index="{{ key }}" understanding="{{ understand.a }}" comprehension="{{ understand.c }}" fill="#F4f2f3" points="{{ understand.points }}" msg="{{ understand.msg }}"/>
+                  {%endif%}
+                {% endfor %}
+              </g>
+            </svg> 
+            <img src="{{constant('PROFILE_IMAGE_URL')~value.author.slug}}/{{constant('PROFILE_IMAGE_SIZE')}}" class="avatar person"/>
+            <div class="name"><a href="{{constant('PROFILE_URL')}}{{value.author.slug}}">{{value.author.name}}</a></div>
+            {{value.creation_date|date("d/m/Y H:i:s")}}
+            <br/>
+            {% set userSlug = value.author.slug %}
+            {% if attribute(adminUser, userSlug) is empty %}
+              {% if attribute(user, userSlug) is not empty %}
+                {% for authKey,authValue in attribute(user,userSlug) %}
+                  {{question[authKey].text}}&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{authValue}}
+                  <br/>
+                {% endfor %}
+              {% endif %}
+            {% endif %}
+            <p class="{{value.class}}">{{value.content.description}}</p>
+          </div>
+        {% endfor %}
+        {% if opinionNotExistsText != '' %}
+          {{opinionNotExistsText}}
+        {% endif %}
+      </div>
+      <div class="link">
+        <h3>Link allegati</h3>
+        <ul>
+          {% set noLinksExistsText = t('discussion', 'There are no links for this proposal') %}
+          {% for key, value in proposal.links%}
+            {% set noLinksExistsText = '' %}
+            <li><a href="{{value.content.summary}}" target="_blank">{{value.content.summary}}</a><br>{{value.content.description}}</li>
+          {% endfor %}
+          {% if noLinksExistsText != '' %}
+            {{noLinksExistsText}}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<script>
+  var imageUrl = "{{constant('PROFILE_IMAGE_URL')}}";
+  var imageSize = "{{constant('PROFILE_IMAGE_SIZE')}}";
+</script>

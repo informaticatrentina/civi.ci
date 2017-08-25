@@ -1,0 +1,185 @@
+<link href="{{constant('THEME_URL')}}css/theme.bootstrap.css" rel="stylesheet">
+{% set isHighlighter = checkPermission('can_mark_highlighted') %}
+{% set canShowHideOpinion = checkPermission('can_show_hide_opinion') %}
+{% set isAdmin = checkPermission('admin') %}
+{% set canAccessReport = checkPermission('access_report') %}
+<div class="row">
+  <div class="span12">
+    <div class="pull-left">
+      <h1>
+        {{discussionTitle}}
+      </h1>
+    </div>
+    {% if canAccessReport == true %}
+      <div class="pull-right btn-toolbar hidden-print">
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/csv">{{ t('discussion', 'Export To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{discussionId}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
+        <a class="btn btn-inverse" href="{{constant('BASE_URL')}}admin/export/{{discussionId}}/pdf">{{ t('discussion', 'Export To PDF') }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="span12">
+    <table class="table table-bordered table-striped table-condensed" id="sortTable">
+      <thead>
+        <tr class="tablesorter-headerRow">
+          <th>{{ t('discussion','Title') }}</th>
+          <th>{{ t('discussion','Summary') }}</th>
+          <th>{{ t('discussion','Description') }}</th>
+          <th>{{ t('discussion','Author') }}</th>
+          <th>{{ t('discussion','Creation Date') }}</th>
+          <th>{{ t('discussion','Status') }}</th>
+          <th>{{ t('discussion','Number of Opinions') }}</th>
+          <th>{{ t('discussion','Number of Links') }}</th>
+          <th class="sorter-false">{{ t('discussion','Triangle count') }}</th>
+          {% if isAdmin == true %}
+            <th class="hidden-print">{{ t('discussion', 'Sorting Order') }}</th>
+          {% endif %}
+          {% if (isAdmin == true ) or (canShowHideOpinion == true) or (isHighlighter == true) or (canAccessReport == true) %}
+            <th class="sorter-false hidden-print">{{ t('discussion','Ops') }}</th>
+          {% endif %}
+        </tr>
+      </thead>
+      {% for proposal in allProposals %}
+      <tr class="pid-{{proposal.id}}">
+        <td><a class="proposalLinks proposal-title" href="{{constant('BASE_URL')}}admin/discussion/{{slug}}/{{proposal.id}}">{{ proposal.title }}</a></td>
+        <td class="proposal-summary">{{ proposal.content.summary }}</td>
+        <td class="proposal-description">{{ proposal.content.description }}</td>
+        {% set authorEmail = '' %}
+        {% if attribute(emails, proposal.author.slug) is not empty %}
+          {% set authorEmail = attribute(emails, proposal.author.slug) %}
+        {% endif %}
+        <td><a href="mailto:{{authorEmail}}">{{ proposal.author.name }}</a></td>
+        <td>{{ proposal.creation_date }}</td>
+        <td>{{ proposal.status }}</td>
+        {% if proposal.totalOpinion != '' %}
+        <td>{{ proposal.totalOpinion }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        {% if proposal.totalLinks != '' %}
+        <td>{{ proposal.totalLinks }}</td>
+        {%else %}
+        <td>0</td>
+        {%endif%}
+        <td>
+          {% if proposal.weightmap is iterable %}
+          <svg version="1.1"  xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="180px" height="113px" viewBox="-9.25 6.98 209 196" enable-background="new -18.25 -18.75 200 180" xml:space="preserve">
+          <g>
+          {% for key,value in proposal.weightmap %}
+          <polygon class="sl" index="{{key}}"  fill="{{understanding[key].fill}}" points="{{understanding[key].points }}"  msg="{{ understand.msg }}"/>
+          <text  x="{{understanding[key].x}}" y="{{understanding[key].y}}" fill="black">{{value}}</text>
+          {% endfor %}
+          </g>
+          </svg>
+          {% else %}
+          {{proposal.weightmap}}
+          {%endif%}
+        </td>
+        {% if isAdmin == true %}
+          <td class="hidden-print"><input type="text" size="2" maxlength="2" proposal-id="{{proposal.id}}" value="{{proposal.sorting_order}}" class="proposal-sorting-order r span1" /></td>
+        {% endif %}
+        <td class="hidden-print">
+          <div class="dropdown">
+            <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              {% if isAdmin == true %}
+                <li class="edit-proposal" proposal-id="{{proposal.id}}">
+                  <a a href="#formModal" data-toggle="modal">{{t('discussion','Edit')}}</a>
+                </li>
+              {% endif %}
+              {% if (isAdmin == true ) or (canShowHideOpinion == true) or (canAccessReport == true) %}
+                <li>
+                  <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/opinion?id={{proposal.id}}">{{ t('discussion','View opinions')}}</a>
+                </li>
+              {% endif %}
+              {% if isAdmin == true or canAccessReport == true %}
+                <li>
+                  <a class="proposalLinks" href="{{constant('BASE_URL')}}admin/discussion/proposals/{{slug}}/links?id={{proposal.id}}">{{ t('discussion','View links')}}</a>
+                </li>
+                {% if proposal.status == 'active' %}
+                  <li>
+                    <a proposal-id='{{proposal.id}}' class="proposalStatus">{{t('discussion', 'Hide')}} </a>
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span>
+                  </li>
+                {% else %}
+                  <li>
+                    <a proposal-id='{{proposal.id}}'  class="proposalStatus">{{t('discussion', 'Show')}}</a>
+                    <span style="display:none;" class="loading-image"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading..." /></span>
+                  </li>
+                {% endif %}
+              {% endif %}
+              {% if isHighlighter == true %}
+                <li>
+                  {% set highlighterText = t('discussion','Highlight') %}
+                  {% set highlighterAttribute = 'Highlight' %}
+                  {% if proposal.highlight is defined%}
+                    {% set highlighterText = t('discussion','UnHighlight') %}
+                    {% set highlighterAttribute = 'UnHighlight' %}
+                  {% endif %}
+                  <a class="proposalLinks highlighter" href="{{constant('BASE_URL')}}admin/discussion/proposal/highlight/{{slug}}?id={{proposal.id}}" highlight = "{{highlighterAttribute}}">{{ highlighterText }}</a>
+                </li>
+              {% endif %}
+              {% if canAccessReport == true %}
+                <li>
+                  <a href="{{constant('BASE_URL')}}admin/export/opinions/proposal/{{proposal.id}}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+<div id="formModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">{{discussionTitle}}</h3>
+      </div>
+      <div class="modal-body" style="padding:40px; max-height: 300px;">
+        <form class="form-horizontal" id ="update-proposal-form" method="post" role="form" action="{{constant('BASE_URL')}}discussion/proposal/edit/{{ slug }}" id="submit-proposal-form">
+          <div class="form-group">
+            <div class="hidden alert-error" id="proposal-error"></div>
+          </div>
+          <div class="form-group">
+            <label for="title">{{ t('discussion', 'Title') }}</label>
+            <input maxlength="{{title_char}}" class="form-control" id="title" name="title" value="{{title}}" type="text" />
+            <div class="words">{{title_char}}</div>
+          </div>
+          <div class="form-group">
+            <label for="Introduction">{{ t('discussion', 'Introduction') }}</label>
+            <textarea maxlength="{{intro_char}}" rows="3" class="form-control"  id="proposal-summary" name="summary"></textarea>
+             <div class="words">{{intro_char}}</div>
+          </div>
+          <div class="form-group">
+            <label for="Proposal">{{ t('discussion', 'Proposal') }}</label>
+            <textarea rows="5" class="form-control" id="proposal-description" name="description"></textarea>
+          </div>
+          <input type="hidden" name="proposal_id" value="" id="proposal-id">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ t('discussion', 'Cancel')}}</button>
+        <button id="updateProposal"  class="btn btn-primary">{{ t('discussion', 'Update Proposal')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{constant('THEME_URL')}}js/jquery.tablesorter.min.js"></script>
+<script src="{{constant('THEME_URL')}}js/jquery.tablesorter.widgets.js"></script>
+<script src="{{constant('THEME_URL')}}js/reports.js"></script>
+<script src="{{constant('THEME_URL')}}js/proposalStatus.js"></script>
+<script type="text/javascript">
+  var page = {
+    proposalStatusUrl: "{{constant('BASE_URL')}}admin/discussion/proposal/status",
+  };
+  var title = "{{constant('TITLE')}}";
+  var tcharLimit = "{{title_char}}";
+  var icharLimit = "{{intro_char}}";
+  var baseUrl = "{{constant('BASE_URL')}}";
+</script>
