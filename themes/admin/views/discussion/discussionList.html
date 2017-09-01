@@ -1,184 +1,20 @@
-{% set isAdmin = checkPermission('admin') %}
-{% set configureHomePage = checkPermission('configure_home_page') %}
-{% set createNewDiscussion = checkPermission('create_new_discussion') %}
-{% set accessReport = checkPermission('access_report') %}
-{% set canShowHideOpinion = checkPermission('can_show_hide_opinion') %}
-{% set canMarkHighlighted = checkPermission('can_mark_highlighted') %}
-{% if shownNicknamePopUp is defined %}
-  {% if shownNicknamePopUp == 1 %}
-    <button id="btns" class="hide" data-toggle="modal" data-target="#myModal"></button>
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Choose your nickname') }}</h4>
-          </div>
-          <div class="modal-body">
-            <div class="display_message_nickname"></div>
-              <div class="form-group">
-                <label for="nickname" class="control-label">{{ t('discussion', 'Nickname') }}:</label>
-                <input type="text" class="form-control" id="nickname">
-                <a href="#" id="check_availability">{{ t('discussion', 'Check Availability ?') }}</a>
-                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
-              </div>
-              <div class="form-group">
-                <input type="checkbox" id="never_add_nickname" name="never_add_nickname" />
-                {{ t('discussion', 'Never show this again ?') }}
-                <br><br>
-                <p class="hide alert-danger" id="never_add_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
-            <button type="button" class="btn btn-primary" id="save_nickname">{{ t('discussion', 'Save changes') }}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
-{% if showUseNickname is defined %}
-  {% if showUseNickname == 1 %}
-    <button id="btn-show-use-nickname" class="hide" data-toggle="modal" data-target="#show-use-nickname-modal"></button>
-
-    <div class="modal fade" id="show-use-nickname-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{{ t('discussion', 'Use your nickname everywhere') }}</h4>
-          </div>
-          <form action="{{constant('BASE_URL')}}user/displaynickname" method="post">
-            <div class="modal-body">
-              <div class="display_message_nickname"></div>
-              <div class="form-group">
-                <label class="control-label">{{ t('discussion', 'Use your nickname on this site. On all posts you posted') }}</label>
-                <span id="load_image_nickname" style="display:none"><img src="{{constant('THEME_URL')}}images/loader.gif" alt="loading image"></span>
-              </div>
-              <div class="form-group">
-                <input type="checkbox" id="never_display_nickname" name="never_display_nickname" />
-                {{ t('discussion', 'Never show this again ?') }}
-                <br><br>
-                <p class="hide alert-danger" id="never_display_nickname_popup">{{ t('discussion', 'This cannot be changed again proceed with a thoughtful mind !!') }}</p>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">{{ t('discussion', 'Close') }}</button>
-              <button type="submit" class="btn btn-primary" name="btn_use_nickname" value="1" id="use_nickname">{{ t('discussion', 'Yes use my nickname') }}</button>
-              <button type="submit" class="btn btn-primary hide" name="btn_never_display_nickname" value="1" id="btn_never_display_nickname">{{ t('discussion', 'Save Changes') }}</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
-<div class="row">
-  <div class="span12">
-    <h1 class="title">{{ t('discussion','Discussions List') }}</h1>
-    <div class="btn-toolbar">
-      {% if createNewDiscussion == true %}
-        <a class="btn btn-success admin-discussion-link" href="{{constant('BASE_URL')}}admin/discussion/add">{{ t('discussion', 'Create Discussion') }}</a>
-      {% endif %}
-      {% if configureHomePage == true %}
-        <a class="btn btn-warning admin-homepage-link" href="{{constant('BASE_URL')}}admin/config/homepage">{{ t('discussion', 'Configure Home Page') }}</a>
-      {% endif %}
-      {% if accessReport == true or canShowHideOpinion == true %}
-        <a class="btn btn-info admin-allDiscussion-link" href="{{constant('BASE_URL')}}admin/all-discussion">{{ t('discussion', 'View All Discussions') }}</a>
-      {% endif %}
-      {% if accessReport == true %}
-        <a class="btn btn-info admin-allStatistics-link" href="{{constant('BASE_URL')}}admin/statistics">{{ t('discussion', 'View All Statistics') }}</a>
-        <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/all/csv">{{ t('discussion', 'Export To CSV') }}</a>
-        <a class="btn btn-inverse admin-allCSV-link" href="{{constant('BASE_URL')}}admin/export/opinions/discussion/all/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a>
-      {% endif %}
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="span12">
-    <table  id="discussions-list" class="table table-bordered table-striped table-condensed">
-      <thead>
-        <tr>
-          <th>{{ t('discussion', 'Title') }}</th>
-          <th>{{ t('discussion', 'Summary') }}</th>
-          <th>{{ t('discussion', 'Author') }}</th>
-          <th>{{ t('discussion', 'Users Proposal Count') }}</th>
-          <th>{{ t('discussion', 'Admin Proposal Count') }}</th>
-          <th>{{ t('discussion', 'Opinion Count') }}</th>
-          <th>{{ t('discussion', 'Vote on triangle') }}</th>
-          <th>{{ t('discussion', 'Users Count') }}</th>
-          {% if isAdmin == true %}
-            <th>{{ t('discussion', 'Sorting Order') }}</th>
-          {% endif %}
-          {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
-            <th>{{ t('discussion', 'Ops') }}</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% set totalProposal = 0 %}
-        {% set totalOpinion = 0 %}
-        {% for info in discussionInfo %}
-        <tr>
-          <td>{{ info.discussionTitle }}</td>
-          <td>{{ info.discussionSummary }}</td>
-          {% set authorEmail = '' %}
-          {% if attribute(emails, info.discussionAuthorSlug) is not empty %}
-            {% set authorEmail = attribute(emails, info.discussionAuthorSlug) %}
-          {% endif %}
-          <td><a href="mailto:{{authorEmail}}">{{ info.discussionAuthor }}</a></td>
-          <td>{{ info.proposalCount }}</td>
-          <td>{{ info.adminUser.proposalCount }}</td>
-          <td>{{ info.opinionCount}}</td>
-          <td>{{ info.opinionVoting}}</td>
-          <td>{{ info.userCount}}</td>
-          {% if isAdmin == true %}
-            <td><input type="text" size="2" maxlength="2" discussion-slug="{{info.discussionSlug}}" value="{{info.discussionOrder}}" class="sort-order span1" /></td>
-          {% endif %}
-          {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
-            <td>
-              <div class="dropdown">
-                <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">Espandi <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {% if isAdmin == true %}
-                    <li><a href="{{constant('BASE_URL')}}admin/discussion/edit/{{ info.discussionSlug }}">{{ t('discussion','Edit')}}</a></li>
-                  {% endif %}
-                  {% if accessReport == true or canMarkHighlighted == true or canShowHideOpinion == true %}
-                    <li><a href="{{constant('BASE_URL')}}admin/discussion/proposal/list/{{ info.discussionSlug }}">{{ t('discussion','View Proposals')}}</a></li>
-                  {% endif %}
-                  {% if accessReport == true %}
-                    <li><a href="{{constant('BASE_URL')}}admin/discussion/allproposal/{{ info.discussionSlug }}">{{ t('discussion','Print Discussion')}}</a></li>
-                    <li><a href="{{constant('BASE_URL')}}admin/discussion/statistics/{{ info.discussionId }}">{{ t('discussion','Statistics')}}</a></li>
-                    <li><a href="{{constant('BASE_URL')}}admin/export/opinions/discussion/{{ info.discussionId }}/csv">{{ t('discussion', 'Export Opinion To CSV') }}</a></li>
-                  {% endif %}
-                </ul>
-              </div>
-            </td>
-          {% endif %}
-        </tr>
-        {% set totalProposal = totalProposal + info.proposalCount %}
-        {% set totalOpinion = totalOpinion + info.opinionCount + info.opinionVoting %}
-        {% endfor %}
-      </tbody>
+<div class="container">
+  <div class="row">
+    <br>
+    <table class="table table-bordered">
+      <th>{{ t('discussion','Discussion Title') }}</th>
+      <th>{{ t('discussion','Discussion Summary') }}</th>
+      <th>{{ t('discussion','Discussion Author') }}</th>
+      <th>{{ t('discussion','Submit Proposal') }}</th>
+      {% for info in discussionInfo %}
+      <tr>
+        <td><a href="{{constant('BASE_URL')}}discussion/proposals/{{ info.discussionSlug }}">{{ info.discussionTitle }}</a></td>
+        <td>{{ info.discussionSummary }}</td>
+        <td>{{ info.discussionAuthor }}</td>
+        <td><a href="{{constant('BASE_URL')}}discussion/proposal/submit/{{ info.discussionSlug }}">{{ t('discussion','Submit')}}</a></td>
+      </tr>
+      {% endfor %}
     </table>
+    <br/>
   </div>
 </div>
-<div class="row">
-  <div class="span12">
-    <p><strong>{{ t('discussion','Number of Proposals') }}:</strong> {{totalProposal}} </p>
-    <p><strong>{{ t('discussion','Number of Visualization + Opinions') }}:</strong> {{totalOpinion}}</p>
-    <p><strong>{{ t('discussion','Number of User Registered') }}:</strong> {{authorNames|length}}</p>
-    <p><strong>{{ t('discussion','List of User Registered who all contributed in proposal, visualization, and opinion') }}</strong></p>
-    <div>
-    {% for author in authorNames %}
-      {{author}}<br />
-    {% endfor %}
-    </div>
-  </div>
-</div>
-<script>
-  var baseUrl = "{{constant('BASE_URL')}}";
-</script>
-<script src="{{constant('THEME_URL')}}js/discussionList.js"></script>
