@@ -43,7 +43,7 @@
     <input type="text" class="input-block-level" name ="lastname" value="{{lastName}}" id="lastname" placeholder="{{t('discussion', 'Last Name')}}">
 
 
-    {% if user.nickname_enable is not empty %}  
+   
 
     {% if user.nickname is not empty %}
       {% set nickname = user.nickname %}
@@ -55,7 +55,7 @@
     <span id="load-image"><img src="{{constant('BASE_URL')}}images/loader.gif" alt="loading..." /></span>
 
     <br class="br-for-user"/><br class="br-for-user" />
-    {% endif %}
+    
     {% set email = '' %}
     {% if user.email is not empty %}
       {% set email = user.email %}

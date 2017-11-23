@@ -1,3 +1,4 @@
+
 <div class="container-narrow">
   <div class="masthead">
     <img src="{{constant('THEME_URL')}}images/logo-partecipa.jpg">
@@ -9,6 +10,9 @@
       <div class="proposal-title">
         <h4>{{discussion.summary}}</h4>
       </div>
+        <div class="text">
+        {{discussion.descrizione_supplementare}}
+          </div>
       {% for proposal in discussion.proposal %}
         <div class='pid-{{proposal.id}}'>
           <div class="text">

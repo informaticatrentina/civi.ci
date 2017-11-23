@@ -56,12 +56,42 @@ $(document).ready(function() {
       $('#never_display_nickname_popup').show();
       $('#btn_never_display_nickname').show();
       $('#use_nickname').addClass('disabled');
+      $('#use_nickname').prop("disabled",true);
+      $('<input>').attr({type: 'hidden',id: 'btn_use_nickname', name: 'btn_use_nickname', value: '1'}).appendTo('form');
     } else {
       $('#never_display_nickname_popup').hide();
       $('#btn_never_display_nickname').hide();
       $('#use_nickname').removeClass('disabled');
+      $('#use_nickname').prop("disabled",false);
+      $('#btn_use_nickname').remove();
     }
   });
+
+
+ /* $('#use_nickname').on('click', function(e) {
+    e.preventDefault();
+    var never_display_nickname = $('#never_display_nickname').val();
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + 'user/displaynickname',
+      dataType: 'json',
+      data:  {
+        never_display_nickname : nickname
+      },
+      success: function(resp) {
+        if (resp.success) {
+         
+        } else {
+         
+        }
+      },
+      error: function() {
+     
+      }
+    });
+
+  });*/
 
 });
 
@@ -130,6 +160,7 @@ function saveNickname() {
             html(resp.msg);
           $('#myModal').remove();
           $('#btns').remove();
+          $('.modal-backdrop').remove();
         } else {
           $('.display_message_nickname').
             removeClass('alert-success').
