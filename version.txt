@@ -1,1 +1,1 @@
-infotn-release-1.1.5
+infotn-release-1.1.6
