@@ -1165,6 +1165,10 @@ msgid "I have read the {ahref_start_tag} privacy {ahref_end_tag} and I authorize
 msgstr "Ho letto l'{ahref_start_tag}informativa alla privacy{ahref_end_tag} e autorizzo il trattamento dei dati personali in base art. 13 del D. Lgs. 196/2003"
 
 msgctxt "discussion"
+msgid "I authorize personal data processing as European Regulation n. 2016/679"
+msgstr "Autorizzo il trattamento dei dati personali ai sensi del Regolamento UE n. 2016/679"
+
+msgctxt "discussion"
 msgid "Italian"
 msgstr "Italiano"
 
@@ -1818,6 +1822,22 @@ msgstr "Id"
 msgctxt "rbac"
 msgid "Role"
 msgstr "Ruolo"
+
+msgctxt "rbac"
+msgid "Gdpr Policy"
+msgstr "Consenso Gdpr"
+
+msgctxt "rbac"
+msgid "Gdpr Date"
+msgstr "Accettazione Gdpr"
+
+msgctxt "rbac"
+msgid "Gdpr Date Deleted"
+msgstr "Cancellazione Gdpr"
+
+msgctxt "rbac"
+msgid "Disabled User"
+msgstr "Disabilita Utenza"
 
 msgctxt "rbac"
 msgid "Permission"

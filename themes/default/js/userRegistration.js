@@ -67,6 +67,10 @@ $(document).ready(function() {
       $('#error').html(Yii.t('js', 'Please check privacy checkbox')).css('color','red');
       return false;
     }
+    if ($('#register-gdpr').is(':checked') == false) {
+      $('#error').html(Yii.t('js', 'Please check GDPR privacy checkbox')).css('color','red');
+      return false;
+    }
     $('#error').html();
   });
 

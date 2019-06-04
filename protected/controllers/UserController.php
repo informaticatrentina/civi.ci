@@ -12,13 +12,15 @@
  * This file can not be copied and/or distributed without the express permission of
  * <ahref Foundation.
  */
-class UserController extends PageController {
+class UserController extends PageController
+{
 
   /**
    * init
    * function is used for set basic configuration and theme setting
    */
-  public function init() {
+  public function init()
+  {
     if (!defined('SITE_THEME')) {
       p('Site theme is not defined. Please define it in local config file');
     } else {
@@ -33,16 +35,17 @@ class UserController extends PageController {
     }
   }
 
-/**
- * Method called before any specific ation call
- *
- * @property beforeAction
- *
- * @param $action
- *
- * @return bool always true
- */
-  public function beforeAction($action) {
+  /**
+   * Method called before any specific ation call
+   *
+   * @property beforeAction
+   *
+   * @param $action
+   *
+   * @return bool always true
+   */
+  public function beforeAction($action)
+  {
     new JsTrans('js', SITE_LANGUAGE);
     return true;
   }
@@ -53,16 +56,16 @@ class UserController extends PageController {
    * this function also set the user information in session and redirect to user
    * on same page from where he made a request for registration
    */
-  public function actionRegister() {
+  public function actionRegister()
+  {
     try {
 
       $nickname_enable = Yii::app()->globaldef->params['enable_nickname_use'];
 
-      if($nickname_enable  == "1")
-      {
-          $user['nickname_enable'] = "1";
+      if ($nickname_enable  == "1") {
+        $user['nickname_enable'] = "1";
       }
-      
+
 
 
       $saveUser = array('success' => false, 'msg' => '');
@@ -107,12 +110,21 @@ class UserController extends PageController {
           if (!array_key_exists('privacy_policy', $user)) {
             throw new Exception(Yii::t('discussion', 'Please check privacy policy checkbox'));
           }
+          if (!array_key_exists('gdpr_policy', $user)) {
+            throw new Exception(Yii::t('discussion', 'Please check GDPR privacy checkbox'));
+          }
+
+          $now = new \DateTime();
+          $now->setTimezone(new \DateTimeZone('Europe/Rome'));
+
           $userDetail = array(
             'firstname' => $user['firstname'],
             'lastname' => $user['lastname'],
             'email' => $user['email'],
             'password' => $user['password'],
             'status' => 0,
+            'gdpr' => 1,
+            'gdpr_date' => $now->format('Y-m-d H:i:s'),
             'type' => $user['registration-type'],
             'source' => CIVICO
           );
@@ -131,7 +143,7 @@ class UserController extends PageController {
           }
           $userIdentityMgr = new UserIdentityManager();
           $saveUser = $userIdentityMgr->createUser($userDetail);
-          if (array_key_exists('success', $saveUser) && $saveUser['success'] == true) {
+          if (isset($saveUser['success']) && $saveUser['success'] == true) {
             $this->_sendActivationMail($user);
             $saveUser['msg'] = Yii::t('discussion', 'You have been successfully registered');
           } else {
@@ -147,13 +159,12 @@ class UserController extends PageController {
     }
 
     $this->layout = 'userManager';
-if($nickname_enable == "0"){
-    $this->render('registration', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
-}
-else {
- $this->render('registration_nickname', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
-} 
- }
+    if ($nickname_enable == "0") {
+      $this->render('registration', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
+    } else {
+      $this->render('registration_nickname', array('message' => $saveUser, 'back_url' => $backUrl, 'user' => $user));
+    }
+  }
 
   /**
    * actionExportUser
@@ -162,7 +173,8 @@ else {
    * It creates an xls file containg user email id and content type submitted by user
    * @author Pradeep Kumar<pradeep@incaendo.com>
    */
-  public function actionExportUser() {
+  public function actionExportUser()
+  {
     try {
       $isAdmin = checkPermission('admin');
       if ($isAdmin == false) {
@@ -177,8 +189,10 @@ else {
       if (empty($userEmail)) {
         throw new Exception('User email id is a blank array');
       }
-      $header = array( Yii::t('discussion', 'Emails'),
-                       Yii::t('discussion','Content Submitted By Contributor'));
+      $header = array(
+        Yii::t('discussion', 'Emails'),
+        Yii::t('discussion', 'Content Submitted By Contributor')
+      );
       foreach ($userEmail as $id => $email) {
         $content = array();
         if (in_array($id, $userIds['Proposal'])) {
@@ -210,12 +224,32 @@ else {
    * @param void
    * @return array $contributorIds - id (slug) of contributor (user)
    */
-  private function _getAllContributorsId() {
+  private function _getAllContributorsId()
+  {
     try {
       $contributorIds = array('Proposal' => array(), 'Opinion' => array(), 'Link' => array());
       $aggregatorManager = new AggregatorManager();
-      $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
-      '', '', '', '', '', array(), '', 'title,tags,author', '', '', '', CIVICO);
+      $proposals = $aggregatorManager->getEntry(
+        ALL_ENTRY,
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        array(),
+        '',
+        'title,tags,author',
+        '',
+        '',
+        '',
+        CIVICO
+      );
       foreach ($proposals as $proposal) {
         if (array_key_exists('tags', $proposal) && !empty($proposal['tags'])) {
           foreach ($proposal['tags'] as $tag) {
@@ -230,13 +264,15 @@ else {
               case LINK_TAG_SCEME:
                 $content = 'Link';
                 break;
-              default :
+              default:
                 $content = '';
                 break;
             }
             if (!empty($content)) {
-              if (array_key_exists('author', $proposal) && array_key_exists('slug',
-                $proposal['author']) && !empty($proposal['author']['slug'])) {
+              if (array_key_exists('author', $proposal) && array_key_exists(
+                'slug',
+                $proposal['author']
+              ) && !empty($proposal['author']['slug'])) {
                 if (!in_array($proposal['author']['slug'], $contributorIds[$content])) {
                   $contributorIds[$content][] = $proposal['author']['slug'];
                 }
@@ -259,7 +295,8 @@ else {
    * @param array $contributorsId
    * @return array $contributorEmail - email id of contributor (user)
    */
-  private function _getContributorsEmail($contributorsId) {
+  private function _getContributorsEmail($contributorsId)
+  {
     try {
       $userEmail = array();
       if (empty($contributorsId)) {
@@ -270,8 +307,10 @@ else {
       $contributorsId), true, false);
       if (array_key_exists('_items', $authorsEmails) && !empty($authorsEmails['_items'])) {
         foreach ($authorsEmails['_items'] as $authorEmail) {
-          if (array_key_exists('_id', $authorEmail) && !empty($authorEmail['_id'])
-            && array_key_exists('email', $authorEmail) && !empty($authorEmail['email'])) {
+          if (
+            array_key_exists('_id', $authorEmail) && !empty($authorEmail['_id'])
+            && array_key_exists('email', $authorEmail) && !empty($authorEmail['email'])
+          ) {
             $userEmail[$authorEmail['_id']] = $authorEmail['email'];
           }
         }
@@ -288,7 +327,8 @@ else {
    * @param array $user - user information
    * @return void
    */
-  private function _sendActivationMail($user) {
+  private function _sendActivationMail($user)
+  {
     try {
       $email = $user['email'];
       $encrypted_email = encryptDataString($email);
@@ -325,13 +365,17 @@ else {
    * @param  array $userInfo - data for mail
    * @return string $html
    */
-  private function _prepareMailBody($userInfo) {
+  private function _prepareMailBody($userInfo)
+  {
     $html = '';
     $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/activationEmail.html');
     $html = str_replace("{{salute_text}}", $userInfo['salute_text'], $html);
-    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
-    $mailText = Yii::t('discussion', 'Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
-       array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
+    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'], $html);
+    $mailText = Yii::t(
+      'discussion',
+      'Thank you for registering. Please activate your account by clicking this {start_ahref_link} link {end_ahref_link}  or copy and paste the link below and follow the instructions.',
+      array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>')
+    );
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
     $html = str_replace("{{regards}}", $userInfo['regards'], $html);
@@ -342,7 +386,8 @@ else {
    * actionActivateUser
    * function is used for activate by using activation link
    */
-  public function actionActivateUser() {
+  public function actionActivateUser()
+  {
     try {
       $this->setHeader('2.0');
       $message = '';
@@ -374,11 +419,25 @@ else {
             throw new Exception('User id is empty for email ' . $email);
           }
           $inputParam = array(
-              'status' => '1',
-              'id' => $userId
+            'status' => '1',
+            'id' => $userId
           );
           $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
           if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
+
+            // Scrivo file di log
+            if (is_dir(Yii::app()->getRuntimePath())) {
+              if (is_writable(Yii::app()->getRuntimePath())) {
+                $now = new \DateTime();
+                $now->setTimezone(new \DateTimeZone('Europe/Rome'));
+                $filename = Yii::app()->getRuntimePath().'/activation.txt';
+                file_put_contents($filename, $now->format('Y-m-d H:i:s') . ' ### ' . json_encode($inputParam) . PHP_EOL, FILE_APPEND);
+              }
+            }
+
+
+
+
             $verified = TRUE;
             $message = Yii::t("discussion", "Your account has been activated. Please login");
           } else {
@@ -399,7 +458,8 @@ else {
    * saveAdditionalInfo
    * function is used for additional information
    */
-  public function actionSaveAdditionalInfo() {
+  public function actionSaveAdditionalInfo()
+  {
     try {
       if (!isUserLogged()) {
         $this->redirect(BASE_URL);
@@ -564,7 +624,7 @@ else {
           }
           if (array_key_exists('education-level', $userInfo)) {
             $postData['education_level'] = $userInfo['education-level'];
-                 if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
+            if (!array_key_exists($userInfo['education-level'], $additionalInformation['education_level']['value'])) {
               $postData['education_level'] =  'other';
               $postData['education_level_description'] = $userInfo['education-level'];
             }
@@ -614,7 +674,8 @@ else {
    * forgotPassword
    * funcion is used for getting forgot password
    */
-  public function actionForgotPassword() {
+  public function actionForgotPassword()
+  {
     try {
       $response = array('status' => FALSE, 'msg' => '', 'data' => '');
       $this->layout = 'userManager';
@@ -644,16 +705,16 @@ else {
           $time_out = $now + ACTIVATION_LINK_TIME_OUT;
           $key = getRegistrationtKey($email, $time_out);
           $param = array(
-              'u1' => $key,
-              'u2' => $encrypted_email,
-              'u3' => $time_out,
+            'u1' => $key,
+            'u2' => $encrypted_email,
+            'u3' => $time_out,
           );
           $userInfo = array(
-              'salute_text' => Yii::t('discussion', 'Good Morning'),
-              'firstname' => $userInfo['firstname'],
-              'lastname' => $userInfo['lastname'],
-              'activation_link' => BASE_URL . 'user/change-password?' . http_build_query($param),
-              'regards' => Yii::t('discussion', 'Regards')
+            'salute_text' => Yii::t('discussion', 'Good Morning'),
+            'firstname' => $userInfo['firstname'],
+            'lastname' => $userInfo['lastname'],
+            'activation_link' => BASE_URL . 'user/change-password?' . http_build_query($param),
+            'regards' => Yii::t('discussion', 'Regards')
           );
           $body = $this->_prepareForgotPasswordMailBody($userInfo);
           $subject = Yii::t('discussion', 'Reset your password');
@@ -679,13 +740,17 @@ else {
    * @param  array $userInfo - data for mail
    * @return string $html
    */
-  private function _prepareForgotPasswordMailBody($userInfo) {
+  private function _prepareForgotPasswordMailBody($userInfo)
+  {
     $html = '';
     $html = file_get_contents(Yii::app()->theme->basePath . '/views/user/forgotPasswordEmail.html');
     $html = str_replace("{{salute_text}}", $userInfo['salute_text'], $html);
-    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'] , $html);
-    $mailText = Yii::t('discussion', 'Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions.',
-      array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>' ));
+    $html = str_replace("{{user_name}}", $userInfo['firstname'] . ' ' . $userInfo['lastname'], $html);
+    $mailText = Yii::t(
+      'discussion',
+      'Please reset your password by clicking this {start_ahref_link} link {end_ahref_link} or copy and paste the link below and follow the instructions.',
+      array('{start_ahref_link}' => '<a href="' . $userInfo['activation_link'] . '" target="_blank">', '{end_ahref_link}' => '</a>')
+    );
     $html = str_replace("{{mail_text_description}}", $mailText, $html);
     $html = str_replace("{{activation_link}}", $userInfo['activation_link'], $html);
     $html = str_replace("{{regards}}", $userInfo['regards'], $html);
@@ -696,7 +761,8 @@ else {
    * actionChangePassword
    * function is used for change password
    */
-  public function actionChangePassword() {
+  public function actionChangePassword()
+  {
     try {
       $this->setHeader('2.0');
       Yii::app()->clientScript->registerScriptFile(THEME_URL . 'js/' . 'changePassword.js', CClientScript::POS_END);
@@ -770,7 +836,8 @@ else {
    * actionSaveAdditinalInformationQuestion
    * function is ued for save additional information question in database
    */
-  public function actionSaveAdditinalInformationQuestion() {
+  public function actionSaveAdditinalInformationQuestion()
+  {
     if (!array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)) {
       $this->actionError();
       exit;
@@ -801,7 +868,8 @@ else {
    * @return array
    * @throws Exception
    */
-  public function getUserAdditionalInfo($authorIds) {
+  public function getUserAdditionalInfo($authorIds)
+  {
     try {
       $users = array();
       if (isModuleExist('backendconnector') == false) {
@@ -827,20 +895,28 @@ else {
             if (array_key_exists('age-range', $user)) {
               $users[$user['_id']]['age_range'] = $user['age-range'];
             }
-            if (array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
-            && array_key_exists($user['sex'][0], $question['sex']['value'])) {
+            if (
+              array_key_exists('sex', $user) && array_key_exists(0, $user['sex'])
+              && array_key_exists($user['sex'][0], $question['sex']['value'])
+            ) {
               $users[$user['_id']]['sex'] = $question['sex']['value'][$user['sex'][0]];
             }
-            if (array_key_exists('citizenship', $user)
-            && array_key_exists($user['citizenship'], $question['citizenship']['value'])) {
+            if (
+              array_key_exists('citizenship', $user)
+              && array_key_exists($user['citizenship'], $question['citizenship']['value'])
+            ) {
               $users[$user['_id']]['citizenship'] = $question['citizenship']['value'][$user['citizenship']];
             }
-            if (array_key_exists('education-level', $user) &&
-            array_key_exists($user['education-level'], $question['education_level']['value'])) {
+            if (
+              array_key_exists('education-level', $user) &&
+              array_key_exists($user['education-level'], $question['education_level']['value'])
+            ) {
               $users[$user['_id']]['education_level'] = $question['education_level']['value'][$user['education-level']];
             }
-            if (array_key_exists('work', $user)
-            && array_key_exists($user['work'], $question['work']['value'])) {
+            if (
+              array_key_exists('work', $user)
+              && array_key_exists($user['work'], $question['work']['value'])
+            ) {
               $users[$user['_id']]['work'] = $question['work']['value'][$user['work']];
             }
             if (array_key_exists('public-authority', $user) && array_key_exists('name', $user['public-authority'])) {
@@ -855,9 +931,11 @@ else {
               if (array_key_exists('residence', $user['profile-info'])) {
                 $users[$user['_id']]['residence'] = $user['profile-info']['residence'];
               }
-              if (array_key_exists('association', $user['profile-info']) &&
+              if (
+                array_key_exists('association', $user['profile-info']) &&
                 array_key_exists('value', $question['association']) &&
-                array_key_exists($user['profile-info']['association'], $question['association']['value'])) {
+                array_key_exists($user['profile-info']['association'], $question['association']['value'])
+              ) {
                 $users[$user['_id']]['association'] = $question['association']['value'][$user['profile-info']['association']];
               }
             }
@@ -878,7 +956,8 @@ else {
    *   else it return all email on user key
    * @return array $userEmail
    */
-  public function getAuthorEmail($authorIds, $checkAdmin = FALSE) {
+  public function getAuthorEmail($authorIds, $checkAdmin = FALSE)
+  {
     try {
       $userEmail = array('user' => array(), 'admin_user' => array());
       if (isModuleExist('rbacconnector') == false) {
@@ -916,10 +995,13 @@ else {
    * @param int $lastLoginTimestamp
    * @return boolean - TRUE if question form is to be shown
    */
-  public function showQuestionForm($lastLoginTimestamp) {
+  public function showQuestionForm($lastLoginTimestamp)
+  {
     $showAdditionalQuestion = FALSE;
-    if (isset(Yii::app()->globaldef->params['last_modified']['user_additional_info_question']) &&
-      $lastLoginTimestamp < Yii::app()->globaldef->params['last_modified']['user_additional_info_question']) {
+    if (
+      isset(Yii::app()->globaldef->params['last_modified']['user_additional_info_question']) &&
+      $lastLoginTimestamp < Yii::app()->globaldef->params['last_modified']['user_additional_info_question']
+    ) {
       $showAdditionalQuestion = TRUE;
     }
     return $showAdditionalQuestion;
@@ -931,14 +1013,17 @@ else {
    * @param array $userInfo
    * @return void
    */
-  public function updateLastLoginTime($userInfo) {
+  public function updateLastLoginTime($userInfo)
+  {
     $im = new UserIdentityAPI();
     $param = array(
       'id' => Yii::app()->session['user']['id'],
       'site-last-login' => array(CIVICO => time())
     );
-    if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])
-      && array_key_exists('site-last-login', $userInfo['_items'][0])) {
+    if (
+      array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items'])
+      && array_key_exists('site-last-login', $userInfo['_items'][0])
+    ) {
       $param['site-last-login'] = $userInfo['_items'][0]['site-last-login'];
       $param['site-last-login'][CIVICO] = time();
     }
@@ -956,9 +1041,10 @@ else {
    * @return JSON Response is returned with a message and a success status
    * @throws Exception
    */
-  public function actionCheckNickname() {
+  public function actionCheckNickname()
+  {
     $response = array(
-      'msg' => Yii::t('discussion', 'Nickname already in use. Choose another!') ,
+      'msg' => Yii::t('discussion', 'Nickname already in use. Choose another!'),
       'success' => TRUE
     );
     try {
@@ -994,12 +1080,13 @@ else {
    * @return JSON Response message and success status are returned.
    * @throws Exception
    */
-  public function actionSaveNickname() {
+  public function actionSaveNickname()
+  {
     $response = array(
-        'msg' => '',
-        'success' => FALSE
+      'msg' => '',
+      'success' => FALSE
     );
-//var_dump('ok');
+    //var_dump('ok');
     try {
       if ((array_key_exists('nickname', $_GET) && array_key_exists('neverAddNickname', $_GET)) && ($_GET['nickname'] != '' || $_GET['neverAddNickname'] == ACTIVE)) {
         $module = Yii::app()->getModule('backendconnector');
@@ -1007,51 +1094,54 @@ else {
           throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
         }
         $nickname = $_GET['nickname'];
-   
+
         $user = new UserIdentityAPI();
         $userDetail = array();
         $sessionArr = Yii::app()->session['user'];
-        $sessionArr['firstname'] =$nickname;
-        $sessionArr['lastname'] = ''; 
-        if (!empty($sessionArr) && array_key_exists('id', $sessionArr) &&
-                isset($sessionArr['id'])) {
+        $sessionArr['firstname'] = $nickname;
+        $sessionArr['lastname'] = '';
+        if (
+          !empty($sessionArr) && array_key_exists('id', $sessionArr) &&
+          isset($sessionArr['id'])
+        ) {
           $userDetail['id'] = $sessionArr['id'];
           $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userDetail, false, false, false);
-          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
-                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
-            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
-                    !empty($userStatus['_items']['0']['site-user-info']) &&
-                    is_array($userStatus['_items']['0']['site-user-info'])) {
+          if (
+            array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+            array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])
+          ) {
+            if (
+              array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+              !empty($userStatus['_items']['0']['site-user-info']) &&
+              is_array($userStatus['_items']['0']['site-user-info'])
+            ) {
               $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
               if ($_GET['neverAddNickname'] == 1) {
                 if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
                   $tempSiteInfo = $tempSiteUserInfo[CIVICO];
                   $tempUserInfo = array('never-add-nickname' => 1);
                   $tempSiteUserInfo['site-user-info'][CIVICO] = array_merge($tempSiteInfo, $tempUserInfo);
-                  $sessionArr ['show-add-nickname-popup'] = 0;
+                  $sessionArr['show-add-nickname-popup'] = 0;
                 } else {
                   $tempSiteUserInfo[CIVICO] = array('never-add-nickname' => 1);
                   $tempSiteUserInfo['site-user-info'] = $tempSiteUserInfo;
-                  $sessionArr ['show-add-nickname-popup'] = 0;
+                  $sessionArr['show-add-nickname-popup'] = 0;
                 }
                 Yii::app()->session['user'] = $sessionArr;
                 $response = $this->saveUserNickname($userDetail['id'], $nickname, $tempSiteUserInfo);
               } else {
-                 $sessionArr ['show-add-nickname-popup'] = 0;
-                   Yii::app()->session['user'] = $sessionArr;
+                $sessionArr['show-add-nickname-popup'] = 0;
+                Yii::app()->session['user'] = $sessionArr;
                 $response = $this->saveUserNickname($userDetail['id'], $nickname, $tempSiteUserInfo);
               }
             } else {
-              
-             
-                $userSiteInfo['site-user-info'] = array();
-                $response = $this->saveUserNickname($userDetail['id'], $nickname, $userSiteInfo);
-                $sessionArr ['show-add-nickname-popup'] = 0;
-              
-                Yii::app()->session['user'] = $sessionArr;
-              
-          
 
+
+              $userSiteInfo['site-user-info'] = array();
+              $response = $this->saveUserNickname($userDetail['id'], $nickname, $userSiteInfo);
+              $sessionArr['show-add-nickname-popup'] = 0;
+
+              Yii::app()->session['user'] = $sessionArr;
             }
           } else {
             throw new Exception('Some error occured in getting user detail');
@@ -1077,18 +1167,21 @@ else {
    * @param ARRAY $userSiteInfo
    * @return ARRAY Response with a message and a success status are returned
    */
-  public function saveUserNickname($userId, $nickname = false, $userSiteInfo) {
+  public function saveUserNickname($userId, $nickname = false, $userSiteInfo)
+  {
     $response = array(
-        'msg' => '',
-        'success' => FALSE
+      'msg' => '',
+      'success' => FALSE
     );
     $user = new UserIdentityAPI();
     $userInfo['id'] = $userId;
     if ($nickname != false) {
       $userInfo['nickname'] = $nickname;
     }
-    if (array_key_exists('site-user-info', $userSiteInfo) &&
-      !empty($userSiteInfo['site-user-info'])) {
+    if (
+      array_key_exists('site-user-info', $userSiteInfo) &&
+      !empty($userSiteInfo['site-user-info'])
+    ) {
       $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
     }
     $updateUser = $user->curlPut(IDM_USER_ENTITY, $userInfo);
@@ -1127,7 +1220,8 @@ else {
    * @author Harsh <harsh@incaendo.com>
    * @throws Exception
    */
-  public function actionDisplayNickname() {
+  public function actionDisplayNickname()
+  {
 
 
     try {
@@ -1135,30 +1229,32 @@ else {
 
         $postData = $_POST;
 
-      
-    
+
+
         $sessionArr = Yii::app()->session['user'];
         if (array_key_exists('id', $sessionArr) && !empty($sessionArr['id'])) {
-           
+
           $tagToBeInserted = array();
 
           // caso usa il nickname senza flag su non mostrare piu
           if (array_key_exists('btn_use_nickname', $postData) && !array_key_exists('btn_never_display_nickname', $postData)) {
             $tagToBeInserted = array('use-nickname' => 1);
             $sessionArr['show-use-nickname'] = 0;
-          } 
+          }
           if (array_key_exists('btn_never_display_nickname', $postData) && array_key_exists('btn_use_nickname', $postData)) {
-            if (array_key_exists('never_display_nickname', $postData) &&
-                $postData['never_display_nickname'] = 'on') {
-               
-                $tagToBeInserted = array('never-display-nickname' => 1,'use-nickname' => 1);
+            if (
+              array_key_exists('never_display_nickname', $postData) &&
+              $postData['never_display_nickname'] = 'on'
+            ) {
 
-                $sessionArr['never_display_nickname'] = 1;
-                $sessionArr['show-use-nickname'] = 0;
+              $tagToBeInserted = array('never-display-nickname' => 1, 'use-nickname' => 1);
+
+              $sessionArr['never_display_nickname'] = 1;
+              $sessionArr['show-use-nickname'] = 0;
             }
           }
 
-  
+
 
           $userInfo = array();
           $userInfo['id'] = $sessionArr['id'];
@@ -1168,11 +1264,15 @@ else {
           }
           $user = new UserIdentityAPI();
           $userStatus = $user->getUserDetail(IDM_USER_ENTITY, $userInfo, false, false, false);
-          if (array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
-                  array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])) {
-            if (array_key_exists('site-user-info', $userStatus['_items']['0']) &&
-                    !empty($userStatus['_items']['0']['site-user-info']) &&
-                    is_array($userStatus['_items']['0']['site-user-info'])) {
+          if (
+            array_key_exists('_items', $userStatus) && !empty($userStatus['_items']) &&
+            array_key_exists('0', $userStatus['_items']) && !empty($userStatus['_items'])
+          ) {
+            if (
+              array_key_exists('site-user-info', $userStatus['_items']['0']) &&
+              !empty($userStatus['_items']['0']['site-user-info']) &&
+              is_array($userStatus['_items']['0']['site-user-info'])
+            ) {
               $tempSiteUserInfo = $userStatus['_items']['0']['site-user-info'];
               if (array_key_exists(CIVICO, $tempSiteUserInfo)) {
                 $tempSiteInfo = $tempSiteUserInfo[CIVICO];
@@ -1190,18 +1290,19 @@ else {
             if (!array_key_exists('success', $response) || !$response['success']) {
               throw new Exception('Not got success while saving use nickname tags');
             }
-           
-            if (array_key_exists('success', $response) && $response['success'] &&
+
+            if (
+              array_key_exists('success', $response) && $response['success'] &&
               array_key_exists('use-nickname', $tagToBeInserted) &&
-              array_key_exists('nickname', $sessionArr)) {
+              array_key_exists('nickname', $sessionArr)
+            ) {
               $sessionArr['firstname'] = $sessionArr['nickname'];
               $sessionArr['lastname'] = '';
               Yii::app()->session['user'] = $sessionArr;
             }
-            if(array_key_exists('success', $response) && $sessionArr['never_display_nickname'] == '1')
-            {
-             // var_dump($sessionArr);
-            //  die();
+            if (array_key_exists('success', $response) && $sessionArr['never_display_nickname'] == '1') {
+              // var_dump($sessionArr);
+              //  die();
               Yii::app()->session['user'] = $sessionArr;
             }
           } else {
@@ -1214,5 +1315,4 @@ else {
     }
     $this->redirect(Yii::app()->request->urlReferrer);
   }
-
 }

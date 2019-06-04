@@ -431,6 +431,10 @@ msgid "Please check privacy checkbox"
 msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
+msgid "Please check GDPR privacy checkbox"
+msgstr "Devi accettare le condizioni sulla privacy GDPR"
+
+msgctxt "discussion"
 msgid "Please add authority description"
 msgstr "Inserisci la descrizione dell'ente"
 
