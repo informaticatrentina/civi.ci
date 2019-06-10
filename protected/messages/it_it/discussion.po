@@ -1840,6 +1840,10 @@ msgid "Disabled User"
 msgstr "Disabilita Utenza"
 
 msgctxt "rbac"
+msgid "Enabled User"
+msgstr "Abilita Utenza"
+
+msgctxt "rbac"
 msgid "Permission"
 msgstr "Permesso"
 
