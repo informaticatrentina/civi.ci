@@ -388,6 +388,7 @@ class UserController extends PageController
    */
   public function actionActivateUser()
   {
+    //die('son giust');
     try {
       $this->setHeader('2.0');
       $message = '';
@@ -410,11 +411,13 @@ class UserController extends PageController
             throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
           }
           $userIdentityApi = new UserIdentityAPI();
-          $userInfo = $userIdentityApi->getUserDetail(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
+          $userInfo = $userIdentityApi->getLastUserRegistered(IDM_USER_ENTITY, array('email' => trim($email)), false, true);
+
           $userId = '';
           if (array_key_exists('_items', $userInfo) && array_key_exists(0, $userInfo['_items']) && array_key_exists('_id', $userInfo['_items'][0])) {
             $userId = $userInfo['_items'][0]['_id'];
           }
+  
           if (empty($userId)) {
             throw new Exception('User id is empty for email ' . $email);
           }
@@ -422,7 +425,9 @@ class UserController extends PageController
             'status' => '1',
             'id' => $userId
           );
+         
           $updateUser = $userIdentityApi->curlPut(IDM_USER_ENTITY, $inputParam);
+
           if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
 
             // Scrivo file di log
