@@ -57,6 +57,7 @@ class DiscussionController  extends PageController {
     $homeConfig->type = 'homeconfig';
     $homeConfigurations = $homeConfig->get();
     $configuration = array();
+
     foreach ($homeConfigurations as $config) {
       if ($config['name_key'] == 'introduction_text') {
         $configuration[$config['name_key']] = html_entity_decode(stripslashes($config['value']));
@@ -71,7 +72,9 @@ class DiscussionController  extends PageController {
     $discussions = array_chunk($stripedContent, $chunkSize);
   
     $showUseNickname = INACTIVE;
-  
+
+    $showNicknamePopUp = FALSE;
+
     if (!empty(Yii::app()->session['user'])) {
       $sessionArr = Yii::app()->session['user'];
 
