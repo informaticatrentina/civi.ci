@@ -1133,6 +1133,10 @@ msgid "Please check privacy policy checkbox"
 msgstr "Devi accettare le condizioni sulla privacy"
 
 msgctxt "discussion"
+msgid "Please check GDPR privacy checkbox"
+msgstr "Devi accettare le condizioni sulla privacy GDPR"
+
+msgctxt "discussion"
 msgid "Please check term and condition checkbox"
 msgstr "Controllare casella termine e condizioni"
 
