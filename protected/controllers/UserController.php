@@ -62,25 +62,40 @@ class UserController extends PageController
 
       $nickname_enable = Yii::app()->globaldef->params['enable_nickname_use'];
 
-      if ($nickname_enable  == "1") {
-        $user['nickname_enable'] = "1";
-      }
-
-
-
       $saveUser = array('success' => false, 'msg' => '');
       $backUrl = BASE_URL;
       $user = array_map('trim', $_POST);
+   
       if (!empty($user)) {
+
         if (!empty($user['registration-type'])) {
-          if (empty($user['firstname'])) {
+          if (empty($user['firstname']))
+          {
             throw new Exception(Yii::t('discussion', 'Please enter first name'));
           }
+          else 
+          {
+                if ($user['registration-type'] == 'org') 
+                {
+                    $module = Yii::app()->getModule('backendconnector');
+                    if (empty($module))
+                    {
+                        throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+                    }
+                    $uidApi = new UserIdentityAPI();
+                    $isAlreadyUsed = $uidApi->isOrganizationNameAlreadyUsed(IDM_USER_ENTITY, array('firstname' => trim($user['firstname'])));
+                    if($isAlreadyUsed==true) 
+                    {
+                        throw new Exception(Yii::t('discussion', 'Organization name already used'));
+                    }    
+                }   
+          }
+
           if ($user['registration-type'] == 'user') {
             if (empty($user['lastname'])) {
               throw new Exception(Yii::t('discussion', 'Please enter last name'));
             }
-            if (empty($user['nickname']) && $user['nickname_enable'] == "1") {
+            if (empty($user['nickname']) && $nickname_enable  == "1") {
               throw new Exception(Yii::t('discussion', 'Please enter nickname'));
             }
           } else if ($user['registration-type'] == 'org') {
@@ -129,7 +144,9 @@ class UserController extends PageController
             'source' => CIVICO
           );
           if ($user['registration-type'] == 'user') {
-            $userDetail['nickname'] = $user['nickname'];
+              if(isset($user['nickname'])) {
+                  $userDetail['nickname'] = $user['nickname'];
+              }
           }
           if (!empty($_GET['back'])) {
             $back = substr($_GET['back'], 1);
@@ -1189,6 +1206,8 @@ class UserController extends PageController
     ) {
       $userInfo['site-user-info'] = $userSiteInfo['site-user-info'];
     }
+
+
     $updateUser = $user->curlPut(IDM_USER_ENTITY, $userInfo);
     if (array_key_exists('_status', $updateUser) && $updateUser['_status'] == 'OK') {
       $response['id'] = $updateUser['_id'];

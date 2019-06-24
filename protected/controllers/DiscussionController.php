@@ -275,7 +275,10 @@ if (array_key_exists('success', $response) && $response['success']) {
               $temp['show-use-nickname'] = ACTIVE;
             }
           }
-         if (!array_key_exists('never_display_nickname', $siteUserInfo) && array_key_exists('nickname', $response['_items']['0'])) {
+
+ 
+
+         if (isset($siteUserInfo) && !array_key_exists('never_display_nickname', $siteUserInfo) && array_key_exists('nickname', $response['_items']['0'])) {
 
 
                  $temp['show-use-nickname'] = ACTIVE;
@@ -402,15 +405,20 @@ if (array_key_exists('success', $response) && $response['success']) {
           }
         }
       }
+
       if ($showUseNickname == ACTIVE) {
         $sessionArr['show-use-nickname'] = ACTIVE;
       }
     }
+   
+   
+
+
     Yii::app()->session['user'] = $sessionArr;
     $this->render('discussionList', array(
         'discussionInfo' => $discussion['discussion'],
         'emails' => $discussion['emails'],
-        'authorNames' => $discussion['author_name'],
+        'authorNames' => $authorNames,
         'shownNicknamePopUp' => $showNicknamePopUp,
         'showUseNickname' => $showUseNickname
     ));
@@ -2310,6 +2318,7 @@ if (array_key_exists('success', $response) && $response['success']) {
       $proposals = $aggregatorManager->getEntry(ALL_ENTRY, '', '', '', '', '', '',
       '1', '', '', '', '', array(), '', 'id, author', '', '', trim('discussion,' .
       $discussionId), CIVICO);
+
       foreach ($proposals as $proposal) {
         if (array_key_exists('count', $proposal)) {
           $response['proposal_count'] = $proposal['count'];
@@ -2350,6 +2359,7 @@ if (array_key_exists('success', $response) && $response['success']) {
     } catch (Exception $e) {
       Yii::log($e->getMessage(), 'Error in _getDiscussionProposalOpinionAndAuthor');
     }
+
     return $response;
   }
 
