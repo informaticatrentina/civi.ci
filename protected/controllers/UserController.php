@@ -110,6 +110,26 @@ class UserController extends PageController
           if ($user['email'] != $user['cemail']) {
             throw new Exception(Yii::t('discussion', 'Please enter same email'));
           }
+
+          //check if mail is already used inside instance
+
+          $module = Yii::app()->getModule('backendconnector');
+          if (empty($module))
+          {
+            throw new Exception(Yii::t('discussion', 'backendconnector module is missing or not defined'));
+          }
+
+          $uidApi = new UserIdentityAPI();
+          
+          $isEmailAlreadyUsed = $uidApi->isEmailAlreadyUsed(IDM_USER_ENTITY, array('email' => trim($user['email'])));
+          
+          if($isEmailAlreadyUsed==true)
+          {
+            throw new Exception(Yii::t('discussion', 'Email address already used'));
+          }
+
+          //end check if email is already used inside instance
+
           if (empty($user['password'])) {
             throw new Exception(Yii::t('discussion', 'Please enter password'));
           }
