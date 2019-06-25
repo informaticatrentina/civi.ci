@@ -1136,6 +1136,10 @@ msgctxt "discussion"
 msgid "Organization name already used"
 msgstr "Il nome dell'organizzazione è già in uso"
 
+msgctxt "discussion"
+msgid "Email address already used"
+msgstr "L'indirizzo email è già in uso"
+
 #msgctxt "discussion"
 #msgid "Please check GDPR privacy checkbox"
 #msgstr "Devi accettare le condizioni sulla privacy GDPR"
