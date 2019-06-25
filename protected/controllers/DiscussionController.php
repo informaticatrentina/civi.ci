@@ -410,9 +410,9 @@ if (array_key_exists('success', $response) && $response['success']) {
         $sessionArr['show-use-nickname'] = ACTIVE;
       }
     }
-   
-   
 
+    $authorNames = $discussion['author_name'];
+    asort($authorNames);
 
     Yii::app()->session['user'] = $sessionArr;
     $this->render('discussionList', array(
@@ -3013,8 +3013,20 @@ if (array_key_exists('success', $response) && $response['success']) {
       $discussionWiseOpinionAuthor = array();
       $discussionAuthorId = array();
       if (!empty($discussionInfo)) {
-        foreach ($discussionInfo as $info) {
+          foreach ($discussionInfo as $info) {
+
+          
+
+
           $discussionContent = $this->_getDiscussionProposalOpinionAndAuthor($info['id']);
+
+          $userCount=0;
+          if(isset($discussionContent) && isset($discussionContent['author_name'])) 
+          {
+           $userCount=count($discussionContent['author_name']); 
+          }
+
+
           $discussionDetail[] = array(
             'discussionId' => $info['id'],
             'discussionTitle' => $info['title'],
@@ -3027,9 +3039,10 @@ if (array_key_exists('success', $response) && $response['success']) {
             'opinionCount' => $discussionContent['opinion_count'],
             'opinionVoting' => $discussionContent['opinion_voting'],
             'opinions' => $discussionContent['opinion'],
-            'userCount' => 0,
+            'userCount' => $userCount  /*0*/,
             'adminUser' => array('proposalCount' => 0, 'opinionCount' => 0)
-          );
+          ); 
+
           $discussionAuthorId[] = $info['author_id'];
           $authorName = array_merge($authorName, $discussionContent['author_name']);
           $authorId = array_merge($authorId, $discussionContent['author']);
@@ -3082,12 +3095,15 @@ if (array_key_exists('success', $response) && $response['success']) {
           $resp['author_name'][$authorId] = $author;
         }
       }
+
       //get discussion author's email id
       $discussionAuthorEmail  = $this->getAuthorEmail($discussionAuthorId, TRUE);
       $user['admin_user'] = array_merge($user['admin_user'], $discussionAuthorEmail['admin_user']);
       $resp['emails'] = array_merge($user['user'], $user['admin_user']);
       $resp['user'] = $user;
       $resp['discussion_author'] = $discussionWiseAuthor;
+      //added authorName in response
+      $resp['author_name']=$authorName;
     } catch (Exception $e) {
       Yii::log($e->getMessage(), ERROR, 'Error in _getDiscussionProposalOpinionLinks');
     }
