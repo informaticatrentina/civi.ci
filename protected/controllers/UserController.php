@@ -125,7 +125,7 @@ class UserController extends PageController
           
           if($isEmailAlreadyUsed==true)
           {
-            throw new Exception(Yii::t('discussion', 'Email address already used'));
+            throw new Exception(Yii::t('discussion', 'Email id already in use, Please choose a different email id'));
           }
 
           //end check if email is already used inside instance
